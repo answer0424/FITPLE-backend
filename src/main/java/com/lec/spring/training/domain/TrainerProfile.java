@@ -26,13 +26,12 @@ public class TrainerProfile {
     @Column(nullable = false)
     private Integer perPrice;
 
-    @Column(nullable = false, columnDefinition = "JSON")
-    private String skills;
+
 
     @Column(nullable = false)
     private String content;
 
-    @Column
+    @Column(nullable = false)
     private Date career;
 
     @Enumerated(EnumType.STRING)
@@ -44,8 +43,9 @@ public class TrainerProfile {
     @Builder.Default
     private List<Certification> certificationList = new ArrayList<>();
 
+
     public void addCertificationList(Certification... certificationList) {
         Collections.addAll(this.certificationList, certificationList);
     }
-}
+}// end TrainerProfile
 

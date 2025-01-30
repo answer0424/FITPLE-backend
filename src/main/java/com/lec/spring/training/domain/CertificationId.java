@@ -19,7 +19,7 @@ public class CertificationId implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "TrainerProfile_id")
+    @Column(name = "trainerProfileId")
     private Long trainerProfileId;
 }
 

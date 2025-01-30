@@ -2,13 +2,12 @@ package com.lec.spring.training.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 
 @Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -19,12 +18,15 @@ public class Certification {
 
     @MapsId("trainerProfileId") // 복합 키의 trainerProfileId와 매핑
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TrainerProfile_id", nullable = false)
+    @JoinColumn(name = "trainer_profile_id", nullable = false)
     @ToString.Exclude
     @JsonIgnore
     private TrainerProfile trainerProfile;
 
     @Column(name = "credentials")
-    private String credentials;
+    private String credentials; // 경로
+
+    @Column(nullable = false)
+    private String skills= "";
 }
 
