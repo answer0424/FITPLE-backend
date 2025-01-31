@@ -14,7 +14,7 @@ public interface TrainerDetailService {
 //    List<TrainerProfile> getAllTrainerProfiles();
 
     // 닉네임 기준 프로필 검색/상세 페이지 완성 시 수정
-    void getTrainerProfileByNickname(String nickname);
+    TrainerProfileDTO getTrainerProfileByNickname(String nickname, PrincipalDetails userss);
 
     // 트레이너 프로필 수정
     boolean updateTrainerProfile(TrainerProfileDTO trainerProfile,  List<String> skills, List<MultipartFile> images) throws IOException;

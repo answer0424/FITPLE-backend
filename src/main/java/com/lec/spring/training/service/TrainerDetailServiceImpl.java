@@ -3,26 +3,19 @@ package com.lec.spring.training.service;
 import com.lec.spring.base.config.PrincipalDetails;
 import com.lec.spring.base.domain.User;
 import com.lec.spring.base.repository.UserRepository;
-import com.lec.spring.training.DTO.SkillsDTO;
 import com.lec.spring.training.DTO.TrainerProfileDTO;
-import com.lec.spring.training.controller.MyPageController;
-import com.lec.spring.training.domain.Certification;
 import com.lec.spring.training.domain.TrainerProfile;
 import com.lec.spring.training.repository.CertificationRepository;
 import com.lec.spring.training.repository.TrainerProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.lec.spring.training.domain.GrantStatus.승인;
 
@@ -89,15 +82,21 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
         }
     }
 
-    // # 트레이너 닉네임으로 프로필 가져오기
-    @Override
-    public void getTrainerProfileByNickname(String nickname) {
-        // 유저리포지토리에서 findbynickname => get id
-        Long id = 1L;
-        trainerProfileRepository.findById(id);
+    public TrainerProfileDTO getTrainerProfileByNickname(String nickname, PrincipalDetails users) {
+        // 유저 리포지토리에서 닉네임으로 유저 조회
+        User user = userRepository.findByNickname(nickname);
 
-        //return 준우가 만드는거에 맞춰
+        // 트레이너 프로필 조회
+        TrainerProfile trainerProfile = trainerProfileRepository.findByTrainerId(user.getId());
+
+        return TrainerProfileDTO.builder()
+                .trainerId(trainerProfile.getTrainer().getId())
+                .career(trainerProfile.getCareer())
+                .content(trainerProfile.getContent())
+                .perPrice(trainerProfile.getPerPrice())
+                .build();
     }
+
 
     // 트레이너 프로필 수정
     @Override

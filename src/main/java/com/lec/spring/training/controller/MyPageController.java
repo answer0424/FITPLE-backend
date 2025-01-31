@@ -63,15 +63,12 @@ public class MyPageController{
     /*메소드와 메소드 사이에 정보를 보낼 때는 매개변수로 보내는 것을 잊지말자.!*/
     @PostMapping(value = "/member/detail", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Boolean> createTrainerProfile(
-            @ModelAttribute TrainerProfileDTO trainerProfileDTO,
+            @ModelAttribute("trainerProfileDTO") TrainerProfileDTO trainerProfileDTO,
             @AuthenticationPrincipal PrincipalDetails user,
             @ModelAttribute("skills") List<String> skills,
-            @RequestPart(required = false) List<MultipartFile> image
-    ){
+            @RequestPart("img") List<MultipartFile> image
+    ) throws JsonProcessingException {
 
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        TrainerProfileDTO trainerProfileDTO = objectMapper.readValue(trainerProfileDTOJson, TrainerProfileDTO.class);
-//        System.out.println("traineProfileDTO:" + trainerProfileDTO);
 
 
         // 비어있는 필드를 체크 (예시: trainerId가 없으면 400 오류)
@@ -95,9 +92,9 @@ public class MyPageController{
     // [트레이너 상세페이지 수정]
     @PatchMapping(value = "/member/detail", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Boolean> updateTrainerProfile(
-            @RequestPart("trainerProfileDTO") TrainerProfileDTO trainerProfileDTO,
+            @ModelAttribute("trainerProfileDTO") TrainerProfileDTO trainerProfileDTO,
             @AuthenticationPrincipal PrincipalDetails user,
-            @RequestPart("skills") List<String> skills,
+            @ModelAttribute("skills") List<String> skills,
             @RequestPart(value = "img", required = false) List<MultipartFile> image
 
     ) throws IOException {

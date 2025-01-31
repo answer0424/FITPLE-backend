@@ -25,8 +25,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-
     @PostMapping("/student")
     public ResponseEntity<?> registerStudent(@RequestBody UserRegistrationDTO registration) {
         User user = userService.registerUser(registration, "ROLE_STUDENT");
@@ -57,8 +55,6 @@ public class UserController {
         return ResponseEntity.ok(authentication);
     }
 
-    //--------------------------------------------------------------------------------
-    // 확인용
     @RequestMapping("/user")
     public User user(@AuthenticationPrincipal PrincipalDetails userDetails){
         return (userDetails != null) ? userDetails.getUser() : null;

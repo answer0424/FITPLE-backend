@@ -14,17 +14,17 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User registerUser(UserRegistrationDTO registrationDTO, String role) {
         String email = registrationDTO.getEmail();
         String username = registrationDTO.getUsername();
-
+        String password = passwordEncoder.encode(registrationDTO.getPassword());
         String nickname = registrationDTO.getNickname();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
         Date birth = registrationDTO.getBirth();
@@ -39,7 +39,7 @@ public class UserService {
         User user = User.builder()
                 .email(email)
                 .username(username.toUpperCase())
-
+                .password(password)  // 이미 인코딩된 비밀번호 사용
                 .nickname(nickname)
                 .birth(birth)
                 .address(address)
