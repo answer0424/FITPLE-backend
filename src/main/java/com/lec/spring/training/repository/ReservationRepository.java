@@ -18,13 +18,13 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findByStatus(ReservationStatus status);
 
-    @Query("SELECT new com.lec.spring.training.DTO.MonthReservationDTO(r.id, u.id, " +
-            "CASE WHEN u.authority = 'ROLE_TRAINER' THEN u.nickname ELSE tr.nickname END, r.date) " +
+    @Query("SELECT new com.lec.spring.training.DTO.MonthReservationDTO(r.id, u.id, u.nickname, r.date) " +
             "FROM Reservation r JOIN r.training t JOIN t.user u JOIN t.trainer tr " +
-            "WHERE u.id = :userId AND FUNCTION('YEAR', r.date) = :year AND FUNCTION('MONTH', r.date) = :month")
-    List<MonthReservationDTO> findReservationsByUserAndMonth(@Param("userId") Long userId,
-                                                             @Param("year") int year,
-                                                             @Param("month") int month);
+            "WHERE tr.id = :trainerId AND u.id = :studentId AND FUNCTION('YEAR', r.date) = :year AND FUNCTION('MONTH', r.date) = :month")
+    List<MonthReservationDTO> findReservationsByStudentAndMonth(@Param("studentId") Long studentId,
+                                                                @Param("trainerId") Long trainerId,
+                                                                @Param("year") int year,
+                                                                @Param("month") int month);
 
     @Query("SELECT new com.lec.spring.training.DTO.TodayReservationDTO(u.nickname, " +
             "CAST(r.status AS string), u.profileImage, r.date) " +
@@ -34,5 +34,16 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "WHERE u.id = :userId AND r.date = :date")
     List<TodayReservationDTO> findTodayReservationsByUser(@Param("userId") Long userId,
                                                           @Param("date") LocalDateTime date);
+
+    @Query("SELECT new com.lec.spring.training.DTO.MonthReservationDTO" +
+            "(r.id, " +
+            "CASE WHEN tr.id = :userId THEN u.id ELSE tr.id END, " +
+            "CASE WHEN tr.id = :userId THEN u.nickname ELSE tr.nickname END," +
+            "r.date) " +
+            "FROM Reservation r JOIN r.training t JOIN t.user u JOIN t.trainer tr " +
+            "WHERE FUNCTION('YEAR', r.date) = :year AND FUNCTION('MONTH', r.date) = :month AND (u.id = :userId OR tr.id = :userId)")
+    List<MonthReservationDTO> findReservationsByUserAndMonth(@Param("userId") Long userId,
+                                                             @Param("year") int year,
+                                                             @Param("month") int month);
 
 }// end ReservationRepository

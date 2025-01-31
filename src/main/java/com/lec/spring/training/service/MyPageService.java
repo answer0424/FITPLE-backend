@@ -1,12 +1,7 @@
 package com.lec.spring.training.service;
 
-import com.lec.spring.training.DTO.CreateReservationDTO;
-import com.lec.spring.training.DTO.MonthReservationDTO;
-import com.lec.spring.training.DTO.StudentListDTO;
-import com.lec.spring.training.DTO.TodayReservationDTO;
-import com.lec.spring.training.domain.Reservation;
+import com.lec.spring.training.DTO.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,7 +22,7 @@ public interface MyPageService {
     boolean useCoupon(Long studentId, Long trainerId);
 
     //- 트레이너 별 쿠폰 페이지 변경 기능
-    void changeCouponPageByTrainer(Long studentId, Long trainerId);
+    CouponPageDTO changeCouponPageByTrainer(Long studentId, Long trainerId);
 
     //- 남은 pt 횟수 불러오기
     int getPtCount(Long studentId, Long trainerId);
@@ -35,20 +30,23 @@ public interface MyPageService {
     //- 내 회원 목록 불러오기
     List<StudentListDTO> getMyStudentList(Long trainerId);
 
+    //- 인덱스 0번 트레이너의 쿠폰 페이지
+    CouponPageDTO getMyTrainerPage(Long userId);
+
     //- 채팅 목록에서 회원 이름 검색
     StudentListDTO findStudentByChats(Long trainerId, String studentName);
 
     //- 트레이닝에 추가하기
-    void addTraining(Long studentId, Long trainerId);
+    boolean addTraining(Long studentId, Long trainerId);
 
     //- 일정 추가 기능
-    void addSchedule(CreateReservationDTO reservationDTO);
+    boolean addSchedule(CreateReservationDTO reservationDTO, long studentId);
 
     //- 회원별 일정 불러오기
-    List<MonthReservationDTO> getSchedulesByMember(Long studentId, Long trainerId);
+    List<MonthReservationDTO> getSchedulesByMember(Long studentId, Long trainerId, int year, int month);
 
     //- 트레이닝 id 찾기
-    int findTrainingId(Long studentId, Long trainerId);
+    long findTrainingId(Long studentId, Long trainerId);
 
 
 } //end MyPageService

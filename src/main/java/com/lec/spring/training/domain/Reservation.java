@@ -28,7 +28,6 @@ public class Reservation {
     private Training training;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime date;
 
     @Enumerated(EnumType.STRING)
@@ -36,7 +35,6 @@ public class Reservation {
     private ReservationStatus status = ReservationStatus.운동전;
 
     @Column(name = "startTime")
-    @Temporal(TemporalType.TIME)
     private LocalTime startTime;
 
     @Column

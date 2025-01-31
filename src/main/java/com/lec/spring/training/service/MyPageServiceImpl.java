@@ -3,20 +3,18 @@ package com.lec.spring.training.service;
 import com.lec.spring.base.config.PrincipalDetailService;
 import com.lec.spring.base.domain.User;
 import com.lec.spring.base.repository.UserRepository;
-import com.lec.spring.training.DTO.CreateReservationDTO;
-import com.lec.spring.training.DTO.MonthReservationDTO;
-import com.lec.spring.training.DTO.StudentListDTO;
-import com.lec.spring.training.DTO.TodayReservationDTO;
+import com.lec.spring.training.DTO.*;
 import com.lec.spring.training.domain.Reservation;
 import com.lec.spring.training.domain.ReservationStatus;
 import com.lec.spring.training.domain.Training;
 import com.lec.spring.training.repository.ReservationRepository;
 import com.lec.spring.training.repository.TrainingRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class MyPageServiceImpl implements MyPageService {
 
@@ -77,7 +75,7 @@ public class MyPageServiceImpl implements MyPageService {
 
                 training.setTotal_stamps(training.getTotal_stamps() - (10 * coupon));
                 training.setCoupons(training.getCoupons() + coupon);
-                trainingRepository.save(training);
+                trainingRepository.saveAndFlush(training);
             }
 
             return training.getTotal_stamps();
@@ -96,7 +94,7 @@ public class MyPageServiceImpl implements MyPageService {
             if (training.getCoupons() > 0) {
                 training.setCoupons(training.getCoupons() - 1);
                 training.setTimes(training.getTimes() + 1);
-                trainingRepository.save(training);
+                trainingRepository.saveAndFlush(training);
             } else {
                 return false;
             }
@@ -107,42 +105,114 @@ public class MyPageServiceImpl implements MyPageService {
     }
 
     @Override
-    public void changeCouponPageByTrainer(Long studentId, Long trainerId) {
+    public CouponPageDTO changeCouponPageByTrainer(Long studentId, Long trainerId) {
+        try{
+            Training training = trainingRepository.findById(findTrainingId(studentId, trainerId)).orElseThrow();
+            List<User> ids = new ArrayList<>();
+            trainingRepository.findByUserId(studentId)
+                    .forEach(t ->
+                            ids.add(t.getTrainer())
+                    );
 
+            return CouponPageDTO.builder()
+                    .coupons(training.getCoupons())
+                    .times(training.getTimes())
+                    .nickname(training.getTrainer().getNickname())
+                    .trainerIds(ids)
+                    .build();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
     public int getPtCount(Long studentId, Long trainerId) {
-        return 0;
+        try{
+            Training training = trainingRepository.findById(findTrainingId(studentId, trainerId)).orElseThrow();
+
+            return training.getTimes();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     @Override
     public List<StudentListDTO> getMyStudentList(Long trainerId) {
-        return List.of();
+        List<StudentListDTO> studentList = new ArrayList<>();
+
+        trainingRepository.findByTrainerId(trainerId).forEach(e ->
+                studentList.add(
+                        StudentListDTO.builder()
+                                .times(e.getTimes())
+                                .nickname(e.getUser().getNickname())
+                                .userId(e.getUser().getId())
+                                .build()
+                )
+        );
+
+        return studentList;
+    }
+
+    @Override
+    public CouponPageDTO getMyTrainerPage(Long userId) {
+        Long trainerId = trainingRepository.findByUserId(userId).get(0).getTrainer().getId();
+
+        return changeCouponPageByTrainer(userId, trainerId);
     }
 
     @Override
     public StudentListDTO findStudentByChats(Long trainerId, String studentName) {
-        return null;
+        try {
+            long studentId = userRepository.findByUsername(studentName).getId();
+
+            return null;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
-    public void addTraining(Long studentId, Long trainerId) {
+    public boolean addTraining(Long studentId, Long trainerId) {
+        try {
+            Training training = Training.builder()
+                    .user(userRepository.findById(studentId).orElseThrow())
+                    .trainer(userRepository.findById(trainerId).orElseThrow())
+                    .times(0)
+                    .build();
 
+            trainingRepository.saveAndFlush(training);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
-    public void addSchedule(CreateReservationDTO reservationDTO) {
+    public boolean addSchedule(CreateReservationDTO reservationDTO, long studentId) {
+        try {
+            Reservation reservation = Reservation.builder()
+                    .date(reservationDTO.getDate())
+                    .training(trainingRepository.findById(
+                            findTrainingId(studentId, reservationDTO.getTrainingId())).orElseThrow())
+                    .build();
 
+            reservationRepository.save(reservation);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
-    public List<MonthReservationDTO> getSchedulesByMember(Long studentId, Long trainerId) {
+    public List<MonthReservationDTO> getSchedulesByMember(Long studentId, Long trainerId, int year, int month) {
+
+        MonthReservationDTO
+
         return List.of();
     }
 
     @Override
-    public int findTrainingId(Long studentId, Long trainerId) {
+    public long findTrainingId(Long studentId, Long trainerId) {
         return trainingRepository.findByUserIdAndTrainerIdEquals(studentId, trainerId);
     }
 }
