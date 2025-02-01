@@ -13,6 +13,7 @@ public class TrainerProfileDTO {
     private Long id;
     private String trainerName;
     private String trainerEmail;
+    private String trainerProfileImage;
     private Integer perPrice;
     private String content;
     private LocalDate career;

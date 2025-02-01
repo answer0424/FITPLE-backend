@@ -41,28 +41,26 @@ public class TrainerProfileDTOService {
     }
 
     private TrainerProfileDTO convertToDTO(TrainerProfile trainerProfile) {
-        // ✅ 트레이너의 사용자 ID 가져오기
+
         Long userId = trainerProfile.getTrainer().getId();
 
-        // ✅ HBTI 정보 조회 (User ID 기반)
-        HBTI hbti = hbtiRepository.findByUserId(userId)
-                .orElse(null);
 
-        // ✅ User 엔티티에서 gymId 가져오기
-        Long gymId = trainerProfile.getTrainer().getGym() != null
-                ? trainerProfile.getTrainer().getGym().getId()
-                : null;
+        String profileImage = trainerProfile.getTrainer().getProfileImage();
 
-        // ✅ Gym 정보 조회
-        Gym gym = gymId != null ? gymRepository.findById(gymId).orElse(null) : null;
+
+        HBTI hbti = hbtiRepository.findByUser_Id(userId).orElse(null);
+
+
+        Gym gym = trainerProfile.getTrainer().getGym();
 
         return TrainerProfileDTO.builder()
                 .id(trainerProfile.getId())
                 .trainerName(trainerProfile.getTrainer().getUsername())
                 .trainerEmail(trainerProfile.getTrainer().getEmail())
+                .trainerProfileImage(profileImage) //
                 .perPrice(trainerProfile.getPerPrice())
                 .content(trainerProfile.getContent())
-                .career(trainerProfile.getCareer()) // ✅ LocalDateTime → LocalDate 변환
+                .career(trainerProfile.getCareer()) //
                 .isAccess(trainerProfile.getIsAccess().name())
                 .certifications(trainerProfile.getCertificationList().stream()
                         .map(cert -> CertificationDTO.builder()
@@ -70,14 +68,15 @@ public class TrainerProfileDTOService {
                                 .imageUrl(cert.getCredentials())
                                 .build())
                         .collect(Collectors.toList()))
-                // ✅ HBTI 정보 추가
+
                 .hbti(hbti != null ? hbti.getHbti() : "정보 없음")
-                // ✅ 체육관 정보 추가
+
                 .gymName(gym != null ? gym.getName() : "체육관 정보 없음")
                 .gymAddress(gym != null ? gym.getAddress() : "위치 정보 없음")
                 .gymLatitude(gym != null ? gym.getLatitude() : null)
                 .gymLongitude(gym != null ? gym.getLongitude() : null)
                 .build();
     }
+
 
 }
