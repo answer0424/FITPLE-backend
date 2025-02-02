@@ -1,5 +1,7 @@
 package com.lec.spring.base.config;
 
+import com.lec.spring.base.config.oauth.CustomOauth2SuccessHandler;
+import com.lec.spring.base.config.oauth.PrincipalOauth2UserService;
 import com.lec.spring.base.jwt.JWTFilter;
 import com.lec.spring.base.jwt.JWTUtil;
 import com.lec.spring.base.jwt.LoginFilter;
@@ -30,9 +32,15 @@ public class SecurityConfig {
 
     private final JWTUtil jwtUtil;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil) {
+    private final PrincipalOauth2UserService principalOauth2UserService;
+
+    private final CustomOauth2SuccessHandler customOauth2SuccessHandler;
+
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, PrincipalOauth2UserService principalOauth2UserService, CustomOauth2SuccessHandler customOauth2SuccessHandler) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
+        this.principalOauth2UserService = principalOauth2UserService;
+        this.customOauth2SuccessHandler = customOauth2SuccessHandler;
     }
 
     @Value("${cors.allowed-origins}")
@@ -63,8 +71,8 @@ public class SecurityConfig {
         // 경로별 인가 설정
         http
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/").hasRole("ROLE_STUDENT")
-                        .anyRequest().permitAll());
+                        .requestMatchers("/register/**").permitAll() // 회원가입 엔드포인트는 인증 필요 없음
+                        .anyRequest().authenticated());
 
         // 세션 설정
         http
@@ -78,7 +86,7 @@ public class SecurityConfig {
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
-       // CORS 설정
+        // CORS 설정
         http
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(new CorsConfigurationSource() {
                     @Override
@@ -96,9 +104,20 @@ public class SecurityConfig {
                     }
                 }));
 
-        // TODO : oauth2 설정
+        // oauth2 설정
+        http
+                .oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
+                        // // code 를 받아오는 것이 아니라, 'AccessToken' 과 사용자 '프로필정보'를 한번에 받아온다
+                        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
+                                // 인증 서버의 UserInfo Endpoint 진행
+                                .userService(principalOauth2UserService))
+                        // 인증 성공 후 수행할 작업 (여기서 JWT 발급해야 함)
+                        .successHandler(customOauth2SuccessHandler)
+                );
+
         return http.build();
 
     }
+
 
 }

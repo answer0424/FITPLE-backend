@@ -27,9 +27,10 @@ public class UserController {
 
     @PostMapping("/student")
     public ResponseEntity<?> registerStudent(@RequestBody UserRegistrationDTO registration) {
+        System.out.println("student 권한으로 회원가입 요청");
         User user = userService.registerUser(registration, "ROLE_STUDENT");
         if(user == null){
-            return ResponseEntity.badRequest().body(null);
+            return new ResponseEntity<>("Student registered failed", HttpStatus.CONFLICT);
         }else {
             return new ResponseEntity<>("Student registered successfully with role: ROLE_STUDENT", HttpStatus.OK);
         }
@@ -37,6 +38,7 @@ public class UserController {
 
     @PostMapping("/trainer")
     public ResponseEntity<?> registerTrainer(@RequestBody UserRegistrationDTO registration) {
+        System.out.println("trainer 권한으로 회원가입 요청");
         User user = userService.registerUser(registration, "ROLE_TRAINER");
         if(user == null){
             return new ResponseEntity<>("Trainer registered failed", HttpStatus.CONFLICT);
@@ -55,6 +57,8 @@ public class UserController {
         return ResponseEntity.ok(authentication);
     }
 
+    //--------------------------------------------------------------------------------
+    // 확인용
     @RequestMapping("/user")
     public User user(@AuthenticationPrincipal PrincipalDetails userDetails){
         return (userDetails != null) ? userDetails.getUser() : null;
@@ -63,6 +67,7 @@ public class UserController {
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
+        System.out.println(users);
         return ResponseEntity.ok(users);
     }
 }
