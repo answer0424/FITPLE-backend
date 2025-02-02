@@ -71,8 +71,8 @@ public class SecurityConfig {
         // 경로별 인가 설정
         http
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/").hasRole("ROLE_STUDENT")
-                        .anyRequest().permitAll());
+                        .requestMatchers("/register/**").permitAll() // 회원가입 엔드포인트는 인증 필요 없음
+                        .anyRequest().authenticated());
 
         // 세션 설정
         http
@@ -86,7 +86,7 @@ public class SecurityConfig {
         http
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
-       // CORS 설정
+        // CORS 설정
         http
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(new CorsConfigurationSource() {
                     @Override
@@ -118,5 +118,6 @@ public class SecurityConfig {
         return http.build();
 
     }
+
 
 }
