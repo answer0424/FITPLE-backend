@@ -252,7 +252,6 @@ VALUES ('Trainer11', 'password11', 'trainer11@example.com', 'TrainerNick11', 'Tr
        ('Trainer85', 'password85', 'trainer85@example.com', 'TrainerNick85', '서울특별시 금천구 Trainer Address 85',
         '2004-10-10', '/img/profile85.png', 'ROLE_TRAINER', NOW());
 
-
 INSERT INTO trainer_profile (id, trainer_id, per_price, content, career, is_access)
 VALUES (1, 51, 50000, 'Experienced trainer with expertise in fitness.', '2010-05-01',
         '승인'),
@@ -364,6 +363,7 @@ VALUES (1, 51, 50000, 'Experienced trainer with expertise in fitness.', '2010-05
        (74, 124, 75000,  'Pilates instructor with flexibility focus.', '2023-08-14', '승인'),
        (75, 125, 60000,  'Expert in weightlifting and powerlifting.', '2015-04-01',
         '승인');
+
 INSERT INTO HBTI ( user_id, HBTI, mb_score
                  , ei_score
                  , cn_score
@@ -529,8 +529,6 @@ VALUES
 (124, 'MINP', 74, 25, 32, 85),
 (125, 'MENP', 75, 86, 33, 86)
 ;
-
-
 INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons) VALUES
                                                                             (1, 51, 10, 5, 0),
                                                                             (38, 51, 10, 5, 0),
@@ -1265,7 +1263,7 @@ INSERT INTO Review (training_id, rating, content, created_at) VALUES
 
 SELECT *
 FROM User
-WHERE username = 'user1';
+WHERE username = 'ff11';
 SELECT *
 FROM User;
 Select *
@@ -1273,6 +1271,9 @@ from hbti;
 SELECT *
 FROM User;
 SELECT *
-FROM HBTI;
+FROM HBTI
+where user_id=126;
+select *
+from gym;
 
 

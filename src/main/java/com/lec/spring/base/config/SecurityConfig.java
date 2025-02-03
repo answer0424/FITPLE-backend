@@ -72,6 +72,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register/**").permitAll() // 회원가입 엔드포인트는 인증 필요 없음
+                        .requestMatchers("/api/hbti/calculate").permitAll()
+                        .requestMatchers("/api/hbti/type/*").permitAll()
+                        .requestMatchers("/img/**").permitAll()
                         .anyRequest().authenticated());
 
         // 세션 설정
