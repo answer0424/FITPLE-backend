@@ -2,11 +2,15 @@ package com.lec.spring.training.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lec.spring.base.DTO.MyPageUserInfoDTO;
 import com.lec.spring.base.config.PrincipalDetails;
-import com.lec.spring.training.DTO.SkillsDTO;
-import com.lec.spring.training.DTO.TrainerProfileDTO;
+import com.lec.spring.base.service.HbtiService;
+import com.lec.spring.base.service.UserService;
+import com.lec.spring.training.DTO.*;
+import com.lec.spring.training.service.MyPageService;
 import com.lec.spring.training.service.TrainerDetailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,53 +19,259 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/member")
 public class MyPageController{
 
     private final TrainerDetailService trainerDetailService;
+    private final MyPageService myPageService;
+    private final UserService userService;
+    private final HbtiService hbtiService;
 
-    //- 내 일정 띄우기
+    // 비밀번호 찾기 로직
+//    @GetMapping("/password-recovery")
+//    public ResponseEntity<?> recoverPassword() {
+//    }
 
+    // 마이페이지 info 컴포넌트(좌측 내 정보)
+    @GetMapping("/{userid}/info")
+    public ResponseEntity<?> getMyPageUserInfo(@PathVariable Long userid) {
+        try {
+            MyPageUserInfoDTO userInfo = userService.getMyPageUserInfo(userid);
+            userInfo.setHBTI(hbtiService.getHbtiByUserId(userid).getHbti());
+            return new ResponseEntity<>(userInfo, HttpStatus.OK);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
-    //- 오늘의 일정 띄우기
+    // 학생 마이페이지 일정 조회 로직
+    @GetMapping("/{userid}/calendar")
+    public ResponseEntity<?> getStudentCalendar(@PathVariable Long userid,
+                                                @RequestParam int year,
+                                                @RequestParam int month) {
+        try {
+            List<MonthReservationDTO> monthDTO = myPageService.filterSchedulesByMonth(userid, year, month);
+            return new ResponseEntity<>(monthDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
+    // 회원 정보 수정 페이지 조회 로직
+    @GetMapping("/{userid}/edit")
+    public ResponseEntity<?> editMemberInfo(@PathVariable Long userid) {
+        try {
+            MyPageUserInfoDTO userInfo = userService.getMyPageUserInfo(userid);
+            return new ResponseEntity<>(userInfo, HttpStatus.OK);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
-    //- 스탬프 상태 변경
+    // 학생 마이페이지 스탬프 조회 로직
+    @GetMapping("/{userid}/stamp")
+    public ResponseEntity<?> getStudentStamp(@PathVariable Long userid) {
+        try {
+            CouponPageDTO couponPageDTO = myPageService.getMyTrainerPage(userid);
 
-    
-    //- 스탬프 띄우기
+            return new ResponseEntity<>(couponPageDTO, HttpStatus.OK);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
+    // 학생 마이페이지에서 트레이너 변경 로직
+    @GetMapping("/{userid}/stamp/trainer/{trainerId}")
+    public ResponseEntity<?> changeTrainerForStamp(@PathVariable Long userid, @PathVariable Long trainerId) {
+        try {
+            CouponPageDTO couponPageDTO = myPageService.changeCouponPageByTrainer(userid, trainerId);
 
-    //- 쿠폰 사용 기능
+            return new ResponseEntity<>(couponPageDTO, HttpStatus.OK);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
+    // 트레이너 페이지 일정 등록 학생 목록 조회 로직
+    @GetMapping("/{userid}/register")
+    public ResponseEntity<?> registerSchedule(@PathVariable Long userid) {
+        List<StudentListDTO> studentListDTO = myPageService.getMyStudentList(userid);
+        if(!studentListDTO.isEmpty()) {
 
-    //- 트레이너 별 쿠폰 페이지 변경 기능
+            return new ResponseEntity<>(studentListDTO, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("수강생이 없습니다", HttpStatus.NO_CONTENT);
+        }
+    }
 
+    // 트레이너 페이지에서 학생별 일정 등록 조회 로직
+    @GetMapping("/{userid}/register/student/{studentId}")
+    public ResponseEntity<?> registerScheduleForStudent(@PathVariable Long userid,
+                                                        @PathVariable Long studentId,
+                                                        @RequestParam int year,
+                                                        @RequestParam int month) {
+        List<MonthReservationDTO> monthReservationDTO =
+                myPageService.getSchedulesByMember(studentId, userid, year, month);
 
-    //- 남은 pt 횟수 불러오기
+        if(!monthReservationDTO.isEmpty()) {
 
+            return new ResponseEntity<>(monthReservationDTO, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("해당 학생과 일정이 없습니다", HttpStatus.NO_CONTENT);
+        }
+    }
 
-    //- 내 회원 목록 불러오기
+    // 트레이너 페이지에서 학생 검색 로직
+    @GetMapping("/{userid}/register/search")
+    public ResponseEntity<?> searchStudentsForSchedule(@PathVariable Long userid,
+                                                       @RequestParam String studentName) {
+        //TODO : 채팅 기반 검색
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
 
+    // 트레이너 페이지에서 학생별 일정 조회 로직
+    @GetMapping("/{userid}/calendar/student/{studentId}")
+    public ResponseEntity<?> getTrainerCalendarForStudent(@PathVariable Long userid,
+                                                          @PathVariable Long studentId,
+                                                          @RequestParam int year,
+                                                          @RequestParam int month) {
+        List<MonthReservationDTO> monthReservationDTO =
+                myPageService.getSchedulesByMember(studentId, userid, year, month);
 
-    //- 채팅 목록에서 회원 이름 검색
+        if(!monthReservationDTO.isEmpty()) {
 
+            return new ResponseEntity<>(monthReservationDTO, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("해당 학생과 일정이 없습니다", HttpStatus.NO_CONTENT);
+        }
+    }
 
-    //- 트레이닝에 추가하기
+    // 마이페이지에서 AI 프로필 사진 생성 요청 처리 로직
+    @PostMapping("/{userid}/ai-creation")
+    public ResponseEntity<?> createAIProfilePicture(@PathVariable String userid) {
+        //TODO : AI 빨랑 해야하는대...
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
 
+    // 트레이너 페이지에서 일정 등록 추가 처리 로직
+    @PostMapping("/register/add-schedule")
+    public ResponseEntity<?> addSchedule(@RequestBody Long userid,
+                                         @RequestBody CreateReservationDTO reservationDTO) {
+        try {
+            myPageService.addSchedule(reservationDTO, userid);
+            return new ResponseEntity<>("일정 등록에 성공했습니다", HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
-    //- 일정 추가 기능
+    // 트레이너 페이지 회원 추가 처리 로직
+    @PostMapping("/register/add-member")
+    public ResponseEntity<?> addMemberToSchedule(@RequestBody Long trainerId, @RequestBody Long studentId) {
+        try {
+            myPageService.addTraining(studentId, trainerId);
+            return new ResponseEntity<>("회원 추가에 성공했습니다", HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
+    // 마이페이지에서 회원 정보 수정 처리 로직
+    @PatchMapping("/mypage")
+    public ResponseEntity<?> updateMemberInfo(@RequestBody MyPageUserInfoDTO newUserInfo) {
+        try {
+            userService.changeUserProfile(newUserInfo);
+            return new ResponseEntity<>("", HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
-    //- 회원 일정 불러오기
+    // 마이페이지에서 일정 상태 변경 처리 로직
+    @PatchMapping("/schedule")
+    public ResponseEntity<?> updateSchedule(@RequestBody String status, @RequestBody Long reservationId) {
+        try {
+            if(myPageService.updateStampStatus(status, reservationId))
+                return new ResponseEntity<>("완료되었습니다", HttpStatus.OK);
+            else return new ResponseEntity<>("변경 실패하였습니다 \n 다시 시도해주세요", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
+    // 마이페이지에서 프로필 사진 변경 처리 로직
+    @PatchMapping("/profile-img")
+    public ResponseEntity<?> updateProfileImage(@RequestBody MultipartFile profileImage,
+                                                @RequestBody Long userId) {
+        //TODO
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    // 마이페이지에서 AI 프로필 사진 변경 처리 로직
+    @PatchMapping("/ai-img")
+    public ResponseEntity<?> updateAIProfileImage(@RequestBody MultipartFile profileImage,
+                                                  @RequestBody Long userId,
+                                                  @RequestBody String AIPrompt) {
+        //TODO
+        return new ResponseEntity<>("", HttpStatus.OK);
+    }
+
+    // 학생 마이페이지에서 쿠폰 사용 처리 로직
+    @PatchMapping("/use-coupons")
+    public ResponseEntity<?> useCoupons(@RequestBody Long studentId, @RequestBody Long trainerId) {
+        try {
+            if(myPageService.useCoupon(studentId, trainerId)){
+                return new ResponseEntity<>("쿠폰 사용에 성공했습니다", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("쿠폰 사용에 실패했습니다", HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    // 트레이너 페이지에서 PT 횟수 증감 처리 로직
+    @PatchMapping("/pt-count")
+    public ResponseEntity<?> updatePTCount(@RequestBody Long studentId,
+                                           @RequestBody Long trainerId,
+                                           @RequestBody int times) {
+        try {
+            return new ResponseEntity<>(myPageService.setPtCount(studentId, trainerId, times), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    // 회원 탈퇴 처리 로직
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteMember(@PathVariable Long userId) {
+        try {
+            userService.DeleteMember(userId);
+            return new ResponseEntity<>("탈퇴처리 되었습니다", HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    // 트레이너 페이지에서 일정 삭제 처리 로직
+    @DeleteMapping("/calendar/delete-schedule")
+    public ResponseEntity<?> deleteSchedule(@RequestBody Long reservationId) {
+        try {
+            myPageService.deleteSchedule(reservationId);
+            return new ResponseEntity<>("삭제 되었습니다", HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
     // [트레이너 상세페이지 작성]
     /*메소드와 메소드 사이에 정보를 보낼 때는 매개변수로 보내는 것을 잊지말자.!*/
-    @PostMapping(value = "/member/detail", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/detail", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Boolean> createTrainerProfile(
             @ModelAttribute("trainerProfileDTO") TrainerProfileDTO trainerProfileDTO,
             @AuthenticationPrincipal PrincipalDetails user,
@@ -90,7 +300,7 @@ public class MyPageController{
 
 
     // [트레이너 상세페이지 수정]
-    @PatchMapping(value = "/member/detail", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/detail", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Boolean> updateTrainerProfile(
             @ModelAttribute("trainerProfileDTO") TrainerProfileDTO trainerProfileDTO,
             @AuthenticationPrincipal PrincipalDetails user,

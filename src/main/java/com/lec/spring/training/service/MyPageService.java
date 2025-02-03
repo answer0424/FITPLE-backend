@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MyPageService {
     //- 이 달의 일정 띄우기
-    List<MonthReservationDTO> filterSchedulesByMonth(String username, int year, int month);
+    List<MonthReservationDTO> filterSchedulesByMonth(Long userid, int year, int month);
 
     //- 오늘의 일정 띄우기
     List<TodayReservationDTO> filterSchedulesByDay(String username, LocalDateTime date);
@@ -27,6 +27,9 @@ public interface MyPageService {
     //- 남은 pt 횟수 불러오기
     int getPtCount(Long studentId, Long trainerId);
 
+    //- pt 횟수 변경
+    int setPtCount(Long studentId, Long trainerId, int times);
+
     //- 내 회원 목록 불러오기
     List<StudentListDTO> getMyStudentList(Long trainerId);
 
@@ -37,10 +40,13 @@ public interface MyPageService {
     StudentListDTO findStudentByChats(Long trainerId, String studentName);
 
     //- 트레이닝에 추가하기
-    boolean addTraining(Long studentId, Long trainerId);
+    void addTraining(Long studentId, Long trainerId);
 
     //- 일정 추가 기능
-    boolean addSchedule(CreateReservationDTO reservationDTO, long studentId);
+    void addSchedule(CreateReservationDTO reservationDTO, long studentId);
+
+    //- 일정 추가 기능
+    void deleteSchedule(long reservationId);
 
     //- 회원별 일정 불러오기
     List<MonthReservationDTO> getSchedulesByMember(Long studentId, Long trainerId, int year, int month);

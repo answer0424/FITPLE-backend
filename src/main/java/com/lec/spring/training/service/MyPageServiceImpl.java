@@ -9,6 +9,8 @@ import com.lec.spring.training.domain.ReservationStatus;
 import com.lec.spring.training.domain.Training;
 import com.lec.spring.training.repository.ReservationRepository;
 import com.lec.spring.training.repository.TrainingRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,22 +18,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
+@Service
 public class MyPageServiceImpl implements MyPageService {
 
     private final ReservationRepository reservationRepository;
     private final TrainingRepository trainingRepository;
     private final UserRepository userRepository;
 
-    public MyPageServiceImpl(ReservationRepository reservationRepository, TrainingRepository trainingRepository, UserRepository userRepository, PrincipalDetailService principalDetailService) {
-        this.reservationRepository = reservationRepository;
-        this.trainingRepository = trainingRepository;
-        this.userRepository = userRepository;
-    }
 
 
     @Override
-    public List<MonthReservationDTO> filterSchedulesByMonth(String username, int year, int month) {
-        User user = userRepository.findByUsername(username); // 현재 로그인한 유저
+    public List<MonthReservationDTO> filterSchedulesByMonth(Long userid, int year, int month) {
+        User user = userRepository.findById(userid).orElseThrow(() -> new IllegalArgumentException("유저 정보를 찾지 못했습니다.")); // 현재 로그인한 유저
 
         if (user != null) {
             return reservationRepository.findReservationsByUserAndMonth(user.getId(), year, month);
@@ -53,14 +52,17 @@ public class MyPageServiceImpl implements MyPageService {
 
     @Override
     public boolean updateStampStatus(String status, Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() -> new IllegalArgumentException("예약이 없습니다."));
 
-        if (reservation != null) {
-            reservation.setStatus(ReservationStatus.valueOf(status));
-            return true;
-        } else {
-            return false;
+        reservation.setStatus(ReservationStatus.valueOf(status));
+        reservationRepository.save(reservation);
+
+        if (reservation.getStatus().equals(ReservationStatus.운동완료)) {
+            Training training = trainingRepository.findById(reservation.getTraining().getId()).orElseThrow(() -> new IllegalArgumentException("스탬프 추가에 실패했습니다"));
+            training.setTotal_stamps(training.getTotal_stamps() + 1);
         }
+
+        return true;
     }
 
     @Override
@@ -88,52 +90,54 @@ public class MyPageServiceImpl implements MyPageService {
     public boolean useCoupon(Long studentId, Long trainerId) {
         long trainingId = findTrainingId(studentId, trainerId);
 
-        try {
-            Training training = trainingRepository.findById(trainingId).orElseThrow();
 
-            if (training.getCoupons() > 0) {
-                training.setCoupons(training.getCoupons() - 1);
-                training.setTimes(training.getTimes() + 1);
-                trainingRepository.saveAndFlush(training);
-            } else {
-                return false;
-            }
+        Training training = trainingRepository.findById(trainingId)
+                .orElseThrow(() -> new IllegalArgumentException("쿠폰 확인에 실패했습니다."));
+
+        if (training.getCoupons() > 0) {
+            training.setCoupons(training.getCoupons() - 1);
+            training.setTimes(training.getTimes() + 1);
+            trainingRepository.saveAndFlush(training);
             return true;
-        }catch (Exception e) {
+        } else {
             return false;
         }
     }
 
     @Override
     public CouponPageDTO changeCouponPageByTrainer(Long studentId, Long trainerId) {
-        try{
-            Training training = trainingRepository.findById(findTrainingId(studentId, trainerId)).orElseThrow();
-            List<User> ids = new ArrayList<>();
-            trainingRepository.findByUserId(studentId)
-                    .forEach(t ->
-                            ids.add(t.getTrainer())
-                    );
 
-            return CouponPageDTO.builder()
-                    .coupons(training.getCoupons())
-                    .times(training.getTimes())
-                    .nickname(training.getTrainer().getNickname())
-                    .trainerIds(ids)
-                    .build();
-        } catch (Exception e) {
-            return null;
-        }
+        Training training = trainingRepository.findById(findTrainingId(studentId, trainerId)).orElseThrow(() -> new IllegalArgumentException("쿠폰 페이지 불러오기에 실패했습니다"));
+        List<User> ids = new ArrayList<>();
+        trainingRepository.findByUserId(studentId)
+                .forEach(t ->
+                        ids.add(t.getTrainer())
+                );
+
+        return CouponPageDTO.builder()
+                .coupons(training.getCoupons())
+                .times(training.getTimes())
+                .nickname(training.getTrainer().getNickname())
+                .trainerIds(ids)
+                .build();
     }
 
     @Override
     public int getPtCount(Long studentId, Long trainerId) {
-        try{
-            Training training = trainingRepository.findById(findTrainingId(studentId, trainerId)).orElseThrow();
+        Training training = trainingRepository.findById(findTrainingId(studentId, trainerId))
+                .orElseThrow(() -> new IllegalArgumentException("남은 횟수 불러오기에 실패했습니다"));
 
-            return training.getTimes();
-        } catch (Exception e) {
-            return 0;
-        }
+        return training.getTimes();
+    }
+
+    @Override
+    public int setPtCount(Long studentId, Long trainerId, int times) {
+        Training training = trainingRepository.findById(findTrainingId(studentId, trainerId))
+                .orElseThrow(() -> new IllegalArgumentException("남은 횟수 불러오기에 실패했습니다"));
+
+        training.setTimes(training.getTimes() + times);
+
+        return trainingRepository.saveAndFlush(training).getTimes();
     }
 
     @Override
@@ -165,6 +169,8 @@ public class MyPageServiceImpl implements MyPageService {
         try {
             long studentId = userRepository.findByUsername(studentName).getId();
 
+            //TODO : 채팅 기반 검색
+
             return null;
         } catch (Exception e) {
             return null;
@@ -172,43 +178,40 @@ public class MyPageServiceImpl implements MyPageService {
     }
 
     @Override
-    public boolean addTraining(Long studentId, Long trainerId) {
-        try {
-            Training training = Training.builder()
-                    .user(userRepository.findById(studentId).orElseThrow())
-                    .trainer(userRepository.findById(trainerId).orElseThrow())
-                    .times(0)
-                    .build();
+    public void addTraining(Long studentId, Long trainerId) {
+        Training training = Training.builder()
+                .user(userRepository.findById(studentId)
+                        .orElseThrow(() -> new IllegalArgumentException("회원 목록에서 검색에 실패했습니다")))
+                .trainer(userRepository.findById(trainerId)
+                        .orElseThrow(() -> new IllegalArgumentException("트레이너 목록에서 검색에 실패했습니다")))
+                .times(0)
+                .build();
 
-            trainingRepository.saveAndFlush(training);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        trainingRepository.saveAndFlush(training);
+
     }
 
     @Override
-    public boolean addSchedule(CreateReservationDTO reservationDTO, long studentId) {
-        try {
-            Reservation reservation = Reservation.builder()
-                    .date(reservationDTO.getDate())
-                    .training(trainingRepository.findById(
-                            findTrainingId(studentId, reservationDTO.getTrainingId())).orElseThrow())
-                    .build();
+    public void addSchedule(CreateReservationDTO reservationDTO, long studentId) {
+        Reservation reservation = Reservation.builder()
+                .date(reservationDTO.getDate())
+                .training(trainingRepository.findById(
+                        findTrainingId(studentId, reservationDTO.getTrainingId())).orElseThrow(() -> new IllegalArgumentException("일정 등록에 실패했습니다.")))
+                .build();
 
-            reservationRepository.save(reservation);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        reservationRepository.save(reservation);
+    }
+
+    @Override
+    public void deleteSchedule(long reservationId) {
+        reservationRepository.delete(reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new IllegalArgumentException("삭제할 스케줄을 찾지 못했습니다")));
+        reservationRepository.flush();
     }
 
     @Override
     public List<MonthReservationDTO> getSchedulesByMember(Long studentId, Long trainerId, int year, int month) {
-
-        MonthReservationDTO
-
-        return List.of();
+        return reservationRepository.findReservationsByStudentAndMonth(studentId, trainerId, year, month);
     }
 
     @Override
