@@ -252,6 +252,7 @@ VALUES ('Trainer11', 'password11', 'trainer11@example.com', 'TrainerNick11', 'Tr
        ('Trainer85', 'password85', 'trainer85@example.com', 'TrainerNick85', '서울특별시 금천구 Trainer Address 85',
         '2004-10-10', '/img/profile85.png', 'ROLE_TRAINER', NOW());
 
+
 INSERT INTO trainer_profile (id, trainer_id, per_price, content, career, is_access)
 VALUES (1, 51, 50000, 'Experienced trainer with expertise in fitness.', '2010-05-01',
         '승인'),
@@ -363,7 +364,6 @@ VALUES (1, 51, 50000, 'Experienced trainer with expertise in fitness.', '2010-05
        (74, 124, 75000,  'Pilates instructor with flexibility focus.', '2023-08-14', '승인'),
        (75, 125, 60000,  'Expert in weightlifting and powerlifting.', '2015-04-01',
         '승인');
-
 INSERT INTO HBTI ( user_id, HBTI, mb_score
                  , ei_score
                  , cn_score
@@ -529,58 +529,60 @@ VALUES
 (124, 'MINP', 74, 25, 32, 85),
 (125, 'MENP', 75, 86, 33, 86)
 ;
+
+
 INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons) VALUES
-                                                                            (1, 51, 10, 5, 0),
-                                                                            (38, 51, 10, 5, 0),
-                                                                            (2, 52, 15, 7, 1),
-                                                                            (3, 53, 20, 9, 2),
-                                                                            (4, 54, 25, 3, 3),
-                                                                            (5, 55, 12, 6, 0),
-                                                                            (6, 56, 18, 2, 1),
-                                                                            (7, 57, 22, 8, 2),
-                                                                            (8, 58, 30, 4, 3),
-                                                                            (9, 59, 14, 1, 0),
-                                                                            (10, 60, 17, 7, 1),
-                                                                            (11, 61, 10, 9, 0),
-                                                                            (12, 62, 15, 3, 1),
-                                                                            (13, 63, 20, 5, 2),
-                                                                            (14, 64, 25, 8, 3),
-                                                                            (15, 65, 12, 2, 0),
-                                                                            (16, 66, 18, 4, 1),
-                                                                            (17, 67, 22, 6, 2),
-                                                                            (18, 68, 30, 0, 3),
-                                                                            (19, 69, 14, 9, 0),
-                                                                            (20, 70, 17, 3, 1),
-                                                                            (21, 71, 10, 2, 0),
-                                                                            (22, 72, 15, 5, 1),
-                                                                            (23, 73, 20, 7, 2),
-                                                                            (24, 74, 25, 4, 3),
-                                                                            (25, 75, 12, 6, 0),
-                                                                            (26, 76, 18, 1, 1),
-                                                                            (27, 77, 22, 8, 2),
-                                                                            (28, 78, 30, 9, 3),
-                                                                            (29, 79, 14, 2, 0),
-                                                                            (30, 80, 17, 5, 1),
-                                                                            (31, 81, 10, 4, 0),
-                                                                            (32, 82, 15, 3, 1),
-                                                                            (33, 83, 20, 7, 2),
-                                                                            (34, 84, 25, 1, 3),
-                                                                            (35, 85, 12, 0, 0),
-                                                                            (36, 86, 18, 6, 1),
-                                                                            (37, 87, 22, 5, 2),
-                                                                            (38, 88, 30, 9, 3),
-                                                                            (39, 89, 14, 8, 0),
-                                                                            (40, 90, 17, 2, 1),
-                                                                            (41, 91, 10, 4, 0),
-                                                                            (42, 92, 15, 3, 1),
-                                                                            (43, 93, 20, 5, 2),
-                                                                            (44, 94, 25, 7, 3),
-                                                                            (45, 95, 12, 1, 0),
-                                                                            (46, 96, 18, 6, 1),
-                                                                            (47, 97, 22, 9, 2),
-                                                                            (48, 98, 30, 8, 3),
-                                                                            (49, 99, 14, 0, 0),
-                                                                            (50, 100, 17, 4, 1);
+                                                                             (1, 51, 10, 5, 0),
+                                                                             (38, 51, 10, 5, 0),
+                                                                             (2, 52, 15, 7, 1),
+                                                                             (3, 53, 20, 9, 2),
+                                                                             (4, 54, 25, 3, 3),
+                                                                             (5, 55, 12, 6, 0),
+                                                                             (6, 56, 18, 2, 1),
+                                                                             (7, 57, 22, 8, 2),
+                                                                             (8, 58, 30, 4, 3),
+                                                                             (9, 59, 14, 1, 0),
+                                                                             (10, 60, 17, 7, 1),
+                                                                             (11, 61, 10, 9, 0),
+                                                                             (12, 62, 15, 3, 1),
+                                                                             (13, 63, 20, 5, 2),
+                                                                             (14, 64, 25, 8, 3),
+                                                                             (15, 65, 12, 2, 0),
+                                                                             (16, 66, 18, 4, 1),
+                                                                             (17, 67, 22, 6, 2),
+                                                                             (18, 68, 30, 0, 3),
+                                                                             (19, 69, 14, 9, 0),
+                                                                             (20, 70, 17, 3, 1),
+                                                                             (21, 71, 10, 2, 0),
+                                                                             (22, 72, 15, 5, 1),
+                                                                             (23, 73, 20, 7, 2),
+                                                                             (24, 74, 25, 4, 3),
+                                                                             (25, 75, 12, 6, 0),
+                                                                             (26, 76, 18, 1, 1),
+                                                                             (27, 77, 22, 8, 2),
+                                                                             (28, 78, 30, 9, 3),
+                                                                             (29, 79, 14, 2, 0),
+                                                                             (30, 80, 17, 5, 1),
+                                                                             (31, 81, 10, 4, 0),
+                                                                             (32, 82, 15, 3, 1),
+                                                                             (33, 83, 20, 7, 2),
+                                                                             (34, 84, 25, 1, 3),
+                                                                             (35, 85, 12, 0, 0),
+                                                                             (36, 86, 18, 6, 1),
+                                                                             (37, 87, 22, 5, 2),
+                                                                             (38, 88, 30, 9, 3),
+                                                                             (39, 89, 14, 8, 0),
+                                                                             (40, 90, 17, 2, 1),
+                                                                             (41, 91, 10, 4, 0),
+                                                                             (42, 92, 15, 3, 1),
+                                                                             (43, 93, 20, 5, 2),
+                                                                             (44, 94, 25, 7, 3),
+                                                                             (45, 95, 12, 1, 0),
+                                                                             (46, 96, 18, 6, 1),
+                                                                             (47, 97, 22, 9, 2),
+                                                                             (48, 98, 30, 8, 3),
+                                                                             (49, 99, 14, 0, 0),
+                                                                             (50, 100, 17, 4, 1);
 
 # reservation 더미데이터
 INSERT INTO reservation (id, training_id, date, status, start_time, exercise_time)
@@ -907,9 +909,9 @@ WHERE username = 'Trainer65';
 
 # certification
 INSERT INTO certification (id, trainer_profile_id, credentials, skills)
-VALUES (1, 1, 'img/1.jpg', '경력'),
-       (2, 1, 'img/2.jpg', '경력'),
-       (3, 1, 'img/3.jpg', '경력'),
+VALUES (1, 1, '/uploads/1.jpg', '경력'),
+       (2, 1, '/uploads/2.jpg', '경력'),
+       (3, 1, '/uploads/3.jpg', '경력'),
        (4, 2, 'img/4.jpg', '경력'),
        (5, 2, 'img/5.jpg', '경력'),
        (6, 2, 'img/6.jpg', '경력'),
@@ -1263,7 +1265,7 @@ INSERT INTO Review (training_id, rating, content, created_at) VALUES
 
 SELECT *
 FROM User
-WHERE username = 'ff11';
+WHERE username = 'user1';
 SELECT *
 FROM User;
 Select *
@@ -1271,9 +1273,42 @@ from hbti;
 SELECT *
 FROM User;
 SELECT *
-FROM HBTI
-where user_id=126;
-select *
-from gym;
+FROM HBTI;
+SELECT *
+FROM trainer_profile;
+SELECT *
+FROM certification;
+SELECT *
+FROM gym;
+SELECT *
+FROM review;
+
+SELECT *
+FROM training;
+
+UPDATE user
+SET gym_id = 10
+WHERE id = 51;
+
+UPDATE review
+set rating = 2
+WHERE id = 2;
+
+INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons)
+VALUES
+    (5, 51, 10, 5, 2),
+    (16, 51, 20, 10, 3),
+    (20, 51, 15, 7, 1),
+    (25, 51, 12, 6, 2),
+    (30, 51, 18, 8, 3),
+    (37, 51, 25, 15, 5);
 
 
+INSERT INTO Review (training_id, rating, content, created_at)
+VALUES
+    (52, 5, '트레이너님이 매우 친절하시고 체계적인 훈련을 제공합니다.', '2024-02-01 10:00:00'),
+    (53, 4, '운동 루틴이 잘 짜여 있어서 효과를 보고 있습니다.', '2024-02-02 12:30:00'),
+    (54, 5, '개인 맞춤형 코칭이 정말 좋습니다. 만족합니다!', '2024-02-03 14:20:00'),
+    (55, 3, '시설은 조금 부족하지만 트레이닝 자체는 훌륭합니다.', '2024-02-04 16:45:00'),
+    (56, 4, '운동할 때 동기부여를 잘 해주십니다.', '2024-02-05 09:10:00'),
+    (57, 2, '조금 더 세밀한 설명이 필요할 것 같습니다.', '2024-02-06 11:50:00');

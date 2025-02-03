@@ -24,7 +24,9 @@ public class User extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "gym_id")
+    @JoinColumn(name = "GymId")
+    @ToString.Exclude
+    @JsonIgnore
     private Gym gym;
 
     @Column(nullable = false, length = 300, unique = true)
@@ -60,6 +62,8 @@ public class User extends BaseEntity {
     private String providerId;
 
     @Column(length = 20)
+    @ToString.Exclude
+    @JsonIgnore
     private String authority;
 
     @Column(length = 50)

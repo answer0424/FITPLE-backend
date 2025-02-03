@@ -42,6 +42,7 @@ public class ReviewService {
                             .trainerProfileImage(trainer.getProfileImage())
                             .rating(review.getRating())
                             .content(review.getContent())
+                            .createdAt(review.getCreatedAt())
                             .build();
                 })
                 .collect(Collectors.toList());
