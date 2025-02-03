@@ -87,6 +87,8 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
                 .queryParam("uuid", uuid)
                 .toUriString();
 
+        System.out.println(resetLink);
+
         // 이메일 내용 작성 (HTML 형식, React에서 처리하기 용이한 링크 포함)
         String emailContent = "<html>" +
                 "<body>" +

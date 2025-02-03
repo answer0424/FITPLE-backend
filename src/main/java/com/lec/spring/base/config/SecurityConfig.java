@@ -22,6 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.security.Security;
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -72,9 +73,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register/**").permitAll() // 회원가입 엔드포인트는 인증 필요 없음
-                        .requestMatchers("/send-reset-email").permitAll()
-                        .requestMatchers("/reset-password").permitAll()
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/member/send-reset-email").permitAll()
+                        .requestMatchers("/member/reset-password").permitAll()
                         .requestMatchers("/member/detail").authenticated()  //지윤
                         .anyRequest().authenticated());
 
@@ -101,6 +101,7 @@ public class SecurityConfig {
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(List.of("*"));
                         configuration.setMaxAge(3600L);
+                        configuration.setAllowedHeaders(Arrays.asList("*"));
 
                         configuration.setExposedHeaders(List.of("Authorization"));
 

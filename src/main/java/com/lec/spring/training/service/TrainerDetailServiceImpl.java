@@ -40,7 +40,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
     private final UserRepository userRepository;
 
-    @Autowired
+
     public TrainerDetailServiceImpl(TrainerProfileRepository trainerProfileRepository, CertificationRepository certificationRepository, ImgService imgService, UserRepository userRepository) {
         this.trainerProfileRepository = trainerProfileRepository;
         this.certificationRepository = certificationRepository;

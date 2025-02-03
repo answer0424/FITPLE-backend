@@ -57,10 +57,8 @@ public class UserController {
         return ResponseEntity.ok(authentication);
     }
 
-    @RequestMapping("/user")
-    public User user(@AuthenticationPrincipal PrincipalDetails userDetails){
-        return (userDetails != null) ? userDetails.getUser() : null;
-    }
+    //--------------------------------------------------------------------------------
+
 
     @GetMapping("/user") // 지윤
     public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal PrincipalDetails userDetails){
