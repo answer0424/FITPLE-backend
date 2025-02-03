@@ -49,8 +49,10 @@ public class ChatService {
         // 🔥 새로운 채팅방 생성 (ID 먼저 생성해야 함)
         System.out.println("채팅방 생성");
 
-        Chat chat = chatRepository.save(new Chat());
+        Chat chat = chatRepository.saveAndFlush(new Chat());
         System.out.println("생성된 채팅방 " + chat);
+        System.out.println(chatRepository.findById(chat.getId()));
+
 
         // 🔥 UserChatId를 명확히 설정
         UserChatId userChatId1 = new UserChatId(userId, chat.getId());

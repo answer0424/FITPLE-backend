@@ -9,14 +9,15 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@Embeddable
 @Data
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Embeddable
 public class UserChatId implements Serializable {
-    @Column(name = "user_id")  // snake_case로 변경
+    @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "chat_id")  // snake_case로 변경
+    @Column(name = "chat_id")
     private Long chatId;
 }

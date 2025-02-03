@@ -20,7 +20,7 @@ public interface UserChatRepository extends JpaRepository<UserChat, UserChatId> 
 
     // 두 사용자가 공유하는 채팅방 찾기 (1:1 채팅이므로 존재하면 1개)
     @Query("SELECT uc FROM UserChat uc WHERE uc.user.id IN (:userId1, :userId2) " +
-            "GROUP BY uc.chat HAVING COUNT(DISTINCT uc.user.id) = 2")
+            "GROUP BY uc.chat, uc.user.id HAVING COUNT(DISTINCT uc.user.id) = 2")
     Optional<UserChat> findByUserIds(@Param("userId1") Long userId1, @Param("userId2") Long userId2);
 
     // 채팅방에서 특정 유저 제거
