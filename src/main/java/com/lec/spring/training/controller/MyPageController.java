@@ -9,6 +9,8 @@ import com.lec.spring.base.service.UserService;
 import com.lec.spring.training.DTO.*;
 import com.lec.spring.training.service.MyPageService;
 import com.lec.spring.training.service.TrainerDetailService;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,11 +33,6 @@ public class MyPageController{
     private final MyPageService myPageService;
     private final UserService userService;
     private final HbtiService hbtiService;
-
-    // 비밀번호 찾기 로직
-//    @GetMapping("/password-recovery")
-//    public ResponseEntity<?> recoverPassword() {
-//    }
 
     // 마이페이지 info 컴포넌트(좌측 내 정보)
     @GetMapping("/{userid}/info")
@@ -206,10 +203,17 @@ public class MyPageController{
 
     // 마이페이지에서 프로필 사진 변경 처리 로직
     @PatchMapping("/profile-img")
+    @Transactional
     public ResponseEntity<?> updateProfileImage(@RequestBody MultipartFile profileImage,
                                                 @RequestBody Long userId) {
-        //TODO
-        return new ResponseEntity<>("", HttpStatus.OK);
+        try {
+            userService.changeUserProfileImage(profileImage, userId);
+            return new ResponseEntity<>("", HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     // 마이페이지에서 AI 프로필 사진 변경 처리 로직

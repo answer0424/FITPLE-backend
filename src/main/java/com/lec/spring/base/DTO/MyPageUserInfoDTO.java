@@ -9,7 +9,7 @@ import java.util.Date;
 @Builder
 public class MyPageUserInfoDTO {
     long userId;
-    String nickName;
+    String nickname;
     String profileImage;
     String HBTI;
     String address;
