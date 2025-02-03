@@ -364,6 +364,8 @@ VALUES (1, 51, 50000, 'Experienced trainer with expertise in fitness.', '2010-05
        (74, 124, 75000,  'Pilates instructor with flexibility focus.', '2023-08-14', '승인'),
        (75, 125, 60000,  'Expert in weightlifting and powerlifting.', '2015-04-01',
         '승인');
+
+
 INSERT INTO HBTI ( user_id, HBTI, mb_score
                  , ei_score
                  , cn_score
@@ -530,7 +532,6 @@ VALUES
 (125, 'MENP', 75, 86, 33, 86)
 ;
 
-
 INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons) VALUES
                                                                              (1, 51, 10, 5, 0),
                                                                              (38, 51, 10, 5, 0),
@@ -686,6 +687,7 @@ VALUES (1, 1, '2025-01-01 09:00:00', '운동완료', '09:00:00', 45),
        (98, 8, '2025-04-08 09:00:00', '운동전', '09:00:00', 40),
        (99, 9, '2025-04-09 14:30:00', '운동전', '14:30:00', 35),
        (100, 10, '2025-04-10 18:15:00', '운동취소', '18:15:00', 25);
+
 
 UPDATE User
 SET address = '서울특별시 종로구 수표로26길 12'
@@ -906,6 +908,7 @@ WHERE username IN ('Trainer64');
 UPDATE User
 SET address = '서울특별시 강동구 천호대로 1006'
 WHERE username = 'Trainer65';
+
 
 # certification
 INSERT INTO certification (id, trainer_profile_id, credentials, skills)
@@ -1263,33 +1266,6 @@ INSERT INTO Review (training_id, rating, content, created_at) VALUES
                                                                   (15, 5, '강사님 덕분에 목표를 초과 달성했어요.', NOW());
 
 
-SELECT *
-FROM User
-WHERE username = 'user1';
-SELECT *
-FROM User;
-Select *
-from hbti;
-SELECT *
-FROM User;
-SELECT *
-FROM HBTI;
-SELECT *
-FROM trainer_profile;
-SELECT *
-FROM certification;
-SELECT *
-FROM gym;
-SELECT *
-FROM review;
-
-SELECT *
-FROM training;
-
-UPDATE user
-SET gym_id = 10
-WHERE id = 51;
-
 UPDATE review
 set rating = 2
 WHERE id = 2;
@@ -1312,6 +1288,12 @@ VALUES
     (55, 3, '시설은 조금 부족하지만 트레이닝 자체는 훌륭합니다.', '2024-02-04 16:45:00'),
     (56, 4, '운동할 때 동기부여를 잘 해주십니다.', '2024-02-05 09:10:00'),
     (57, 2, '조금 더 세밀한 설명이 필요할 것 같습니다.', '2024-02-06 11:50:00');
+
+-- Update gym_id for trainers based on exact address matches
+UPDATE User u
+    JOIN Gym g ON u.address = g.address
+SET u.gym_id = g.id
+WHERE u.authority = 'ROLE_TRAINER';
 
 select *
 from user;
