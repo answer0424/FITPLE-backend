@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface GymRepository  extends JpaRepository<Gym, Long> {
     Optional<Gym> findById(Long gymId); // ✅ Gym의 ID로 조회
+    Gym findByAddress(String address);
 }
