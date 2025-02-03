@@ -132,7 +132,7 @@ public class HbtiService {
 
         // HBTI 엔티티 생성 또는 업데이트
         HBTI hbtiEntity = hbtiRepository.findById(userId).orElse(new HBTI());
-        hbtiEntity.setId(userId); // primary key 설정
+        //hbtiEntity.setId(userId); // primary key 설정
         hbtiEntity.setUser(user);
         hbtiEntity.setMbScore(roundedMb); // 반올림된 값 저장
         hbtiEntity.setEiScore(roundedEi);

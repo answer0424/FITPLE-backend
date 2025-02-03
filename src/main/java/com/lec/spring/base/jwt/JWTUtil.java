@@ -24,8 +24,11 @@ public class JWTUtil {
     public String generateToken(User user, Long expiredMs) {
         System.out.println("JWTUtil.generateToken() 호출");
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-        String formattedBirth = formatter.format(user.getBirth());
+        String formattedBirth = null;
+        if (user.getBirth() != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+            formattedBirth = formatter.format(user.getBirth());
+        }
 
         // JWT 생성 (Payload 에 저장될 정보)
         return Jwts.builder()

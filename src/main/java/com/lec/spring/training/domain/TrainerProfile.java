@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -46,5 +45,5 @@ public class TrainerProfile {
     public void addCertificationList(Certification... certificationList) {
         Collections.addAll(this.certificationList, certificationList);
     }
-}
+}// end TrainerProfile
 

@@ -1,23 +1,24 @@
 package com.lec.spring.training.service;
 
-import com.lec.spring.base.domain.User;
+import com.lec.spring.base.config.PrincipalDetails;
+import com.lec.spring.training.DTO.SkillsDTO;
+import com.lec.spring.training.DTO.TrainerProfileDTO;
 import com.lec.spring.training.domain.Certification;
-import com.lec.spring.training.domain.GrantStatus;
-import com.lec.spring.training.domain.TrainerProfile;
-import java.util.Date;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 public interface TrainerDetailService {
-    TrainerProfile createTrainerProfile(User trainer, Integer perPrice, String skills, String content,
-                                        Date career, GrantStatus isAccess, List<Certification> certifications);
+    // 트레이너 프로필 생성
+    boolean createTrainerProfile(TrainerProfileDTO trainerProfile, PrincipalDetails user, List<String> skills, List<MultipartFile> files) throws IOException;
 
-    List<TrainerProfile> getAllTrainerProfiles();
 
-    Optional<TrainerProfile> getTrainerProfileById(Long id);
+    // 트레이너 프로필 수정
+    boolean updateTrainerProfile(TrainerProfileDTO trainerProfile,  List<String> skills, List<MultipartFile> images) throws IOException;
 
-    TrainerProfile updateTrainerProfile(Long id, Integer perPrice, String skills, String content,
-                                        Date career, GrantStatus isAccess, List<Certification> certifications);
+
+
 
 
 }// end TrainerDetailService
