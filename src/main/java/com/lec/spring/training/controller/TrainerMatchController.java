@@ -21,14 +21,10 @@ public class TrainerMatchController {
     private final TrainerMatchService trainerMatchService;
 
     @GetMapping("/{userId}/result/match")
-    public ResponseEntity<?> getMatchingTrainers(
-            @PathVariable Long userId,
-            @RequestParam String hbti  // 쉼표로 구분된 HBTI 문자열로 받음
-    ) {
+    public ResponseEntity<?> getMatchingTrainers(@PathVariable Long userId) {
         try {
-            List<String> hbtiList = Arrays.asList(hbti.split(","));
             List<TrainerMatchResponseDTO> matchingTrainers =
-                    trainerMatchService.findMatchingTrainers(userId, hbtiList);
+                    trainerMatchService.findMatchingTrainersByUserId(userId);
 
             if (matchingTrainers.isEmpty()) {
                 return ResponseEntity.noContent().build();

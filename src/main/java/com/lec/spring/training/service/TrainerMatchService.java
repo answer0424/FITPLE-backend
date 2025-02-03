@@ -25,12 +25,17 @@ public class TrainerMatchService {
     private final TrainerProfileRepository trainerProfileRepository;
     private final HbtiRepository hbtiRepository;
 
-    public List<TrainerMatchResponseDTO> findMatchingTrainers(Long userId, List<String> hbtiTypes) {
-        // 사용자 district 확인
+    public List<TrainerMatchResponseDTO> findMatchingTrainersByUserId(Long userId) {
+        // 사용자 조회
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
+        // 사용자의 HBTI 조회
+        HBTI userHBTI = hbtiRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("HBTI not found for user: " + userId));
+
         String userDistrict = extractDistrict(user.getAddress());
+        List<String> hbtiTypes = List.of(userHBTI.getHbti());
 
         // 매칭되는 트레이너 찾기
         return trainerProfileRepository.findMatchingTrainersWithFetch(userDistrict, hbtiTypes)
@@ -55,7 +60,6 @@ public class TrainerMatchService {
                 .profileImage(trainer.getProfileImage())
                 .build();
     }
-
 
     private String extractDistrict(String address) {
         if (address == null) return "";
