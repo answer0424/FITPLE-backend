@@ -5,9 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -20,14 +20,12 @@ public class TrainerProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "trainerId", nullable = false)
     private User trainer;
 
     @Column(nullable = false)
     private Integer perPrice;
-
-
 
     @Column(nullable = false)
     private String content;
@@ -43,7 +41,6 @@ public class TrainerProfile {
     @ToString.Exclude
     @Builder.Default
     private List<Certification> certificationList = new ArrayList<>();
-
 
     public void addCertificationList(Certification... certificationList) {
         Collections.addAll(this.certificationList, certificationList);

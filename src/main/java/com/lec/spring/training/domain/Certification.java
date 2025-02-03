@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +13,7 @@ import lombok.*;
 public class Certification {
 
     @EmbeddedId
-    private CertificationId id;
+    private CertificationId id = new CertificationId();
 
     @MapsId("trainerProfileId") // 복합 키의 trainerProfileId와 매핑
     @ManyToOne(fetch = FetchType.LAZY)

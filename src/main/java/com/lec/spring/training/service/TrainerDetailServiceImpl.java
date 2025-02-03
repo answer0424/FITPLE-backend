@@ -1,23 +1,40 @@
 package com.lec.spring.training.service;
 
 import com.lec.spring.base.config.PrincipalDetails;
+import com.lec.spring.base.domain.Gym;
+import com.lec.spring.base.domain.HBTI;
 import com.lec.spring.base.domain.User;
+import com.lec.spring.base.repository.GymRepository;
+import com.lec.spring.base.repository.HbtiRepository;
 import com.lec.spring.base.repository.UserRepository;
+import com.lec.spring.training.DTO.CertificationDTO;
+import com.lec.spring.training.DTO.SkillsDTO;
 import com.lec.spring.training.DTO.TrainerProfileDTO;
+import com.lec.spring.training.DTO.TrainerProfileReadDTO;
+import com.lec.spring.training.domain.Certification;
+import com.lec.spring.training.domain.CertificationId;
+import com.lec.spring.training.domain.GrantStatus;
 import com.lec.spring.training.domain.TrainerProfile;
 import com.lec.spring.training.repository.CertificationRepository;
 import com.lec.spring.training.repository.TrainerProfileRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
-import static com.lec.spring.training.domain.GrantStatus.승인;
+import static com.lec.spring.training.domain.GrantStatus.*;
 
 
 @Service
@@ -25,56 +42,106 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
     private final TrainerProfileRepository trainerProfileRepository;
     private final CertificationRepository certificationRepository;
-    // UserRepository 필요
     private final ImgService imgService;
-    private final  String imgDir ="com/lec/spring/util";
     private final UserRepository userRepository;
+    private final HbtiRepository hbtiRepository;
+    private final GymRepository gymRepository;
+
+    @Value("${app.image.upload}")
+    private String trainerDir;
 
     @Autowired
-    public TrainerDetailServiceImpl(TrainerProfileRepository trainerProfileRepository, CertificationRepository certificationRepository, ImgService imgService, UserRepository userRepository) {
+    public TrainerDetailServiceImpl(TrainerProfileRepository trainerProfileRepository, CertificationRepository certificationRepository, ImgService imgService, UserRepository userRepository, HbtiRepository hbtiRepository, GymRepository gymRepository) {
         this.trainerProfileRepository = trainerProfileRepository;
         this.certificationRepository = certificationRepository;
         this.imgService = imgService;
         this.userRepository = userRepository;
+        this.hbtiRepository = hbtiRepository;
+        this.gymRepository = gymRepository;
     }
 
 
-    // # 트레이너 프로필 생성
     @Transactional
     @Override
     public boolean createTrainerProfile(TrainerProfileDTO trainerProfileDTO,
                                         PrincipalDetails user,
                                         List<String> skills,
-                                        List<MultipartFile> images) {
+                                        List<MultipartFile> images) throws IOException {
         try {
-
-//            User trainer  = user.getUser();
-
+            // TODO User 설정 (테스트용, 실제 구현 시 user에서 가져오기)
             User trainer = new User();
             trainer.setId(1L);
             trainer.setNickname("지윤");
             trainer.setUsername("wldbs");
-            trainer.setEmail("johndoe@example.com"); // 임시 이메일
+            trainer.setEmail("johndoe@example.com");
             trainer.setPassword("123456");
-            TrainerProfile trainerProfile = TrainerProfile.builder()
-                    .trainer(trainer) // UserRepository 필요(정보를 가져오는것 DB, DB와 연결 => Repository)
-                    .career(trainerProfileDTO.getCareer())
-                    .content(trainerProfileDTO.getContent())
-                    .perPrice(trainerProfileDTO.getPerPrice())
-                    .isAccess(승인) // 원래는 없어야 하는 것이 맞음
-                    .build();
-//            System.out.println("TrainerProfile : " + trainerProfile);
-            trainerProfileRepository.save(trainerProfile);// 프로필 저장후 skills 저장해야함.
 
-
-            // 이미지 저장을 imgService에서 다루기
-            List<String> skillList = new ArrayList<>();
-            for(MultipartFile skill : images){
-                String savePath = imgService.saveImage(skill, "./uploads/");
-                skillList.add(savePath);
+            // SkillsDTO 리스트 생성 및 데이터 매핑
+            if (skills.size() != images.size()) {
+                throw new IllegalArgumentException("자격증과 이미지의 개수가 일치하지 않습니다.");
             }
 
-                return true;
+            List<SkillsDTO> certificationSkills = new ArrayList<>();
+            for (int i = 0; i < skills.size(); i++) {
+                SkillsDTO skillsDTO = new SkillsDTO();
+                skillsDTO.setSkills(skills.get(i));
+                skillsDTO.setImg(images.get(i));
+                certificationSkills.add(skillsDTO);
+            }
+            trainerProfileDTO.setCertificationSkills(certificationSkills);
+
+            // 기존 TrainerProfile 가져오기 또는 새로 생성
+            TrainerProfile trainerProfile = trainerProfileRepository.findById(trainerProfileDTO.getTrainerId())
+                    .orElse(TrainerProfile.builder()
+                            .trainer(trainer)
+                            .career(trainerProfileDTO.getCareer())
+                            .content(trainerProfileDTO.getContent())
+                            .perPrice(trainerProfileDTO.getPerPrice())
+                            .isAccess(승인)
+                            .build());
+
+            trainerProfileRepository.save(trainerProfile);
+            System.out.println("TrainerProfile 저장 완료: " + trainerProfile.getId());
+
+            // Certification 저장
+            List<Certification> certifications = new ArrayList<>();
+
+            for (SkillsDTO skillsDTO : certificationSkills) {
+                if (skillsDTO.getImg() == null || skillsDTO.getImg().isEmpty()) {
+                    throw new IllegalArgumentException("자격증 이미지가 필요합니다.");
+                }
+
+                try {
+                    // 이미지 저장 및 경로 반환
+                    String savePath = imgService.saveImage(skillsDTO.getImg(), trainerDir);
+                    System.out.println("자격증 이미지 저장 경로: " + savePath);
+
+                    // CertificationId 설정 (복합 키)
+                    CertificationId certificationId = new CertificationId();
+                    certificationId.setTrainerProfileId(trainerProfile.getId()); // TrainerProfile의 ID
+                    certificationId.setId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE); // 랜덤 ID(무작위 값)
+                    // CertificationId(복합키)는 generatedValue사용할 수 없음. -> id 부여 생각해야함.
+
+                    // Certification 객체 생성
+                    Certification certification = Certification.builder()
+                            .id(certificationId) // 🔹 복합 키 설정
+                            .credentials(savePath) // 🔹 저장된 이미지 경로
+                            .skills(skillsDTO.getSkills())
+                            .trainerProfile(trainerProfile) // 🔹 TrainerProfile 설정
+                            .build();
+
+                    certifications.add(certification);
+                } catch (IOException e) {
+                    System.out.println("자격증 이미지 저장 중 오류 발생: " + e.getMessage());
+                    throw new ServiceException("자격증 이미지 저장 실패", e);
+                }
+            }
+
+            certificationRepository.saveAll(certifications);
+            System.out.println("트레이너 프로필 및 자격증 저장 완료: " + trainer.getUsername());
+
+            return true;
+
         } catch (Exception e) {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -82,70 +149,129 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
         }
     }
 
-    public TrainerProfileDTO getTrainerProfileByNickname(String nickname, PrincipalDetails users) {
-        // 유저 리포지토리에서 닉네임으로 유저 조회
-        User user = userRepository.findByNickname(nickname);
-
-        // 트레이너 프로필 조회
-        TrainerProfile trainerProfile = trainerProfileRepository.findByTrainerId(user.getId());
-
-        return TrainerProfileDTO.builder()
-                .trainerId(trainerProfile.getTrainer().getId())
-                .career(trainerProfile.getCareer())
-                .content(trainerProfile.getContent())
-                .perPrice(trainerProfile.getPerPrice())
-                .build();
-    }
-
-
-    // 트레이너 프로필 수정
     @Override
     @Transactional
-    public boolean updateTrainerProfile(TrainerProfileDTO trainerProfile,  List<String> skills, List<MultipartFile> images) throws IOException {
-        /*
-        *  현재 흐름 -> 수정된 것만 가져오는 것
-        *   react에서 useState하는 과정에서 별개의 값이 아닌 전체값을 가져오게 될 경우
-        *   기존데이터를 삭제하고 새로 넣는과정을 해야함. 현재 코드와 충돌이 일어날 가능성이 높음
-        *   기존 useState 새로운 값을 넣는 useState를 따로 만들어서 후자를 백단으로 보내는게 좋을 것 같음.
-        * */
-
-        try{
-            TrainerProfile profile = trainerProfileRepository.findById(trainerProfile.getTrainerId()) //현재 로그인한 유저 or 마이페이지 url로 확인
+    public boolean updateTrainerProfile(TrainerProfileDTO trainerProfileDTO, List<String> skills, List<MultipartFile> images) throws IOException {
+        try {
+            // 트레이너 프로필 조회
+            TrainerProfile profile = trainerProfileRepository.findById(trainerProfileDTO.getTrainerId())
                     .orElseThrow(() -> new IllegalArgumentException("해당 ID의 트레이너 프로필이 존재하지 않습니다."));
 
-            if (trainerProfile.getPerPrice() != null) profile.setPerPrice(trainerProfile.getPerPrice());
-            if (trainerProfile.getContent() != null) profile.setContent(trainerProfile.getContent());
-            if (trainerProfile.getCareer() != null) profile.setCareer(trainerProfile.getCareer());
-            if (trainerProfile.getDeletedSkillsId() != null && trainerProfile.getDeletedSkillsId() .length > 0) {
-                // 삭제된 경력이 존재한다면
-                for (Long id : trainerProfile.getDeletedSkillsId() ) {
-                    certificationRepository.deleteById(id);
-                }
-            }
-            trainerProfileRepository.save(profile);
-            // 이미지 저장을 imgService에서 다루기
-         List<String> skillList = new ArrayList<>();
-            for(MultipartFile skill : images){
-                String savePath = imgService.saveImage(skill, "./uploads/");
-                skillList.add(savePath);
+            // 수정 가능한 필드 업데이트
+            if (trainerProfileDTO.getPerPrice() != null) profile.setPerPrice(trainerProfileDTO.getPerPrice());
+            if (trainerProfileDTO.getContent() != null) profile.setContent(trainerProfileDTO.getContent());
+            if (trainerProfileDTO.getCareer() != null) profile.setCareer(trainerProfileDTO.getCareer());
+
+            // 기존 자격증 삭제 처리
+            if (trainerProfileDTO.getDeletedSkillsId() != null && trainerProfileDTO.getDeletedSkillsId().length > 0) {
+                List<CertificationId> idsToDelete = Arrays.stream(trainerProfileDTO.getDeletedSkillsId())
+                        .map(id -> new CertificationId(profile.getId(), id))
+                        .collect(Collectors.toList());
+                System.out.println("삭제할 자격증 ID: " + idsToDelete);
+                certificationRepository.deleteAllByIdInBatch(idsToDelete);
+                System.out.println("자격증 삭제 완료");
             }
 
+            // 새 자격증 추가 처리
+            if (skills == null || images == null || skills.size() != images.size()) {
+                System.out.println("skills: " + skills.size() + ", images: " + images.size());
+                throw new IllegalArgumentException("자격증과 이미지의 개수가 일치하지 않습니다.");
+            }
+
+            // 새 자격증 저장할 리스트 생성
+            List<Certification> certifications = new ArrayList<>();
+
+            for (int i = 0; i < skills.size(); i++) {
+                if (images.get(i) == null || images.get(i).isEmpty()) {
+                    throw new IllegalArgumentException("자격증 이미지가 필요합니다.");
+                }
+
+                // 이미지 저장
+                String savePath = imgService.saveImage(images.get(i), trainerDir);
+                System.out.println("자격증 이미지 저장 경로: " + savePath);
+
+                // CertificationId 설정 (복합 키)
+                CertificationId certificationId = new CertificationId(profile.getId(), UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
+
+                // Certification 객체 생성
+                Certification certification = Certification.builder()
+                        .id(certificationId) // 복합 키 설정
+                        .trainerProfile(profile)
+                        .skills(skills.get(i))
+                        .credentials(savePath)
+                        .build();
+
+                certifications.add(certification);
+            }
+
+            // 새로운 자격증 저장
+            if (!certifications.isEmpty()) {
+                certificationRepository.saveAll(certifications);
+            }
+
+            // 트레이너 프로필 저장
+            trainerProfileRepository.save(profile);
+            System.out.println("트레이너 프로필 수정 완료: " + profile.getId());
+
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return false;
         }
     }
 
+    // 특정 트레이너 ID로 트레이너 프로필 조회 (DTO 변환)
+    public TrainerProfileReadDTO getTrainerProfileById(Long trainerId) {
+        TrainerProfile trainerProfile = trainerProfileRepository.findByTrainerId(trainerId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 트레이너 프로필을 찾을 수 없습니다."));
 
+        return convertToDTO(trainerProfile);
+    }
+
+    // 승인된 트레이너 목록 조회 (DTO 변환)
+    public List<TrainerProfileReadDTO> getApprovedTrainers() {
+        List<TrainerProfile> trainers = trainerProfileRepository.findByIsAccess(GrantStatus.승인);
+        return trainers.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    private TrainerProfileReadDTO convertToDTO(TrainerProfile trainerProfile) {
+
+        Long userId = trainerProfile.getTrainer().getId();
+
+
+        String profileImage = trainerProfile.getTrainer().getProfileImage();
+
+
+        HBTI hbti = hbtiRepository.findByUser_Id(userId).orElse(null);
+
+
+        Gym gym = trainerProfile.getTrainer().getGym();
+
+        return TrainerProfileReadDTO.builder()
+                .id(trainerProfile.getId())
+                .trainerName(trainerProfile.getTrainer().getUsername())
+                .trainerEmail(trainerProfile.getTrainer().getEmail())
+                .trainerProfileImage(profileImage) //
+                .perPrice(trainerProfile.getPerPrice())
+                .content(trainerProfile.getContent())
+                .career(trainerProfile.getCareer()) //
+                .isAccess(trainerProfile.getIsAccess().name())
+                .certifications(trainerProfile.getCertificationList().stream()
+                        .map(cert -> CertificationDTO.builder()
+                                .skills(cert.getSkills())
+                                .imageUrl(cert.getCredentials())
+                                .build())
+                        .collect(Collectors.toList()))
+
+                .hbti(hbti != null ? hbti.getHbti() : "정보 없음")
+
+                .gymName(gym != null ? gym.getName() : "체육관 정보 없음")
+                .gymAddress(gym != null ? gym.getAddress() : "위치 정보 없음")
+                .gymLatitude(gym != null ? gym.getLatitude() : null)
+                .gymLongitude(gym != null ? gym.getLongitude() : null)
+                .build();
+    }
 
 }// end TrainerDetailService
 
-/*
-*TODO
-* 설계!! 를 생각하면서 코드 짜기!
-* imgService 중첩적인 것 합치기 (어떤 차이가 있는지 공부하기!)
-* img 데이터 베이스에 저장하는 코드 작성하기
-* 리뷰서비스 가져와서 잘 출력되는지 확인하기
-* 오후 8시 30분 -> 안된다고 하면 내일
-* */

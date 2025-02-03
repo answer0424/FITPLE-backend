@@ -273,21 +273,22 @@ public class MyPageController{
     /*메소드와 메소드 사이에 정보를 보낼 때는 매개변수로 보내는 것을 잊지말자.!*/
     @PostMapping(value = "/detail", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Boolean> createTrainerProfile(
-            @ModelAttribute("trainerProfileDTO") TrainerProfileDTO trainerProfileDTO,
+            @ModelAttribute TrainerProfileDTO trainerProfileDTO,
             @AuthenticationPrincipal PrincipalDetails user,
-            @ModelAttribute("skills") List<String> skills,
-            @RequestPart("img") List<MultipartFile> image
-    ) throws JsonProcessingException {
-
-
+            @RequestParam("skills") List<String> skills,
+            @RequestPart(required = false) List<MultipartFile> image
+    ) throws IOException {
 
         // 비어있는 필드를 체크 (예시: trainerId가 없으면 400 오류)
         if(trainerProfileDTO.getTrainerId() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+
         // 트레이너 프로필 생성 서비스 호출
         boolean result = trainerDetailService.createTrainerProfile(trainerProfileDTO, user, skills, image);
+        System.out.println("skills:" + skills + "image:" + image);
+
 
 
         // 결과 반환
@@ -302,12 +303,15 @@ public class MyPageController{
     // [트레이너 상세페이지 수정]
     @PatchMapping(value = "/detail", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Boolean> updateTrainerProfile(
-            @ModelAttribute("trainerProfileDTO") TrainerProfileDTO trainerProfileDTO,
+            @ModelAttribute TrainerProfileDTO trainerProfileDTO,
             @AuthenticationPrincipal PrincipalDetails user,
-            @ModelAttribute("skills") List<String> skills,
-            @RequestPart(value = "img", required = false) List<MultipartFile> image
+            @RequestParam("skills") List<String> skills,
+            @RequestPart(required = false) List<MultipartFile> image
 
     ) throws IOException {
+        System.out.println("🚀 skills: " + skills);
+        System.out.println("🚀 images count: " + image.size());
+        System.out.println(" deletedcertifications : " + trainerProfileDTO.getDeletedSkillsId());
         boolean result = trainerDetailService.updateTrainerProfile(trainerProfileDTO,skills,image);
         if(result){
             return new ResponseEntity<>(true, HttpStatus.OK);
