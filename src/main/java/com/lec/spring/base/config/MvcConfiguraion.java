@@ -13,6 +13,8 @@ public class MvcConfiguraion implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")      // CORS 요청을 허용할 URL
                 .allowedOrigins(allowedOrigins)     // 요청을 허용할 도메인
-                .allowCredentials(true);            // 쿠키 요청 허용
+                .allowCredentials(true)            // 쿠키 요청 허용
+                .allowedMethods("*");
+
     }
 }

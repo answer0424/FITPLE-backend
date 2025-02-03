@@ -8,11 +8,10 @@ import lombok.Data;
 @Data
 public class HBTI {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @OneToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "UserId", nullable = false)
     private User user;
 
     @Column(nullable = false, length = 4)

@@ -8,7 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -44,8 +43,9 @@ public class TrainerProfile {
     @Builder.Default
     private List<Certification> certificationList = new ArrayList<>();
 
+
     public void addCertificationList(Certification... certificationList) {
         Collections.addAll(this.certificationList, certificationList);
     }
-}
+}// end TrainerProfile
 
