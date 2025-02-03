@@ -7,8 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface ResetPasswordRepository extends JpaRepository<User, Long> {
-    @Modifying
+
     @Transactional
+    @Modifying
     @Query("UPDATE User u SET u.password = :newPassword WHERE u.id = :id")
     int updatePassword(Long id, String newPassword);
+
 }//end ResetPasswordRepository

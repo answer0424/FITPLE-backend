@@ -76,6 +76,9 @@ public class SecurityConfig {
                         .requestMatchers("/member/send-reset-email").permitAll()
                         .requestMatchers("/member/reset-password").permitAll()
                         .requestMatchers("/member/detail").authenticated()  //지윤
+                        .requestMatchers("/api/hbti/calculate").permitAll()
+                        .requestMatchers("/api/hbti/type/*").permitAll()
+                        .requestMatchers("/img/**").permitAll()
                         .anyRequest().authenticated());
 
         // 세션 설정

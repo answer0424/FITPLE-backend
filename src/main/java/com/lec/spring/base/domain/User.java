@@ -23,6 +23,9 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private HBTI hbti;
+
     @ManyToOne
     @JoinColumn(name = "gym_id")
     private Gym gym;

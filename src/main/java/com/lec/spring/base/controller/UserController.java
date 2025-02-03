@@ -6,6 +6,7 @@ import com.lec.spring.base.domain.User;
 import com.lec.spring.base.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -56,8 +57,6 @@ public class UserController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return ResponseEntity.ok(authentication);
     }
-
-    //--------------------------------------------------------------------------------
 
 
     @GetMapping("/user") // 지윤

@@ -3,6 +3,8 @@ package com.lec.spring.training.DTO;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 public class ReviewResponseDTO {
@@ -14,4 +16,5 @@ public class ReviewResponseDTO {
     private String trainerProfileImage;
     private Byte rating;
     private String content;
+    private LocalDateTime createdAt;
 }
