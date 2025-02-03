@@ -36,9 +36,8 @@ public class Message extends BaseEntity {
     @Column(nullable = false)
     private boolean isChecked;
 
-    public record messageId(Long messageId) {
-
-    }
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timestamp;  // 메시지 전송 시간
 
 }
 

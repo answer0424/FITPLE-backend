@@ -24,15 +24,13 @@ public class User extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "GymId")
-    @ToString.Exclude
-    @JsonIgnore
+    @JoinColumn(name = "gym_id")
     private Gym gym;
 
-    @Column(nullable = false, length = 30, unique = true)
+    @Column(nullable = false, length = 300, unique = true)
     private String username;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 500)
     @ToString.Exclude
     @JsonIgnore
     private String password;
@@ -48,7 +46,7 @@ public class User extends BaseEntity {
     @Column
     private Date birth;
 
-    @Column(nullable = false, length = 45, unique = true)
+    @Column( length = 45, unique = true)
     private String nickname;
 
     @Column(length = 10)
@@ -62,8 +60,6 @@ public class User extends BaseEntity {
     private String providerId;
 
     @Column(length = 20)
-    @ToString.Exclude
-    @JsonIgnore
     private String authority;
 
     @Column(length = 50)
