@@ -2,7 +2,7 @@ package com.lec.spring.training.controller;
 
 
 import com.lec.spring.training.DTO.TrainerProfileReadDTO;
-import com.lec.spring.training.service.TrainerProfileDTOService;
+import com.lec.spring.training.service.TrainerDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/quiz/trainers")
 @RequiredArgsConstructor
 public class TrainerProfileController {
-    private final TrainerProfileDTOService trainerProfileDTOService;
+    private final TrainerDetailService trainerDetailService;
 
     // 특정 트레이너 프로필 조회 (DTO 반환)
     @GetMapping("/{userId}/detail")
     public ResponseEntity<TrainerProfileReadDTO> getTrainerProfile(@PathVariable Long userId) {
-        TrainerProfileReadDTO trainerProfileDTO = trainerProfileDTOService.getTrainerProfileById(userId);
+        TrainerProfileReadDTO trainerProfileDTO = trainerDetailService.getTrainerProfileById(userId);
         return ResponseEntity.ok(trainerProfileDTO);
     }
 
