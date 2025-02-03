@@ -70,10 +70,21 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
+    @GetMapping("/user") // 지윤
+    public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal PrincipalDetails userDetails){
+        System.out.println("##########UserDetails: " + userDetails.toString());  // userDetails 객체 상태 확인
+        if (userDetails != null) {
+            User user = userDetails.getUser();
+            System.out.println("###########현재 회원: " + user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
-        System.out.println(users);
+//        System.out.println(users);
         return ResponseEntity.ok(users);
     }
 }

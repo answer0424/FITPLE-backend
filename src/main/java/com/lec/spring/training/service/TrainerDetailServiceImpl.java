@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -61,6 +62,10 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
     }
 
 
+
+
+// 기타 필요한 import 문
+
     @Transactional
     @Override
     public boolean createTrainerProfile(TrainerProfileDTO trainerProfileDTO,
@@ -68,13 +73,10 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                                         List<String> skills,
                                         List<MultipartFile> images) throws IOException {
         try {
-            // TODO User 설정 (테스트용, 실제 구현 시 user에서 가져오기)
-            User trainer = new User();
-            trainer.setId(1L);
-            trainer.setNickname("지윤");
-            trainer.setUsername("wldbs");
-            trainer.setEmail("johndoe@example.com");
-            trainer.setPassword("123456");
+            // 현재 로그인 한 유저 가져오기
+            PrincipalDetails principal = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            User trainer = principal.getUser();  // PrincipalDetails에서 User 객체 가져오기
+            System.out.println("현재 로그인한 유저 : " + trainer.getUsername());
 
             // SkillsDTO 리스트 생성 및 데이터 매핑
             if (skills.size() != images.size()) {
@@ -99,7 +101,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                             .perPrice(trainerProfileDTO.getPerPrice())
                             .isAccess(승인)
                             .build());
-
+            System.out.println("db저장 시작");
             trainerProfileRepository.save(trainerProfile);
             System.out.println("TrainerProfile 저장 완료: " + trainerProfile.getId());
 

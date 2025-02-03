@@ -69,6 +69,7 @@ public class MyPageController{
             @RequestPart(required = false) List<MultipartFile> image
     ) throws IOException {
 
+        System.out.println("현재 로그인한 회원 : " + user.getName());
         // 비어있는 필드를 체크 (예시: trainerId가 없으면 400 오류)
         if(trainerProfileDTO.getTrainerId() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
