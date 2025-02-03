@@ -79,9 +79,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/hbti/calculate").permitAll()
                         .requestMatchers("/api/hbti/type/*").permitAll()
                         .requestMatchers("/img/**").permitAll()
+                        .requestMatchers("/upload/**").permitAll()
                         .anyRequest().authenticated());
 
-        // 세션 설정
+                        // 세션 설정
         http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
