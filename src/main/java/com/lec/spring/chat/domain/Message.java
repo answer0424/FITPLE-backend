@@ -11,6 +11,8 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
