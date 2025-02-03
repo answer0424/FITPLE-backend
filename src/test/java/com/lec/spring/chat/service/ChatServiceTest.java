@@ -35,8 +35,8 @@ class ChatServiceTest {
     void createOrGetChat() {
         System.out.println("createOrGetChat() 호출");
         // 🔍 기존 채팅방이 있는지 확인
-        Long userId = 1L;
-        Long trainerId = 51L;
+        Long userId = 7L;
+        Long trainerId = 8L;
         Optional<UserChat> existingChat = userChatRepository.findByUserIds(userId, trainerId);
         if (existingChat.isPresent()) {
             System.out.println("이미 존재하는 채팅방");
