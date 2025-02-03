@@ -52,12 +52,15 @@ public class HbtiController {
      * 사용자 ID와 답변을 기반으로 HBTI 결과를 저장
      */
     @PostMapping("/save")
-    @Transactional
     public ResponseEntity<String> saveHbtiResult(@RequestBody HbtiAnswer request) {
         try {
+            System.out.println("Saving HBTI result for user: " + request.getUserId());
             hbtiService.processHbti(request.getUserId(), request.getAnswers());
+            System.out.println("HBTI result saved successfully");
             return ResponseEntity.ok("HBTI 결과가 성공적으로 저장되었습니다.");
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
+            System.err.println("Error saving HBTI result: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

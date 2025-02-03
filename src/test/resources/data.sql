@@ -364,6 +364,8 @@ VALUES (1, 51, 50000, 'Experienced trainer with expertise in fitness.', '2010-05
        (74, 124, 75000,  'Pilates instructor with flexibility focus.', '2023-08-14', '승인'),
        (75, 125, 60000,  'Expert in weightlifting and powerlifting.', '2015-04-01',
         '승인');
+
+
 INSERT INTO HBTI ( user_id, HBTI, mb_score
                  , ei_score
                  , cn_score
@@ -1263,33 +1265,6 @@ INSERT INTO Review (training_id, rating, content, created_at) VALUES
                                                                   (15, 5, '강사님 덕분에 목표를 초과 달성했어요.', NOW());
 
 
-SELECT *
-FROM User
-WHERE username = 'user1';
-SELECT *
-FROM User;
-Select *
-from hbti;
-SELECT *
-FROM User;
-SELECT *
-FROM HBTI;
-SELECT *
-FROM trainer_profile;
-SELECT *
-FROM certification;
-SELECT *
-FROM gym;
-SELECT *
-FROM review;
-
-SELECT *
-FROM training;
-
-UPDATE user
-SET gym_id = 10
-WHERE id = 51;
-
 UPDATE review
 set rating = 2
 WHERE id = 2;
@@ -1312,5 +1287,20 @@ VALUES
     (55, 3, '시설은 조금 부족하지만 트레이닝 자체는 훌륭합니다.', '2024-02-04 16:45:00'),
     (56, 4, '운동할 때 동기부여를 잘 해주십니다.', '2024-02-05 09:10:00'),
     (57, 2, '조금 더 세밀한 설명이 필요할 것 같습니다.', '2024-02-06 11:50:00');
+
+-- Update gym_id for trainers based on exact address matches
+UPDATE User u
+    JOIN Gym g ON u.address = g.address
+SET u.gym_id = g.id
+WHERE u.authority = 'ROLE_TRAINER';
+
+select *
+from user;
+
+select *
+from hbti;
+
+select *
+from gym;
 
 

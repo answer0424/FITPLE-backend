@@ -10,7 +10,7 @@ public class HBTI {
     @Id
     private Long userId;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "UserId", nullable = false)
     private User user;
 

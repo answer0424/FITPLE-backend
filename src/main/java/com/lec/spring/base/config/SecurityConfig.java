@@ -71,10 +71,15 @@ public class SecurityConfig {
         // 경로별 인가 설정
         http
                 .authorizeHttpRequests(auth -> auth
-                                .anyRequest().permitAll()
-                      );
-
-
+                        .requestMatchers("/register/**").permitAll() // 회원가입 엔드포인트는 인증 필요 없음
+                        .requestMatchers("/send-reset-email").permitAll()
+                        .requestMatchers("/reset-password").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/member/detail").authenticated()  //지윤
+                        .requestMatchers("/api/hbti/calculate").permitAll()
+                        .requestMatchers("/api/hbti/type/*").permitAll()
+                        .requestMatchers("/img/**").permitAll()
+                        .anyRequest().authenticated());
 
                         // 세션 설정
         http
