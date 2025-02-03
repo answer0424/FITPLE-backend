@@ -9,7 +9,5 @@ public interface TrainingRepository extends JpaRepository<Training, Long> {
 
     int findByUserIdAndTrainerIdEquals(Long studentId, Long trainerId);
 
-    List<Long> findByTrainerId(Long trainerId);
-
 
 }// end TrainingRepository

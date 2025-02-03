@@ -58,17 +58,6 @@ public class UserController {
         return ResponseEntity.ok(authentication);
     }
 
-    //--------------------------------------------------------------------------------
-    // 확인용
-    @GetMapping("/user")
-    public ResponseEntity<User> user(@AuthenticationPrincipal PrincipalDetails userDetails) {
-        if (userDetails != null) {
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(userDetails.getUser());
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    }
 
     @GetMapping("/user") // 지윤
     public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal PrincipalDetails userDetails){

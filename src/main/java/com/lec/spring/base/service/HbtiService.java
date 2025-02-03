@@ -60,6 +60,7 @@ public class HbtiService {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(hbtiJsonContent, new TypeReference<Map<String, Object>>() {});
     }
+
     /**
      * 답변을 기반으로 각 성향의 퍼센트를 계산
      * @param answers 사용자가 응답한 답변 리스트 (12개)
@@ -107,7 +108,6 @@ public class HbtiService {
         System.out.println("calculateHbtiPercentages 끝");
         return percentages;
     }
-
 
     /**
      * 퍼센트를 기반으로 HBTI 결과 결정
@@ -332,6 +332,13 @@ public class HbtiService {
         }
         return complementary;
     }
+
+    // 특정 HBTI 타입을 가진 모든 사용자 조회
+    public List<User> getUsersByHbtiType(String hbtiType) {
+        return hbtiRepository.findUsersByHbtiType(hbtiType);
+    }
+
+
 } // end class
 
 

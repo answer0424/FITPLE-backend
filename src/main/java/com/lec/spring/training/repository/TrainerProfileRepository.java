@@ -23,12 +23,20 @@ public interface TrainerProfileRepository extends JpaRepository<TrainerProfile, 
 
     @Query("SELECT DISTINCT tp FROM TrainerProfile tp " +
             "JOIN FETCH tp.trainer t " +
+            "LEFT JOIN FETCH t.hbti h " +  // OneToOne 관계를 활용한 직접 조인
             "JOIN FETCH t.gym g " +
-            "JOIN HBTI h ON h.user = t " +  // HBTI 테이블과 조인
             "WHERE g.address LIKE %:district% " +
-            "AND h.hbti IN :hbtiList " +    // HBTI 엔티티의 hbti 필드 사용
+            "AND h.hbti IN :hbtiList " +
             "AND tp.isAccess = '승인'")
     List<TrainerProfile> findMatchingTrainersWithFetch(
             @Param("district") String district,
             @Param("hbtiList") List<String> hbtiList);
 }
+
+
+
+
+
+
+
+
