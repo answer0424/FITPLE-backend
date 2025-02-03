@@ -38,6 +38,8 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
     implementation 'io.jsonwebtoken:jjwt-impl:0.12.6'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+    implementation 'org.springframework.boot:spring-boot-starter-mail' // email 전송
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis' // redis
 }
 
 tasks.named('test') {

@@ -14,6 +14,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @Builder
 @DynamicUpdate
 @DynamicInsert
+
 @Entity(name = "Training")
 public class Training {
     @Id

@@ -52,7 +52,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         User user = userDetails.getUser();
 
         // JWT 생성 - 만료 시간 1일 (24시간)로 설정
-        long expirationTimeInMs = 2000 * 60; // 2분
+        long expirationTimeInMs = 86400000; // 1일
         String token = jwtUtil.generateToken(user, expirationTimeInMs);
         System.out.println("token: " + token);
 
