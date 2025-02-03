@@ -1,9 +1,10 @@
 package com.lec.spring.base.service;
 
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
-
+@Service
 public class EmailAuthServiceImpl implements EmailAuthService {
 
 

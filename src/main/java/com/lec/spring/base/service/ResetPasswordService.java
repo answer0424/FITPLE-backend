@@ -16,8 +16,6 @@ public interface ResetPasswordService {
     // #update
     boolean updatePassword(Long id, String newPassword);
 
-    // mail content
-    MimeMessage createEmail (EmailMessage emailMessage);
 
     //랜덤 번호 생성
     void createNumber();
