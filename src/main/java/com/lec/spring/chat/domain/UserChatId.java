@@ -3,12 +3,13 @@ package com.lec.spring.chat.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
-@Getter
+@Data
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
