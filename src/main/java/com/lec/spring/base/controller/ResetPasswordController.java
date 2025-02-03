@@ -1,6 +1,7 @@
 package com.lec.spring.base.controller;
 
 import com.lec.spring.base.domain.EmailMessage;
+import com.lec.spring.base.domain.User;
 import com.lec.spring.base.service.ResetPasswordService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,16 +19,19 @@ public class ResetPasswordController {
     // 비밀번호 재설정 이메일 발송
     @PostMapping("/send-reset-email")
     public ResponseEntity<String> sendResetEmail(@RequestBody EmailMessage emailMessage) {
-        try {
-            // 이메일 존재 여부 체크
-            resetPasswordService.isExistEmail(emailMessage.getTo());
 
-            // 이메일 발송
-            String result = resetPasswordService.sendEmail(emailMessage);
-            return ResponseEntity.ok(result);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+            // 이메일 존재 여부 체크
+           boolean user = resetPasswordService.isExistEmail(emailMessage.getTo());
+            System.out.println("이메일이 존재하는 User인가요 ? : " + user);
+            if (user) {
+                // 이메일 발송
+                String result = resetPasswordService.sendEmail(emailMessage);
+                return ResponseEntity.ok(result);
+            }
+
+            return (ResponseEntity<String>) ResponseEntity.badRequest();
+
+
     }
 
     // 비밀번호 재설정

@@ -31,11 +31,16 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
     private static int number;
 
 
-    public ResetPasswordServiceImpl(RedisTemplate redisTemplate, EmailAuthService emailAuthService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public ResetPasswordServiceImpl(RedisTemplate redisTemplate,
+                                    EmailAuthService emailAuthService,
+                                    UserRepository userRepository,
+                                    PasswordEncoder passwordEncoder,
+                                    JavaMailSender mailSender) {
         this.redisTemplate = redisTemplate;
         this.emailAuthService = emailAuthService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.mailSender = mailSender;
     }
     // # 랜덤 번호 생성
     @Override
@@ -68,7 +73,7 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
 
         // 동적 URL 생성
         String resetLink = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/member/reset-password")
+                .path("/member/send-reset-password")
                 .queryParam("id", user.getUsername())
                 .queryParam("uuid", uuid)
                 .toUriString();
@@ -83,12 +88,18 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
                 "</body>" +
                 "</html>";
 
+        // 제목이 null이면 기본 제목을 설정
+        String subject = emailMessage.getSubject();
+        if (subject == null || subject.trim().isEmpty()) {
+            subject = "비밀번호 재설정 요청"; // 기본 제목 설정
+        }
+
         // 이메일 전송
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, false, "UTF-8");
             mimeMessageHelper.setTo(emailMessage.getTo());
-            mimeMessageHelper.setSubject(emailMessage.getSubject());
+            mimeMessageHelper.setSubject(subject);  // 제목을 subject로 설정
             mimeMessageHelper.setText(emailContent, true); // HTML 형식으로 이메일 전송
             mailSender.send(mimeMessage);
             return "success";
@@ -97,6 +108,7 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
             return "이메일 전송 중 오류가 발생했습니다.";
         }
     }
+
 
 
     @Override
