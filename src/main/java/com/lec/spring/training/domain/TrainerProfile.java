@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -42,7 +43,6 @@ public class TrainerProfile {
     @ToString.Exclude
     @Builder.Default
     private List<Certification> certificationList = new ArrayList<>();
-
 
     public void addCertificationList(Certification... certificationList) {
         Collections.addAll(this.certificationList, certificationList);

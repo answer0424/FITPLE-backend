@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface HbtiRepository extends JpaRepository<HBTI, Long> {
     Optional<HBTI> findByUserId(Long userId);
+
+    Optional<HBTI> findByUser_Id(Long userId);
 }

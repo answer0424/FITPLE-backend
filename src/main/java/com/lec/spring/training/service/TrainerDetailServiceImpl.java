@@ -1,17 +1,26 @@
 package com.lec.spring.training.service;
 
 import com.lec.spring.base.config.PrincipalDetails;
+import com.lec.spring.base.domain.Gym;
+import com.lec.spring.base.domain.HBTI;
 import com.lec.spring.base.domain.User;
+import com.lec.spring.base.repository.GymRepository;
+import com.lec.spring.base.repository.HbtiRepository;
 import com.lec.spring.base.repository.UserRepository;
+import com.lec.spring.training.DTO.CertificationDTO;
 import com.lec.spring.training.DTO.SkillsDTO;
 import com.lec.spring.training.DTO.TrainerProfileDTO;
+import com.lec.spring.training.DTO.TrainerProfileReadDTO;
 import com.lec.spring.training.domain.Certification;
 import com.lec.spring.training.domain.CertificationId;
+import com.lec.spring.training.domain.GrantStatus;
 import com.lec.spring.training.domain.TrainerProfile;
 import com.lec.spring.training.repository.CertificationRepository;
 import com.lec.spring.training.repository.TrainerProfileRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -26,8 +35,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.lec.spring.training.domain.GrantStatus.대기;
-import static com.lec.spring.training.domain.GrantStatus.승인;
+import static com.lec.spring.training.domain.GrantStatus.*;
 
 
 @Service
@@ -35,17 +43,22 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
     private final TrainerProfileRepository trainerProfileRepository;
     private final CertificationRepository certificationRepository;
-    // UserRepository 필요
     private final ImgService imgService;
-
     private final UserRepository userRepository;
+    private final HbtiRepository hbtiRepository;
+    private final GymRepository gymRepository;
+
+    @Value("${app.image.upload}")
+    private String trainerDir;
 
     @Autowired
-    public TrainerDetailServiceImpl(TrainerProfileRepository trainerProfileRepository, CertificationRepository certificationRepository, ImgService imgService, UserRepository userRepository) {
+    public TrainerDetailServiceImpl(TrainerProfileRepository trainerProfileRepository, CertificationRepository certificationRepository, ImgService imgService, UserRepository userRepository, HbtiRepository hbtiRepository, GymRepository gymRepository) {
         this.trainerProfileRepository = trainerProfileRepository;
         this.certificationRepository = certificationRepository;
         this.imgService = imgService;
         this.userRepository = userRepository;
+        this.hbtiRepository = hbtiRepository;
+        this.gymRepository = gymRepository;
     }
 
 
@@ -102,7 +115,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
                 try {
                     // 이미지 저장 및 경로 반환
-                    String savePath = imgService.saveImage(skillsDTO.getImg(), "./uploads/certification/");
+                    String savePath = imgService.saveImage(skillsDTO.getImg(), trainerDir);
                     System.out.println("자격증 이미지 저장 경로: " + savePath);
 
                     // CertificationId 설정 (복합 키)
@@ -137,9 +150,6 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
             return false;
         }
     }
-
-
-
 
     @Override
     @Transactional
@@ -179,7 +189,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 }
 
                 // 이미지 저장
-                String savePath = imgService.saveImage(images.get(i), "./uploads/certification/");
+                String savePath = imgService.saveImage(images.get(i), trainerDir);
                 System.out.println("자격증 이미지 저장 경로: " + savePath);
 
                 // CertificationId 설정 (복합 키)
@@ -213,9 +223,57 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
         }
     }
 
+    // 특정 트레이너 ID로 트레이너 프로필 조회 (DTO 변환)
+    public TrainerProfileReadDTO getTrainerProfileById(Long trainerId) {
+        TrainerProfile trainerProfile = trainerProfileRepository.findByTrainerId(trainerId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 트레이너 프로필을 찾을 수 없습니다."));
+
+        return convertToDTO(trainerProfile);
+    }
+
+    // 승인된 트레이너 목록 조회 (DTO 변환)
+    public List<TrainerProfileReadDTO> getApprovedTrainers() {
+        List<TrainerProfile> trainers = trainerProfileRepository.findByIsAccess(GrantStatus.승인);
+        return trainers.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    private TrainerProfileReadDTO convertToDTO(TrainerProfile trainerProfile) {
+
+        Long userId = trainerProfile.getTrainer().getId();
 
 
+        String profileImage = trainerProfile.getTrainer().getProfileImage();
 
+
+        HBTI hbti = hbtiRepository.findByUser_Id(userId).orElse(null);
+
+
+        Gym gym = trainerProfile.getTrainer().getGym();
+
+        return TrainerProfileReadDTO.builder()
+                .id(trainerProfile.getId())
+                .trainerName(trainerProfile.getTrainer().getUsername())
+                .trainerEmail(trainerProfile.getTrainer().getEmail())
+                .trainerProfileImage(profileImage) //
+                .perPrice(trainerProfile.getPerPrice())
+                .content(trainerProfile.getContent())
+                .career(trainerProfile.getCareer()) //
+                .isAccess(trainerProfile.getIsAccess().name())
+                .certifications(trainerProfile.getCertificationList().stream()
+                        .map(cert -> CertificationDTO.builder()
+                                .skills(cert.getSkills())
+                                .imageUrl(cert.getCredentials())
+                                .build())
+                        .collect(Collectors.toList()))
+
+                .hbti(hbti != null ? hbti.getHbti() : "정보 없음")
+
+                .gymName(gym != null ? gym.getName() : "체육관 정보 없음")
+                .gymAddress(gym != null ? gym.getAddress() : "위치 정보 없음")
+                .gymLatitude(gym != null ? gym.getLatitude() : null)
+                .gymLongitude(gym != null ? gym.getLongitude() : null)
+                .build();
+    }
 
 }// end TrainerDetailService
 
