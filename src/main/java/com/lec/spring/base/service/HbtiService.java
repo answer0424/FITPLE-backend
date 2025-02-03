@@ -138,6 +138,7 @@ public class HbtiService {
 
         // HBTI 결과 결정
         String hbti = determineHbti(percentages);
+        System.out.println("hbti = " + hbti);
 
         // 유저 정보 조회
         User user = userRepository.findById(userId)
@@ -154,7 +155,7 @@ public class HbtiService {
 
         // HBTI 엔티티 생성 또는 업데이트
         HBTI hbtiEntity = hbtiRepository.findById(userId).orElse(new HBTI());
-        //hbtiEntity.setId(userId); // primary key 설정
+        hbtiEntity.setUserId(userId);
         hbtiEntity.setUser(user);
         hbtiEntity.setMbScore(roundedMb); // 반올림된 값 저장
         hbtiEntity.setEiScore(roundedEi);
