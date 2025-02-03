@@ -25,8 +25,32 @@ public class HbtiService {
 
     private final HbtiRepository hbtiRepository;
     private final UserRepository userRepository;
-    private final Path jsonFilePath;
+    private final String hbtiJsonContent;
 
+    /**
+     * 답변만으로 HBTI 결과를 계산
+     * @param answers 사용자가 응답한 답변 리스트
+     * @return HBTI 결과와 상세 정보를 포함한 맵
+     */
+    public Map<String, Object> calculateHbtiResult(List<Integer> answers) throws IOException {
+        // 퍼센트 계산
+        Map<String, Double> percentages = calculateHbtiPercentages(answers);
+
+        // HBTI 결과 결정
+        String hbtiType = determineHbti(percentages);
+
+        // HBTI 타입에 대한 상세 정보 조회
+        Map<String, Object> typeDetails = getHbtiDataByType(hbtiType);
+
+        // 결과 조합
+        Map<String, Object> result = new HashMap<>();
+        result.put("hbtiType", hbtiType);
+        result.put("percentages", percentages);
+        result.put("details", typeDetails);
+
+        return result;
+    }
+  
     /**
      * JSON 데이터 로드
      * @return 전체 HBTI JSON 데이터 반환
@@ -34,10 +58,8 @@ public class HbtiService {
      */
     private Map<String, Object> loadHbtiData() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        String jsonContent = Files.readString(jsonFilePath);
-        return mapper.readValue(jsonContent, new TypeReference<Map<String, Object>>() {});
+        return mapper.readValue(hbtiJsonContent, new TypeReference<Map<String, Object>>() {});
     }
-
     /**
      * 답변을 기반으로 각 성향의 퍼센트를 계산
      * @param answers 사용자가 응답한 답변 리스트 (12개)
@@ -175,7 +197,11 @@ public class HbtiService {
             throw new IllegalArgumentException("HBTI 유형이 잘못되었습니다: " + hbtiType);
         }
 
-        return (Map<String, Object>) hbtiData.get(hbtiType);
+        // 기존 데이터에 hbtiType을 추가
+        Map<String, Object> result = new HashMap<>((Map<String, Object>) hbtiData.get(hbtiType));
+        result.put("hbtiType", hbtiType); // HBTI 유형 추가
+
+        return result;
     }
 
     /**

@@ -6,6 +6,7 @@ import com.lec.spring.base.domain.User;
 import com.lec.spring.base.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -57,9 +58,16 @@ public class UserController {
         return ResponseEntity.ok(authentication);
     }
 
-    @RequestMapping("/user")
-    public User user(@AuthenticationPrincipal PrincipalDetails userDetails){
-        return (userDetails != null) ? userDetails.getUser() : null;
+    //--------------------------------------------------------------------------------
+    // 확인용
+    @GetMapping("/user")
+    public ResponseEntity<User> user(@AuthenticationPrincipal PrincipalDetails userDetails) {
+        if (userDetails != null) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(userDetails.getUser());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
     @GetMapping("/users")

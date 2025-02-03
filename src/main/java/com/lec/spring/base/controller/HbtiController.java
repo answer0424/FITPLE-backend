@@ -19,6 +19,22 @@ public class HbtiController {
     private final HbtiService hbtiService;
 
     /**
+     * 답변을 기반으로 HBTI 결과를 계산
+     */
+    @PostMapping("/calculate")
+    public ResponseEntity<Map<String, Object>> calculateHbti(@RequestBody List<Integer> answers) {
+        try {
+            Map<String, Object> result = hbtiService.calculateHbtiResult(answers);
+            return ResponseEntity.ok(result);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError()
+                    .body(Map.of("error", "HBTI 데이터를 로드하는 중 문제가 발생했습니다."));
+        }
+    }
+
+    /**
      * 전체 HBTI JSON 데이터를 반환
      */
     @GetMapping("/data")
@@ -27,7 +43,8 @@ public class HbtiController {
             Map<String, Object> hbtiData = hbtiService.getAllHbtiData();
             return ResponseEntity.ok(hbtiData);
         } catch (IOException e) {
-            return ResponseEntity.internalServerError().body(Map.of("error", "HBTI 데이터를 로드하는 중 문제가 발생했습니다."));
+            return ResponseEntity.internalServerError()
+                    .body(Map.of("error", "HBTI 데이터를 로드하는 중 문제가 발생했습니다."));
         }
     }
 
@@ -72,6 +89,7 @@ public class HbtiController {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         } catch (IOException e) {
             return ResponseEntity.internalServerError().body(Map.of("error", "HBTI 데이터를 로드하는 중 문제가 발생했습니다."));
+
         }
     }
 
