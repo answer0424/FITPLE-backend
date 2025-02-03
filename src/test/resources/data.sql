@@ -1280,7 +1280,35 @@ SELECT *
 FROM certification;
 SELECT *
 FROM gym;
+SELECT *
+FROM review;
+
+SELECT *
+FROM training;
 
 UPDATE user
 SET gym_id = 10
 WHERE id = 51;
+
+UPDATE review
+set rating = 2
+WHERE id = 2;
+
+INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons)
+VALUES
+    (5, 51, 10, 5, 2),
+    (16, 51, 20, 10, 3),
+    (20, 51, 15, 7, 1),
+    (25, 51, 12, 6, 2),
+    (30, 51, 18, 8, 3),
+    (37, 51, 25, 15, 5);
+
+
+INSERT INTO Review (training_id, rating, content, created_at)
+VALUES
+    (52, 5, '트레이너님이 매우 친절하시고 체계적인 훈련을 제공합니다.', '2024-02-01 10:00:00'),
+    (53, 4, '운동 루틴이 잘 짜여 있어서 효과를 보고 있습니다.', '2024-02-02 12:30:00'),
+    (54, 5, '개인 맞춤형 코칭이 정말 좋습니다. 만족합니다!', '2024-02-03 14:20:00'),
+    (55, 3, '시설은 조금 부족하지만 트레이닝 자체는 훌륭합니다.', '2024-02-04 16:45:00'),
+    (56, 4, '운동할 때 동기부여를 잘 해주십니다.', '2024-02-05 09:10:00'),
+    (57, 2, '조금 더 세밀한 설명이 필요할 것 같습니다.', '2024-02-06 11:50:00');
