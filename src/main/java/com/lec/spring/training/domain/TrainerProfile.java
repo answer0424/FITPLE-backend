@@ -21,7 +21,7 @@ public class TrainerProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "trainerId", nullable = false)
     private User trainer;
 
