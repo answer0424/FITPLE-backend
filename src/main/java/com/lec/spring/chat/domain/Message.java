@@ -36,5 +36,9 @@ public class Message extends BaseEntity {
     @Column(nullable = false)
     private boolean isChecked;
 
+    public record messageId(Long messageId) {
+
+    }
+
 }
 
