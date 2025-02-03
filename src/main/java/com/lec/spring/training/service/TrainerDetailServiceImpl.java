@@ -12,6 +12,7 @@ import com.lec.spring.training.repository.CertificationRepository;
 import com.lec.spring.training.repository.TrainerProfileRepository;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -25,8 +26,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.lec.spring.training.domain.GrantStatus.대기;
-import static com.lec.spring.training.domain.GrantStatus.승인;
+import static com.lec.spring.training.domain.GrantStatus.*;
 
 
 @Service
@@ -34,10 +34,11 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
     private final TrainerProfileRepository trainerProfileRepository;
     private final CertificationRepository certificationRepository;
-    // UserRepository 필요
     private final ImgService imgService;
-
     private final UserRepository userRepository;
+
+    @Value("${app.image.upload}")
+    private String trainerDir;
 
     @Autowired
     public TrainerDetailServiceImpl(TrainerProfileRepository trainerProfileRepository, CertificationRepository certificationRepository, ImgService imgService, UserRepository userRepository) {
@@ -55,7 +56,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                                         List<String> skills,
                                         List<MultipartFile> images) throws IOException {
         try {
-            // User 설정 (테스트용, 실제 구현 시 user에서 가져오기)
+            // TODO User 설정 (테스트용, 실제 구현 시 user에서 가져오기)
             User trainer = new User();
             trainer.setId(1L);
             trainer.setNickname("지윤");
@@ -100,7 +101,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
                 try {
                     // 이미지 저장 및 경로 반환
-                    String savePath = imgService.saveImage(skillsDTO.getImg(), "./uploads/certification/");
+                    String savePath = imgService.saveImage(skillsDTO.getImg(), trainerDir);
                     System.out.println("자격증 이미지 저장 경로: " + savePath);
 
                     // CertificationId 설정 (복합 키)
@@ -177,7 +178,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 }
 
                 // 이미지 저장
-                String savePath = imgService.saveImage(images.get(i), "./uploads/certification/");
+                String savePath = imgService.saveImage(images.get(i), trainerDir);
                 System.out.println("자격증 이미지 저장 경로: " + savePath);
 
                 // CertificationId 설정 (복합 키)
