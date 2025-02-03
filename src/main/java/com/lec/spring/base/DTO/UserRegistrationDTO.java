@@ -19,4 +19,10 @@ public class UserRegistrationDTO {
     private String nickname;
     private Date birth;
     private String address;
+
+    // Gym 정보
+    private String gymName;
+    private Double latitude;
+    private Double longitude;
+
 }
