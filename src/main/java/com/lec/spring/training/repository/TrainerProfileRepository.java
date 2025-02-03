@@ -1,5 +1,6 @@
 package com.lec.spring.training.repository;
 
+import com.lec.spring.training.DTO.TrainerProfileDTO;
 import com.lec.spring.training.domain.GrantStatus;
 import com.lec.spring.training.DTO.TrainerProfileReadDTO;
 import com.lec.spring.training.domain.TrainerProfile;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 public interface TrainerProfileRepository extends JpaRepository<TrainerProfile, Long> {
 
-    TrainerProfile findByTrainerId(Long id);
+//    TrainerProfile findByTrainerId(Long id);
 
     @Query("SELECT new com.lec.spring.training.DTO.TrainerProfileDTO(tp.id, tp.perPrice, tp.content, tp.career, null, null) " +
             "FROM TrainerProfile tp WHERE tp.id = :id")
