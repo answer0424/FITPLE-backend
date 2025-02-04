@@ -22,6 +22,15 @@ public class ChatWebSocketController {
 
         // 클라이언트에게 메시지 전송
         messagingTemplate.convertAndSend("/topic/chat/" + chatId, message);
+
+        sendNotification(chatId, messageDTO);
+    }
+
+    // 메시지 전송 시 알림 전송
+    private void sendNotification(Long chatId, MessageDTO messageDTO) {
+        String notification = "New message in chat " + chatId + " : " + messageDTO.getContent();
+
+        messagingTemplate.convertAndSend("/topic/notifications" , notification);
     }
 }
 
