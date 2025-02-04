@@ -14,6 +14,7 @@ public interface UserMapper {
 
     @Mapping(source = "id", target = "userId")
     @Mapping(target = "HBTI", ignore = true)
+    @Mapping(source = "birth", target = "birth", dateFormat = "yyyy-MM-dd")
     MyPageUserInfoDTO toDto(User user);
 
     @Mapping(source = "userId", target = "id")

@@ -43,7 +43,7 @@ public class MyPageController{
     public ResponseEntity<?> getMyPageUserInfo(@PathVariable Long userid) {
         try {
             MyPageUserInfoDTO userInfo = userService.getMyPageUserInfo(userid);
-            userInfo.setHBTI(hbtiService.getHbtiByUserId(userid).getHbti());
+            System.out.println(userInfo);
             return new ResponseEntity<>(userInfo, HttpStatus.OK);
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

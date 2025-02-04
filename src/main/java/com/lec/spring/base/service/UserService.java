@@ -107,9 +107,13 @@ public class UserService {
 
         MyPageUserInfoDTO uInfo = userMapper.toDto(u);
 
+//        System.out.println("-------------------------------------" + uInfo);
+
         uInfo.setHBTI(hbtiRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("유저 HBTI 탐색에 실패했습니다"))
                 .getHbti());
+
+//        System.out.println( uInfo +"-------------------------------------");
 
         return uInfo;
 

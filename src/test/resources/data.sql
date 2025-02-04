@@ -1303,4 +1303,19 @@ from hbti;
 select *
 from gym;
 
+insert into hbti ( user_id, HBTI, mb_score
+                 , ei_score
+                 , cn_score
+                 , pg_score)
+VALUES (126, 'MENP', 68, 88, 32, 88);
+
+delete from hbti where user_id = 126;
+
+update User
+set address = '서울시 여러분 식초'
+where id = 126;
+update User
+set birth = '1998-06-16'
+where id = 126;
+
 
