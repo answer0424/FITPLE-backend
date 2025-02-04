@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -28,3 +27,4 @@ public class TrainerProfileDTO {
 
 
 }// end TrainerProfileDTO
+

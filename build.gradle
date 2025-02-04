@@ -40,6 +40,9 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
     implementation 'org.springframework.boot:spring-boot-starter-mail' // email 전송
     implementation 'org.springframework.boot:spring-boot-starter-data-redis' // redis
+    //DTO - Entity 매핑
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 }
 
 tasks.named('test') {
