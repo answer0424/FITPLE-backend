@@ -32,11 +32,18 @@ public class Reservation {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ReservationStatus status = ReservationStatus.운동전;
+    private ReservationStatus status;
 
     @Column(name = "startTime")
     private LocalTime startTime;
 
     @Column
     private Integer exerciseTime;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.status == null) {
+            this.status = ReservationStatus.운동전;
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.lec.spring.training.service;
 
 import com.lec.spring.training.DTO.*;
+import com.lec.spring.training.domain.Training;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,7 +17,7 @@ public interface MyPageService {
     boolean updateStampStatus(String status, Long reservationId);
 
     //- 스탬프 띄우기
-    int showStampList(Long studentId, Long trainerId);
+    int StampToCoupon(Training training, int stamp);
 
     //- 쿠폰 사용 기능
     boolean useCoupon(Long studentId, Long trainerId);

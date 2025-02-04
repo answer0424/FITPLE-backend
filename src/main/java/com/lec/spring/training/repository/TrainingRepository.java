@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface TrainingRepository extends JpaRepository<Training, Long> {
 
-    int findByUserIdAndTrainerIdEquals(Long studentId, Long trainerId);
+    Training findByUserIdAndTrainerIdEquals(Long studentId, Long trainerId);
 
     List<Training> findByTrainerId(Long trainerId);
 

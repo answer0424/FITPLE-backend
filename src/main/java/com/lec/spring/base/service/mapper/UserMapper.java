@@ -13,15 +13,15 @@ public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     @Mapping(source = "id", target = "userId")
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = "HBTI", ignore = true)
+    MyPageUserInfoDTO toDto(User user);
+
+    @Mapping(source = "userId", target = "id")
     @Mapping(target = "gym", ignore = true)
     @Mapping(target = "password", ignore = true)
     @Mapping(target = "provider", ignore = true)
     @Mapping(target = "providerId", ignore = true)
     @Mapping(target = "authority", ignore = true)
-
-    MyPageUserInfoDTO toDto(User user);
     User toEntity(MyPageUserInfoDTO dto);
 
     void UserFromMyPageUserInfoDto(MyPageUserInfoDTO dto, @MappingTarget User user);

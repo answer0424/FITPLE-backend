@@ -31,7 +31,7 @@ public class UserService {
     private final UserMapper userMapper;
     private final HbtiRepository hbtiRepository;
 
-    @Value("${app.image.profile-image}")
+    @Value("${app.image.profile}")
     String dir;
 
     public User registerUser(UserRegistrationDTO registrationDTO, String role) {

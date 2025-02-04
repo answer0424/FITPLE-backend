@@ -7,9 +7,13 @@ import com.lec.spring.base.config.PrincipalDetails;
 import com.lec.spring.base.service.HbtiService;
 import com.lec.spring.base.service.UserService;
 import com.lec.spring.training.DTO.*;
+import com.lec.spring.training.DTO.input.TrainerIdStudentIdDTO;
+import com.lec.spring.training.DTO.input.UpdateProfileImage;
+import com.lec.spring.training.DTO.input.UpdateScheduleDTO;
 import com.lec.spring.training.service.MyPageService;
 import com.lec.spring.training.service.TrainerDetailService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,21 +111,21 @@ public class MyPageController{
     }
 
     // 트레이너 페이지에서 학생별 일정 등록 조회 로직
-    @GetMapping("/{userid}/register/student/{studentId}")
-    public ResponseEntity<?> registerScheduleForStudent(@PathVariable Long userid,
-                                                        @PathVariable Long studentId,
-                                                        @RequestParam int year,
-                                                        @RequestParam int month) {
-        List<MonthReservationDTO> monthReservationDTO =
-                myPageService.getSchedulesByMember(studentId, userid, year, month);
-
-        if(!monthReservationDTO.isEmpty()) {
-
-            return new ResponseEntity<>(monthReservationDTO, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("해당 학생과 일정이 없습니다", HttpStatus.NO_CONTENT);
-        }
-    }
+//    @GetMapping("/{userid}/register/student/{studentId}")
+//    public ResponseEntity<?> registerScheduleForStudent(@PathVariable Long userid,
+//                                                        @PathVariable Long studentId,
+//                                                        @RequestParam int year,
+//                                                        @RequestParam int month) {
+//        List<MonthReservationDTO> monthReservationDTO =
+//                myPageService.getSchedulesByMember(studentId, userid, year, month);
+//
+//        if(!monthReservationDTO.isEmpty()) {
+//
+//            return new ResponseEntity<>(monthReservationDTO, HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>("해당 학생과 일정이 없습니다", HttpStatus.NO_CONTENT);
+//        }
+//    }
 
     // 트레이너 페이지에서 학생 검색 로직
     @GetMapping("/{userid}/register/search")
@@ -156,11 +160,11 @@ public class MyPageController{
     }
 
     // 트레이너 페이지에서 일정 등록 추가 처리 로직
-    @PostMapping("/register/add-schedule")
-    public ResponseEntity<?> addSchedule(@RequestBody Long userid,
+    @PostMapping("/register/add-schedule/{userId}")
+    public ResponseEntity<?> addSchedule(@PathVariable Long userId,
                                          @RequestBody CreateReservationDTO reservationDTO) {
         try {
-            myPageService.addSchedule(reservationDTO, userid);
+            myPageService.addSchedule(reservationDTO, userId);
             return new ResponseEntity<>("일정 등록에 성공했습니다", HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -169,9 +173,9 @@ public class MyPageController{
 
     // 트레이너 페이지 회원 추가 처리 로직
     @PostMapping("/register/add-member")
-    public ResponseEntity<?> addMemberToSchedule(@RequestBody Long trainerId, @RequestBody Long studentId) {
+    public ResponseEntity<?> addMemberToSchedule(@RequestBody TrainerIdStudentIdDTO DTO) {
         try {
-            myPageService.addTraining(studentId, trainerId);
+            myPageService.addTraining(DTO.getStudentId(), DTO.getTrainerId());
             return new ResponseEntity<>("회원 추가에 성공했습니다", HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -191,9 +195,9 @@ public class MyPageController{
 
     // 마이페이지에서 일정 상태 변경 처리 로직
     @PatchMapping("/schedule")
-    public ResponseEntity<?> updateSchedule(@RequestBody String status, @RequestBody Long reservationId) {
+    public ResponseEntity<?> updateSchedule(@RequestBody UpdateScheduleDTO DTO) {
         try {
-            if(myPageService.updateStampStatus(status, reservationId))
+            if(myPageService.updateStampStatus(DTO.getStatus(), DTO.getReservationId()))
                 return new ResponseEntity<>("완료되었습니다", HttpStatus.OK);
             else return new ResponseEntity<>("변경 실패하였습니다 \n 다시 시도해주세요", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
@@ -204,8 +208,13 @@ public class MyPageController{
     // 마이페이지에서 프로필 사진 변경 처리 로직
     @PatchMapping("/profile-img")
     @Transactional
-    public ResponseEntity<?> updateProfileImage(@RequestBody MultipartFile profileImage,
-                                                @RequestBody Long userId) {
+    public ResponseEntity<?> updateProfileImage(@RequestPart("userId") Long userId,
+                                                @RequestPart("profileImage") MultipartFile profileImage,
+                                                HttpServletRequest request) {
+        String contentType = request.getContentType();
+        System.out.println("Received Content-Type: " + contentType);
+        System.out.println("Received userId: " + userId);
+        System.out.println("Received profileImage: " + profileImage);
         try {
             userService.changeUserProfileImage(profileImage, userId);
             return new ResponseEntity<>("", HttpStatus.OK);
@@ -227,9 +236,9 @@ public class MyPageController{
 
     // 학생 마이페이지에서 쿠폰 사용 처리 로직
     @PatchMapping("/use-coupons")
-    public ResponseEntity<?> useCoupons(@RequestBody Long studentId, @RequestBody Long trainerId) {
+    public ResponseEntity<?> useCoupons(@RequestBody TrainerIdStudentIdDTO DTO) {
         try {
-            if(myPageService.useCoupon(studentId, trainerId)){
+            if(myPageService.useCoupon(DTO.getStudentId(), DTO.getTrainerId())){
                 return new ResponseEntity<>("쿠폰 사용에 성공했습니다", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("쿠폰 사용에 실패했습니다", HttpStatus.BAD_REQUEST);
@@ -241,11 +250,10 @@ public class MyPageController{
 
     // 트레이너 페이지에서 PT 횟수 증감 처리 로직
     @PatchMapping("/pt-count")
-    public ResponseEntity<?> updatePTCount(@RequestBody Long studentId,
-                                           @RequestBody Long trainerId,
-                                           @RequestBody int times) {
+    public ResponseEntity<?> updatePTCount(@RequestBody TrainerIdStudentIdDTO DTO) {
         try {
-            return new ResponseEntity<>(myPageService.setPtCount(studentId, trainerId, times), HttpStatus.OK);
+            return new ResponseEntity<>(myPageService.setPtCount(DTO.getStudentId(),
+                    DTO.getTrainerId(), DTO.getTimes()), HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

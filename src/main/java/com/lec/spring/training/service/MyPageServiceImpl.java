@@ -1,6 +1,5 @@
 package com.lec.spring.training.service;
 
-import com.lec.spring.base.config.PrincipalDetailService;
 import com.lec.spring.base.domain.User;
 import com.lec.spring.base.repository.UserRepository;
 import com.lec.spring.training.DTO.*;
@@ -11,12 +10,13 @@ import com.lec.spring.training.repository.ReservationRepository;
 import com.lec.spring.training.repository.TrainingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -51,34 +51,51 @@ public class MyPageServiceImpl implements MyPageService {
     }
 
     @Override
+    @Transactional
     public boolean updateStampStatus(String status, Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() -> new IllegalArgumentException("예약이 없습니다."));
 
-        reservation.setStatus(ReservationStatus.valueOf(status));
-        reservationRepository.save(reservation);
+        try {
+            reservation.setStatus(ReservationStatus.valueOf(status));
 
-        if (reservation.getStatus().equals(ReservationStatus.운동완료)) {
-            Training training = trainingRepository.findById(reservation.getTraining().getId()).orElseThrow(() -> new IllegalArgumentException("스탬프 추가에 실패했습니다"));
-            training.setTotal_stamps(training.getTotal_stamps() + 1);
+            if (status.equals("운동중")) {
+                reservation.setStartTime(LocalTime.now());
+            }
+
+            if (status.equals("운동완료")) {
+                // 두 시간 간의 차이 계산
+                Duration duration = Duration.between(reservation.getStartTime(), LocalTime.now());
+                int exerciseTime = (int) duration.toMinutes();
+                reservation.setExerciseTime(exerciseTime);
+
+                Training training = trainingRepository.findById(reservation.getTraining().getId())
+                        .orElseThrow(() -> new IllegalArgumentException("스탬프 추가에 실패했습니다"));
+                int stamp = training.getTotal_stamps() + 1;
+                if(stamp >= 10) {
+                    //스탬프  - 쿠폰 변환
+                    System.out.println("들어옴?");
+                    StampToCoupon(training, stamp);
+                } else {
+                    training.setTotal_stamps(training.getTotal_stamps() + 1);
+                }
+
+                training.setTimes(training.getTimes() - 1);
+            }
+
+        } catch (IllegalArgumentException e) {
+            throw e;
         }
-
         return true;
     }
 
     @Override
-    public int showStampList(Long studentId, Long trainerId) {
-        long trainingId = findTrainingId(studentId, trainerId);
-
+    public int StampToCoupon(Training training, int stamp) {
         try {
-            Training training = trainingRepository.findById(trainingId).orElseThrow();
+            int coupon = (stamp) / 10;
 
-            if (training.getTotal_stamps() >= 10) { //스탬프가 10개 이상이면 쿠폰으로 변환
-                int coupon = training.getTotal_stamps() / 10;
-
-                training.setTotal_stamps(training.getTotal_stamps() - (10 * coupon));
-                training.setCoupons(training.getCoupons() + coupon);
-                trainingRepository.saveAndFlush(training);
-            }
+            training.setTotal_stamps(stamp - (10 * coupon));
+            training.setCoupons(training.getCoupons() + coupon);
+            trainingRepository.saveAndFlush(training);
 
             return training.getTotal_stamps();
         }catch (Exception e) {
@@ -107,7 +124,10 @@ public class MyPageServiceImpl implements MyPageService {
     @Override
     public CouponPageDTO changeCouponPageByTrainer(Long studentId, Long trainerId) {
 
-        Training training = trainingRepository.findById(findTrainingId(studentId, trainerId)).orElseThrow(() -> new IllegalArgumentException("쿠폰 페이지 불러오기에 실패했습니다"));
+        Long id = findTrainingId(studentId, trainerId);
+
+        Training training = trainingRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("쿠폰 페이지 불러오기에 실패했습니다"));
         List<User> ids = new ArrayList<>();
         trainingRepository.findByUserId(studentId)
                 .forEach(t ->
@@ -195,8 +215,8 @@ public class MyPageServiceImpl implements MyPageService {
     public void addSchedule(CreateReservationDTO reservationDTO, long studentId) {
         Reservation reservation = Reservation.builder()
                 .date(reservationDTO.getDate())
-                .training(trainingRepository.findById(
-                        findTrainingId(studentId, reservationDTO.getTrainingId())).orElseThrow(() -> new IllegalArgumentException("일정 등록에 실패했습니다.")))
+                .training(trainingRepository.findById(reservationDTO.getTrainingId())
+                        .orElseThrow(() -> new IllegalArgumentException("일정 등록에 실패했습니다.")))
                 .build();
 
         reservationRepository.save(reservation);
@@ -216,6 +236,7 @@ public class MyPageServiceImpl implements MyPageService {
 
     @Override
     public long findTrainingId(Long studentId, Long trainerId) {
-        return trainingRepository.findByUserIdAndTrainerIdEquals(studentId, trainerId);
+        Training training = trainingRepository.findByUserIdAndTrainerIdEquals(studentId, trainerId);
+        return training.getId();
     }
 }
