@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -129,6 +130,7 @@ public class MyPageController{
         System.out.println("🚀 skills: " + skills);
         System.out.println("🚀 images count: " + image.size());
         System.out.println(" deletedcertifications : " + trainerProfileDTO.getDeletedSkillsId());
+
         boolean result = trainerDetailService.updateTrainerProfile(trainerProfileDTO,skills,image);
         if(result){
             return new ResponseEntity<>(true, HttpStatus.OK);

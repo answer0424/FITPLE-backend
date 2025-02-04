@@ -1,6 +1,5 @@
 package com.lec.spring.training.service;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,8 +16,7 @@ import java.util.logging.Logger;
 @Service
 public class ImgServiceImpl implements ImgService {
     private static final Logger logger = Logger.getLogger(ImgServiceImpl.class.getName());
-    @Value("${app.image.upload}")
-    private String BASE_UPLOAD_DIR;
+    private static final String BASE_UPLOAD_DIR = "./uploads/certification";
 
     @Override
     public List<String> saveImages(List<MultipartFile> files, String dir) throws IOException {
