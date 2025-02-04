@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 public class ReviewResponseDTO {
     private Long id;
     private Long trainingId;
+    private Long userId;
     private String username;
     private String trainerName;
     private String userProfileImage;

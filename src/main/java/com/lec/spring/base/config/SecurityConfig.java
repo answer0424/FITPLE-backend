@@ -80,6 +80,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/hbti/type/*").permitAll()
                         .requestMatchers("/img/**").permitAll()
                         .requestMatchers("/upload/**").permitAll()
+                        .requestMatchers("/api/reviews/**").authenticated()
                         .anyRequest().authenticated());
 
                         // 세션 설정
