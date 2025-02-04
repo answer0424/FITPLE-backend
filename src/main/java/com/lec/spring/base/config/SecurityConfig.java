@@ -76,6 +76,7 @@ public class SecurityConfig {
                         .requestMatchers("/reset-password").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/api/hbti/data").permitAll()
+                        .requestMatchers("/api/hbti/save").permitAll()
                         .requestMatchers("/member/detail").authenticated()  //지윤
                         .requestMatchers("/api/hbti/calculate").permitAll()
                         .requestMatchers("/api/hbti/type/*").permitAll()
