@@ -21,5 +21,5 @@ public interface TrainingRepository extends JpaRepository<Training, Long> {
     boolean existsByUserIdAndTrainerIdEquals(Long userId, Long trainerId);
 
     @Query("SELECT t FROM Training t WHERE t.trainer.id = :trainerId")
-    List<Training> findByTrainerId(@Param("trainerId") Long trainerId);
+    List<Training> findTrainingsByTrainerId(@Param("trainerId") Long trainerId);
 }

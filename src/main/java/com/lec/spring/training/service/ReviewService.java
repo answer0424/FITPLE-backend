@@ -27,7 +27,7 @@ public class ReviewService {
 
     public List<ReviewResponseDTO> getReviewsByTrainerId(Long trainerId, Long userId) {
         // 해당 트레이너의 모든 트레이닝 정보를 가져옴
-        List<Training> allTrainings = trainingRepository.findByTrainerId(trainerId);
+        List<Training> allTrainings = trainingRepository.findTrainingsByTrainerId(trainerId);
 
         // 이미 작성된 리뷰들을 가져옴
         List<Review> existingReviews = reviewRepository.findReviewsByTrainerId(trainerId);
