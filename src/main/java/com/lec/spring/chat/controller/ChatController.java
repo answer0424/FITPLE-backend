@@ -36,6 +36,7 @@ public class ChatController {
     // 채팅방 목록 불러오기
     @GetMapping("/rooms/{userId}")
     public ResponseEntity<List<ChatDTO>> getUserChats(@PathVariable Long userId) {
+        System.out.println("채팅방 목록을 불러옴");
         List<Chat> chats = chatService.getUserChats(userId);
         List<ChatDTO> chatDTOs = chats.stream().map(ChatDTO::new).collect(Collectors.toList());
         return ResponseEntity.ok(chatDTOs);
