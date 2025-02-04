@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ChatService {
@@ -72,8 +74,6 @@ public class ChatService {
         return chat;
     }
 
-
-
     // 채팅방 나가기
     @Transactional
     public void leaveChat(Long chatId, Long userId) {
@@ -89,9 +89,17 @@ public class ChatService {
         // 채팅방에 남은 유저가 없다면 채팅방 삭제
         if (!userChatRepository.existsByChatId(chatId)) {
             chatRepository.deleteById(chatId);
+        } else {
+            // 남아 있는 유저가 있을 경우 해당 유저들 제거
+            List<UserChat> remainingUsers = userChatRepository.findByChatId(chatId);
+            for (UserChat userChat : remainingUsers) {
+                userChatRepository.delete(userChat);
+            }
         }
-    }
 
+        // 채팅방 삭제
+        chatRepository.deleteById(chatId);
+    }
 
     @Transactional
     public MessageDTO saveMessage(Long chatId, MessageDTO messageDTO) {
@@ -124,5 +132,21 @@ public class ChatService {
         return MessageDTO.fromEntity(savedMessage);
     }
 
+    // 채팅방 목록 불러오기
+    @Transactional(readOnly = true)
+    public List<Chat> getUserChats(Long userId) {
+        return userChatRepository.findByUserId(userId).stream()
+                .map(UserChat::getChat)
+                .collect(Collectors.toList());
+    }
+
+    // 채팅 목록 불러오기
+    @Transactional(readOnly = true)
+    public List<MessageDTO> getChatMessages(Long chatId) {
+        List<Message> messages = messageRepository.findByChatIdOrderByTimestampAsc(chatId);
+        return messages.stream()
+                .map(MessageDTO::fromEntity)
+                .collect(Collectors.toList());
+    }
 
 }
