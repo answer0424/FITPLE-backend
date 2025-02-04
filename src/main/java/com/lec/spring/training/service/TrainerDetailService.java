@@ -21,8 +21,7 @@ public interface TrainerDetailService {
     // 특정 트레이너 ID로 트레이너 프로필 조회 (DTO 변환)
     TrainerProfileReadDTO getTrainerProfileById(Long trainerId);
 
-    // 승인된 트레이너 목록 조회 (DTO 변환)
-    List<TrainerProfileReadDTO> getApprovedTrainers();
+
 
 
 
