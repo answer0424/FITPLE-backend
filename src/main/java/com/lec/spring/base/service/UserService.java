@@ -1,9 +1,11 @@
 package com.lec.spring.base.service;
 
+import com.lec.spring.base.DTO.MyPageUserInfoDTO;
 import com.lec.spring.base.domain.Gym;
 import com.lec.spring.base.domain.User;
 import com.lec.spring.base.DTO.UserRegistrationDTO;
 import com.lec.spring.base.repository.GymRepository;
+import com.lec.spring.base.repository.HbtiRepository;
 import com.lec.spring.base.repository.UserRepository;
 import com.lec.spring.base.service.mapper.UserMapper;
 import com.lec.spring.training.service.ImgServiceImpl;
