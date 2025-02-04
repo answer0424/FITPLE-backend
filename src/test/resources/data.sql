@@ -1293,19 +1293,14 @@ UPDATE User u
     JOIN Gym g ON u.address = g.address
 SET u.gym_id = g.id
 WHERE u.authority = 'ROLE_TRAINER';
+#
+# INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons)
+# VALUES (126, 51, 10, 5, 2);
 
-INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons)
-VALUES (126, 51, 10, 5, 2);
+# DELETE FROM Training
+# WHERE user_id = 126 AND trainer_id = 51 AND times = 10 AND total_stamps = 5 AND coupons = 2;
 
-DELETE FROM Training
-WHERE user_id = 126 AND trainer_id = 51 AND times = 10 AND total_stamps = 5 AND coupons = 2;
 
--- First, delete the related reviews
-DELETE FROM review
-WHERE training_id = (
-    SELECT id FROM training
-    WHERE user_id = 126 AND trainer_id = 51 AND times = 10 AND total_stamps = 5 AND coupons = 2
-);
 
 select *
 from user;
