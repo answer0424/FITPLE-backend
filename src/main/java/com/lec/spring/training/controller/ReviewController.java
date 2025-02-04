@@ -60,9 +60,9 @@ public class ReviewController {
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<?> deleteReview(
             @PathVariable Long reviewId,
-            @AuthenticationPrincipal User user) {
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
         try {
-            reviewService.deleteReview(reviewId, user.getId());
+            reviewService.deleteReview(reviewId, principalDetails.getUser().getId());
             return ResponseEntity.noContent().build();
         } catch (IllegalStateException | EntityNotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
