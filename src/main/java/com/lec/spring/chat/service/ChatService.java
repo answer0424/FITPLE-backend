@@ -13,6 +13,7 @@ import com.lec.spring.chat.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -35,11 +36,13 @@ public class ChatService {
     public Chat createOrGetChat(Long userId, Long trainerId) {
         System.out.println("createOrGetChat() 호출");
         // 🔍 기존 채팅방이 있는지 확인
-        Optional<UserChat> existingChat = userChatRepository.findByUserIds(userId, trainerId);
-        if (existingChat.isPresent()) {
-            System.out.println("이미 존재하는 채팅방");
-            return existingChat.get().getChat();
+        Optional<Long> existingChatId = userChatRepository.findCommonChatId(userId, trainerId);
+        if (existingChatId.isPresent()) {
+            System.out.println("이미 존재하는 채팅방 ID: " + existingChatId.get());
+            return chatRepository.findById(existingChatId.get())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 채팅방 ID"));
         }
+
 
         // 🔍 유저와 트레이너 정보 조회
         System.out.println("유저와 트레이너 정보 조회");
@@ -90,7 +93,6 @@ public class ChatService {
     }
 
 
-    // 해당 채팅방의 모든 사용자에게 전송할 데이터를 반환하는 메서드
     @Transactional
     public MessageDTO saveMessage(Long chatId, MessageDTO messageDTO) {
         // 유저 정보 조회
@@ -101,18 +103,25 @@ public class ChatService {
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 채팅방 ID"));
 
+        System.out.println("메시지 저장 중");
         // 메시지 저장
         Message message = Message.builder()
                 .user(sender)
                 .chat(chat)
                 .content(messageDTO.getContent())
                 .isChecked(false)  // 초기 상태는 안 읽음
+                .timestamp(new Date())
                 .build();
 
-        messageRepository.save(message);
+        Message savedMessage = messageRepository.save(message);
+        System.out.println("메시지 저장 완료");
+
+        messageDTO.setMessageId(savedMessage.getMessageId());
+
+        System.out.println("메시지가 저장되었습니다: " + message);
 
         // MessageDTO 변환 후 반환
-        return MessageDTO.fromEntity(message);
+        return MessageDTO.fromEntity(savedMessage);
     }
 
 

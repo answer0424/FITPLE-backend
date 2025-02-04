@@ -13,17 +13,22 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        System.out.println("websocket 연결 중");
-        registry.addEndpoint("/ws-chat")
+        registry.addEndpoint("/ws-chat") // 일반 WebSocket 지원
+                .setAllowedOriginPatterns("*"); // 모든 도메인 허용
+
+        registry.addEndpoint("/ws-chat") // SockJS 지원
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
-        System.out.println("websocket 연결됨");
     }
+
+
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/topic");
         registry.setApplicationDestinationPrefixes("/app");
+
+        System.out.println("message broker 생성");
     }
 }
 
