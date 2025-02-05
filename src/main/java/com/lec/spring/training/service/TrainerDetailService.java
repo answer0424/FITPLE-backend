@@ -17,7 +17,7 @@ public interface TrainerDetailService {
 
 
     // 트레이너 프로필 수정
-    boolean updateTrainerProfile(TrainerProfileDTO trainerProfile,  List<String> skills, List<MultipartFile> images) throws IOException;
+    boolean updateTrainerProfile(List<SkillsDTO> certificationSkills, TrainerProfileDTO trainerProfileDTO) throws IOException;
 
     // 특정 트레이너 ID로 트레이너 프로필 조회 (DTO 변환)
     TrainerProfileReadDTO getTrainerProfileById(Long trainerId);

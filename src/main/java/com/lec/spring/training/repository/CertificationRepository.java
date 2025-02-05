@@ -16,4 +16,8 @@ public interface CertificationRepository extends JpaRepository<Certification, Ce
         @Transactional
         @Query("DELETE FROM Certification c WHERE c.id IN ?1")
         void deleteAllByIdInBatch(List<Long> ids);
+
+
+                @Query("SELECT c.credentials FROM Certification c WHERE c.trainerProfile.id = :trainerProfileId")
+                List<String> findCredentialsByTrainerProfileId(Long trainerProfileId);
 }// end CertificationRepository

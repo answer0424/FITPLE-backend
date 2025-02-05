@@ -69,24 +69,13 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                                         List<MultipartFile> images) throws IOException {
         try {
             // 현재 로그인한 유저 가져오기
-            PrincipalDetails principal = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            User trainer = principal.getUser();
+            User trainer = user.getUser();
             System.out.println("현재 로그인한 유저 : " + trainer.getUsername());
 
             if (!trainer.getAuthority().equals("ROLE_TRAINER")) {
                 throw new AccessDeniedException("트레이너 권한이 필요합니다");
             }
 
-            // 트레이너 프로필이 이미 존재하는지 확인
-            Optional<TrainerProfile> existingProfile = trainerProfileRepository.findByTrainer(trainer);
-
-            if (existingProfile.isPresent()) {
-                System.out.println("기존 트레이너 프로필이 존재하므로 업데이트를 수행합니다: " + existingProfile.get().getId());
-                trainerProfileDTO.setTrainerId(existingProfile.get().getId());
-                return updateTrainerProfile(trainerProfileDTO, skills, images);
-            }
-
-            // SkillsDTO 리스트 생성 및 데이터 매핑
             if (skills.size() != images.size()) {
                 throw new IllegalArgumentException("자격증과 이미지의 개수가 일치하지 않습니다.");
             }
@@ -94,11 +83,23 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
             List<SkillsDTO> certificationSkills = new ArrayList<>();
             for (int i = 0; i < skills.size(); i++) {
                 SkillsDTO skillsDTO = new SkillsDTO();
-                skillsDTO.setSkills(skills.get(i));
+                skillsDTO.setSkills(skills.get(i).trim());
                 skillsDTO.setImg(images.get(i));
                 certificationSkills.add(skillsDTO);
             }
-            trainerProfileDTO.setCertificationSkills(certificationSkills);
+//            trainerProfileDTO.setCertificationSkills(certificationSkills);
+
+
+            // 트레이너 프로필이 이미 존재하는지 확인
+            Optional<TrainerProfile> existingProfile = trainerProfileRepository.findByTrainer(trainer);
+
+            if (existingProfile.isPresent()) {
+                System.out.println("기존 트레이너 프로필이 존재하므로 업데이트를 수행합니다: " + existingProfile.get().getId());
+                trainerProfileDTO.setTrainerId(existingProfile.get().getId());
+                return updateTrainerProfile(certificationSkills, trainerProfileDTO);
+            }
+
+
 
             // 신규 트레이너 프로필 생성
             TrainerProfile trainerProfile = TrainerProfile.builder()
@@ -113,40 +114,8 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
             trainerProfileRepository.save(trainerProfile);
             System.out.println("TrainerProfile 저장 완료: " + trainerProfile.getId());
 
-            // Certification 저장
-            List<Certification> certifications = new ArrayList<>();
-
-            for (SkillsDTO skillsDTO : certificationSkills) {
-                if (skillsDTO.getImg() == null || skillsDTO.getImg().isEmpty()) {
-                    throw new IllegalArgumentException("자격증 이미지가 필요합니다.");
-                }
-
-                try {
-                    // 이미지 저장 및 경로 반환
-                    String savePath = imgService.saveImage(skillsDTO.getImg(), trainerDir);
-                    System.out.println("자격증 이미지 저장 경로: " + savePath);
-
-                    // CertificationId 설정 (복합 키)
-                    CertificationId certificationId = new CertificationId(trainerProfile.getId(), UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
-                    System.out.println("#################certificationId: " + certificationId);
-
-                    // Certification 객체 생성
-                    Certification certification = Certification.builder()
-                            .id(certificationId)
-                            .credentials(savePath)
-                            .skills(skillsDTO.getSkills())
-                            .trainerProfile(trainerProfile)
-                            .build();
-
-                    certifications.add(certification);
-                } catch (IOException e) {
-                    System.out.println("자격증 이미지 저장 중 오류 발생: " + e.getMessage());
-                    throw new ServiceException("자격증 이미지 저장 실패", e);
-                }
-            }
-
-            certificationRepository.saveAll(certifications);
-            System.out.println("트레이너 프로필 및 자격증 저장 완료: " + trainer.getUsername());
+          saveCertification(certificationSkills, trainerProfile);
+            System.out.println("저장완료 : " + trainer.getUsername());
 
             return true;
 
@@ -159,9 +128,10 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
 
 
+
     @Override
     @Transactional
-    public boolean updateTrainerProfile(TrainerProfileDTO trainerProfileDTO, List<String> skills, List<MultipartFile> images) throws IOException {
+    public boolean updateTrainerProfile(List<SkillsDTO> certificationSkills, TrainerProfileDTO trainerProfileDTO) throws IOException {
         try {
             // 트레이너 프로필 조회
             TrainerProfile profile = trainerProfileRepository.findById(trainerProfileDTO.getTrainerId())
@@ -172,67 +142,27 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
             if (trainerProfileDTO.getContent() != null) profile.setContent(trainerProfileDTO.getContent());
             if (trainerProfileDTO.getCareer() != null) profile.setCareer(trainerProfileDTO.getCareer());
 
-            // 기존 자격증 삭제 처리
+            // 프론트에서 삭제한 자격증 삭제 처리
             if (trainerProfileDTO.getDeletedSkillsId() != null && trainerProfileDTO.getDeletedSkillsId().length > 0) {
                 List<CertificationId> idsToDelete = Arrays.stream(trainerProfileDTO.getDeletedSkillsId())
                         .map(id -> new CertificationId(profile.getId(), id))
                         .collect(Collectors.toList());
-                System.out.println("deleted ids: " + idsToDelete);
+                System.out.println("#######삭제될 자격증 리스트 :  " + idsToDelete);
                 certificationRepository.deleteAllByIdInBatch(idsToDelete);
+                System.out.println("#########삭제 반영된 자격증 리스트 : " + certificationRepository.findCredentialsByTrainerProfileId(profile.getId()) );
             }
 
             // 기존 자격증 이미지 리스트 가져오기
-            List<String> existingImageUrls = trainerProfileRepository.findByTrainerId(profile.getId())
-                    .stream()
-                    //flatMap은 스트림 메서드로 각각 다른 스트림으로 매핑후 하나의 스트림으로 병합
-                    .flatMap(trainerProfile -> trainerProfile.getCertificationList().stream())
-                    .map(Certification::getCredentials)
-                    .collect(Collectors.toList());
+            List<String> existingImageUrls = certificationRepository.findCredentialsByTrainerProfileId(profile.getId());
 
+            System.out.println();
             System.out.println("existingImageUrls: " + existingImageUrls);
 
-            // 새 이미지 추가할 리스트
-            List<String> newImageUrls = new ArrayList<>(existingImageUrls);
-
-            // 새 자격증 추가 처리
-            if (skills != null && images != null) {
-                if (skills.size() != images.size()) {
-                    throw new IllegalArgumentException("자격증과 이미지의 개수가 일치하지 않습니다.");
-                }
-
-                List<Certification> certifications = new ArrayList<>();
-
-                for (int i = 0; i < skills.size(); i++) {
-                    MultipartFile file = images.get(i);
-
-                    if (file != null && !file.isEmpty()) {
-                        // 새 이미지 저장
-                        String savePath = imgService.saveImage(file, "trainer");
-                        newImageUrls.add(savePath);  // 기존 이미지와 함께 저장
-                    }
-
-                    // CertificationId 설정 (복합 키)
-                    CertificationId certificationId = new CertificationId(profile.getId(), UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE);
-
-                    // Certification 객체 생성
-                    Certification certification = Certification.builder()
-                            .id(certificationId) // 복합 키 설정
-                            .trainerProfile(profile)
-                            .skills(skills.get(i))
-                            .credentials(newImageUrls.get(i)) // 기존 + 새로운 이미지 저장
-                            .build();
-
-                    certifications.add(certification);
-                }
-
-                // 새로운 자격증 저장
-                if (!certifications.isEmpty()) {
-                    certificationRepository.saveAll(certifications);
-                }
-            }
+            saveCertification(certificationSkills, profile);
+            System.out.println("수정완료 : " + profile.getId());
 
             // 트레이너 프로필 저장
-            trainerProfileRepository.save(profile);
+//            trainerProfileRepository.save(profile);
 
             return true;
         } catch (Exception e) {
@@ -294,6 +224,45 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 .gymLatitude(gym != null ? gym.getLatitude() : null)
                 .gymLongitude(gym != null ? gym.getLongitude() : null)
                 .build();
+    }
+
+
+    // certification 저장
+    void saveCertification(List<SkillsDTO> certificationsList, TrainerProfile trainerProfile){
+
+        List<Certification> certifications = new ArrayList<>();
+
+        for (SkillsDTO skillsDTO : certificationsList) {
+            if (skillsDTO.getImg() == null || skillsDTO.getImg().isEmpty()) {
+                throw new IllegalArgumentException("자격증 이미지가 필요합니다.");
+            }
+
+            try {
+                // 이미지 저장 및 경로 반환
+                String savePath = imgService.saveImage(skillsDTO.getImg(), trainerDir);
+                System.out.println("자격증 이미지 저장 경로: " + savePath);
+
+                // CertificationId 설정 (복합 키)
+                CertificationId certificationId = new CertificationId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE, trainerProfile.getId());
+                System.out.println("#################certificationId: " + certificationId);
+
+                // Certification 객체 생성
+                Certification certification = Certification.builder()
+                        .id(certificationId)
+                        .credentials(savePath)
+                        .skills(skillsDTO.getSkills() )
+                        .trainerProfile(trainerProfile)
+                        .build();
+                certifications.add(certification);
+
+            } catch (IOException e) {
+                System.out.println("자격증 이미지 저장 중 오류 발생: " + e.getMessage());
+                throw new ServiceException("자격증 이미지 저장 실패", e);
+            }
+        }
+
+        certificationRepository.saveAll(certifications);
+        System.out.println("트레이너 프로필 및 자격증 저장 완료: " + trainerProfile.getId());
     }
 
 }// end TrainerDetailService

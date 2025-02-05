@@ -118,26 +118,26 @@ public class MyPageController{
 
 
 
-    // [트레이너 상세페이지 수정]
-    @PatchMapping(value = "/member/detail", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Boolean> updateTrainerProfile(
-            @ModelAttribute TrainerProfileDTO trainerProfileDTO,
-            @AuthenticationPrincipal PrincipalDetails user,
-            @RequestParam("skills") List<String> skills,
-            @RequestPart(required = false) List<MultipartFile> image
+//    // [트레이너 상세페이지 수정]
+//    @PatchMapping(value = "/member/detail", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public ResponseEntity<Boolean> updateTrainerProfile(
+//            @ModelAttribute TrainerProfileDTO trainerProfileDTO,
+//            @AuthenticationPrincipal PrincipalDetails user,
+//            @RequestParam("skills") List<String> skills,
+//            @RequestPart(required = false) List<MultipartFile> image
+//
+//    ) throws IOException {
+//        System.out.println("🚀 skills: " + skills);
+//        System.out.println("🚀 images count: " + image.size());
+//        System.out.println(" deletedcertifications : " + trainerProfileDTO.getDeletedSkillsId());
+//
+//        boolean result = trainerDetailService.updateTrainerProfile(trainerProfileDTO,image);
+//        if(result){
+//            return new ResponseEntity<>(true, HttpStatus.OK);
+//        }else{
+//            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+//        } }
 
-    ) throws IOException {
-        System.out.println("🚀 skills: " + skills);
-        System.out.println("🚀 images count: " + image.size());
-        System.out.println(" deletedcertifications : " + trainerProfileDTO.getDeletedSkillsId());
-
-        boolean result = trainerDetailService.updateTrainerProfile(trainerProfileDTO,skills,image);
-        if(result){
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
 
 
 
