@@ -1,5 +1,6 @@
 package com.lec.spring.training.DTO;
 
+import com.lec.spring.training.domain.Certification;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -24,6 +25,8 @@ public class TrainerProfileDTO {
     private Long[] deletedSkillsId;
 
    private List<SkillsDTO> certificationSkills = new ArrayList<>();
+
+
 
 
 }// end TrainerProfileDTO

@@ -22,6 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.security.Security;
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -77,6 +78,8 @@ public class SecurityConfig {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/api/hbti/data").permitAll()
                         .requestMatchers("/api/hbti/save").permitAll()
+                        .requestMatchers("/member/send-reset-email").permitAll()
+                        .requestMatchers("/member/reset-password").permitAll()
                         .requestMatchers("/member/detail").authenticated()  //지윤
                         .requestMatchers("/api/hbti/calculate").permitAll()
                         .requestMatchers("/api/hbti/type/*").permitAll()
