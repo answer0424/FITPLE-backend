@@ -17,6 +17,7 @@ import com.lec.spring.training.domain.GrantStatus;
 import com.lec.spring.training.domain.TrainerProfile;
 import com.lec.spring.training.repository.CertificationRepository;
 import com.lec.spring.training.repository.TrainerProfileRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 import static com.lec.spring.training.domain.GrantStatus.*;
@@ -45,6 +47,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
     private final UserRepository userRepository;
     private final HbtiRepository hbtiRepository;
     private final GymRepository gymRepository;
+    private static final AtomicLong ID_GENERATOR = new AtomicLong(1);
 
     @Value("${app.image.upload}")
     private String trainerDir;
@@ -144,12 +147,16 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
             // 프론트에서 삭제한 자격증 삭제 처리
             if (trainerProfileDTO.getDeletedSkillsId() != null && trainerProfileDTO.getDeletedSkillsId().length > 0) {
-                List<CertificationId> idsToDelete = Arrays.stream(trainerProfileDTO.getDeletedSkillsId())
-                        .map(id -> new CertificationId(profile.getId(), id))
+                List<Long> certificationIdsToDelete = Arrays.stream(trainerProfileDTO.getDeletedSkillsId())
                         .collect(Collectors.toList());
-                System.out.println("#######삭제될 자격증 리스트 :  " + idsToDelete);
-                certificationRepository.deleteAllByIdInBatch(idsToDelete);
-                System.out.println("#########삭제 반영된 자격증 리스트 : " + certificationRepository.findCredentialsByTrainerProfileId(profile.getId()) );
+                System.out.println("#######삭제될 자격증 리스트 :  " + certificationIdsToDelete);
+                // 각 자격증 ID에 대해 삭제 수행
+
+                    certificationRepository.deleteCertifications(profile.getId(), certificationIdsToDelete);
+
+
+                certificationRepository.flush();
+                System.out.println("#########삭제 반영된 자격증 리스트 : " + certificationRepository.findCredentialsByTrainerProfileId(profile.getId()));
             }
 
             // 기존 자격증 이미지 리스트 가져오기
@@ -244,7 +251,10 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 System.out.println("자격증 이미지 저장 경로: " + savePath);
 
                 // CertificationId 설정 (복합 키)
-                CertificationId certificationId = new CertificationId(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE, trainerProfile.getId());
+                CertificationId certificationId = new CertificationId(
+                        ID_GENERATOR.getAndIncrement(),
+                        trainerProfile.getId()
+                );
                 System.out.println("#################certificationId: " + certificationId);
 
                 // Certification 객체 생성
