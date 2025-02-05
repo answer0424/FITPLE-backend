@@ -25,6 +25,17 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        //hjy
+        String path = request.getServletPath();
+
+        // 비밀번호 재설정 경로를 필터링하지 않도록 설정
+        if (path.startsWith("/member/reset-password")) {
+            filterChain.doFilter(request, response);
+            System.out.println("jwt에서 제외됨");
+            return;
+        }
+        //
+
         System.out.println("🔹 JWTFilter.doFilterInternal() 호출");
 
         // 요청의 Authorization 헤더 가져오기
@@ -73,6 +84,8 @@ public class JWTFilter extends OncePerRequestFilter {
 
             // 인증 정보를 SecurityContext에 저장
             SecurityContextHolder.getContext().setAuthentication(authToken);
+
+
 
         } catch (Exception e) {
             System.err.println("❌ JWT 파싱 오류: " + e.getMessage());

@@ -25,6 +25,8 @@ import java.security.Security;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -60,6 +62,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+
+
         // csrf disable
         http.csrf(auth -> auth.disable());
 
@@ -73,13 +77,14 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register/**").permitAll() // 회원가입 엔드포인트는 인증 필요 없음
-                        .requestMatchers("/send-reset-email").permitAll()
+                        .requestMatchers("/member/send-reset-email").permitAll()
                         .requestMatchers("/reset-password").permitAll()
+                        .requestMatchers("/member/reset-password").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/api/hbti/data").permitAll()
                         .requestMatchers("/api/hbti/save").permitAll()
                         .requestMatchers("/member/send-reset-email").permitAll()
-                        .requestMatchers("/member/reset-password").permitAll()
+                        .requestMatchers("/member/reset-password/**").permitAll()
                         .requestMatchers("/member/detail").authenticated()  //지윤
                         .requestMatchers("/api/hbti/calculate").permitAll()
                         .requestMatchers("/api/hbti/type/*").permitAll()
@@ -88,7 +93,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/reviews/**").authenticated()
                         .anyRequest().authenticated());
 
-                        // 세션 설정
+
+        // 세션 설정
         http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
