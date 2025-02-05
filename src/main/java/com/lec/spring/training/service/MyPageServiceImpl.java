@@ -12,12 +12,15 @@ import com.lec.spring.training.domain.ReservationStatus;
 import com.lec.spring.training.domain.Training;
 import com.lec.spring.training.repository.ReservationRepository;
 import com.lec.spring.training.repository.TrainingRepository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Service
 public class MyPageServiceImpl implements MyPageService {
 
     private final ReservationRepository reservationRepository;

@@ -5,6 +5,7 @@ import com.lec.spring.training.DTO.SkillsDTO;
 import com.lec.spring.training.DTO.TrainerProfileDTO;
 import com.lec.spring.training.DTO.TrainerProfileReadDTO;
 import com.lec.spring.training.domain.Certification;
+import com.lec.spring.training.domain.TrainerProfile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -16,13 +17,14 @@ public interface TrainerDetailService {
 
 
     // 트레이너 프로필 수정
-    boolean updateTrainerProfile(TrainerProfileDTO trainerProfile,  List<String> skills, List<MultipartFile> images) throws IOException;
+    boolean updateTrainerProfile(List<SkillsDTO> certificationSkills, TrainerProfileDTO trainerProfileDTO) throws IOException;
 
     // 특정 트레이너 ID로 트레이너 프로필 조회 (DTO 변환)
     TrainerProfileReadDTO getTrainerProfileById(Long trainerId);
 
     // 승인된 트레이너 목록 조회 (DTO 변환)
     List<TrainerProfileReadDTO> getApprovedTrainers();
+
 
 
 
