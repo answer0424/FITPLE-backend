@@ -5,6 +5,7 @@ import com.lec.spring.base.config.PrincipalDetails;
 import com.lec.spring.base.domain.User;
 import com.lec.spring.base.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +18,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/register")
 public class UserController {
-    private final UserService userService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private final UserService userService;
 
     @PostMapping("/student")
     public ResponseEntity<?> registerStudent(@RequestBody UserRegistrationDTO registration) {

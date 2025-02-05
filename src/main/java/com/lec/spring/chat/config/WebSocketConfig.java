@@ -19,6 +19,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws-chat") // SockJS 지원
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
+        System.out.println("stomp 실행중");
     }
 
 

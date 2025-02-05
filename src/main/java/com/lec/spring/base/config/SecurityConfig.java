@@ -83,6 +83,8 @@ public class SecurityConfig {
                         .requestMatchers("/img/**").permitAll()
                         .requestMatchers("/upload/**").permitAll()
                         .requestMatchers("/api/reviews/**").authenticated()
+                        .requestMatchers("/api/chat/**").permitAll()
+                        .requestMatchers("/ws-chat/**").permitAll()
                         .anyRequest().authenticated());
 
                         // 세션 설정

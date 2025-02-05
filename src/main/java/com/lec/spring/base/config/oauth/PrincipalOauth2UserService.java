@@ -67,7 +67,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String password = oauth2Password;
         String email = oAuth2UserInfo.getEmail();
         if (email == null) {
-            email = "fitple@domain.com";  // 이메일이 없을 때 기본값 설정
+            email = "fitple" + providerId + "@domain.com";  // 이메일이 없을 때 기본값 설정
         }
         String nickname = provider + "_" + email;
 

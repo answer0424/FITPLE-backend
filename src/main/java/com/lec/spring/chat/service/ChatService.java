@@ -9,7 +9,7 @@ import com.lec.spring.chat.domain.UserChatId;
 import com.lec.spring.chat.repository.ChatRepository;
 import com.lec.spring.chat.repository.MessageRepository;
 import com.lec.spring.chat.repository.UserChatRepository;
-import com.lec.spring.chat.repository.UserRepository;
+import com.lec.spring.chat.repository.ChatUserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,13 +23,13 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
     private final UserChatRepository userChatRepository;
-    private final UserRepository userRepository;
+    private final ChatUserRepository chatUserRepository;
     private final MessageRepository messageRepository;
 
-    public ChatService(ChatRepository chatRepository, UserChatRepository userChatRepository, UserRepository userRepository, MessageRepository messageRepository) {
+    public ChatService(ChatRepository chatRepository, UserChatRepository userChatRepository, ChatUserRepository chatUserRepository, MessageRepository messageRepository) {
         this.chatRepository = chatRepository;
         this.userChatRepository = userChatRepository;
-        this.userRepository = userRepository;
+        this.chatUserRepository = chatUserRepository;
         this.messageRepository = messageRepository;
     }
 
@@ -48,8 +48,8 @@ public class ChatService {
 
         // 🔍 유저와 트레이너 정보 조회
         System.out.println("유저와 트레이너 정보 조회");
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자 ID"));
-        User trainer = userRepository.findById(trainerId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 트레이너 ID"));
+        User user = chatUserRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자 ID"));
+        User trainer = chatUserRepository.findById(trainerId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 트레이너 ID"));
 
         // 🔥 새로운 채팅방 생성 (ID 먼저 생성해야 함)
         System.out.println("채팅방 생성");
@@ -104,7 +104,7 @@ public class ChatService {
     @Transactional
     public MessageDTO saveMessage(Long chatId, MessageDTO messageDTO) {
         // 유저 정보 조회
-        User sender = userRepository.findById(messageDTO.getUserId())
+        User sender = chatUserRepository.findById(messageDTO.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자 ID"));
 
         // 채팅방 존재 여부 확인

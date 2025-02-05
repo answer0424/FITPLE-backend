@@ -14,13 +14,11 @@ import java.util.Date;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Builder
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 @Entity(name = "Message")
 public class Message extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long messageId;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)

@@ -53,13 +53,9 @@ public class User extends BaseEntity {
     private String nickname;
 
     @Column(length = 10)
-    @ToString.Exclude
-    @JsonIgnore
     private String provider;
 
     @Column(length = 100, unique = true)
-    @ToString.Exclude
-    @JsonIgnore
     private String providerId;
 
     @Column(length = 20)
