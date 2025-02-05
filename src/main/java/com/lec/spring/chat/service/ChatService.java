@@ -149,4 +149,9 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
+    // 채팅방 입장 시 메시지 읽음 처리
+    public void updateChatIsChecked(Long chatId) {
+        messageRepository.updateIsCheckedByChatId(chatId, true);
+    }
+
 }

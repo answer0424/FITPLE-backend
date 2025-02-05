@@ -14,12 +14,14 @@ public class MessageDTO {
     private Long messageId;
     private Long userId;
     private String content;
+    private boolean isChecked;
 
     public static MessageDTO fromEntity(Message message) {
         return MessageDTO.builder()
                 .messageId(message.getMessageId())
                 .userId(message.getUser().getId())
                 .content(message.getContent())
+                .isChecked(message.isChecked())
                 .build();
     }
 }

@@ -46,6 +46,9 @@ public class ChatController {
     // 특정 채팅방의 메시지 목록 불러오기
     @GetMapping("/{chatId}/messages")
     public ResponseEntity<List<MessageDTO>> getChatMessages(@PathVariable Long chatId) {
+        // message 읽음 처리
+        System.out.println(chatId + "방의 메시지가 읽음 처리됨");
+        chatService.updateChatIsChecked(chatId);
         List<MessageDTO> messages = chatService.getChatMessages(chatId);
         return ResponseEntity.ok(messages);
     }
