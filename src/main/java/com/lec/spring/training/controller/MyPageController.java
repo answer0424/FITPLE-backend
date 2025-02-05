@@ -44,7 +44,7 @@ public class MyPageController{
     private final MyPageService myPageService;
     private final UserService userService;
     private final HbtiService hbtiService;
-    private final UserService userService;
+
 
     // 마이페이지 info 컴포넌트(좌측 내 정보)
     @GetMapping("/{userid}/info")
