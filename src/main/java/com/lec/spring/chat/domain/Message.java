@@ -11,6 +11,8 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Builder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -37,6 +39,9 @@ public class Message extends BaseEntity {
 
     @Column(nullable = false)
     private boolean isChecked;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timestamp;  // 메시지 전송 시간
 
 }
 
