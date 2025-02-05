@@ -30,10 +30,12 @@ public class MyPageServiceImpl implements MyPageService {
 
     @Override
     public List<MonthReservationDTO> filterSchedulesByMonth(Long userid, int year, int month) {
-        User user = userRepository.findById(userid).orElseThrow(() -> new IllegalArgumentException("유저 정보를 찾지 못했습니다.")); // 현재 로그인한 유저
-
+        User user = userRepository.findById(userid)
+                .orElseThrow(() -> new IllegalArgumentException("유저 정보를 찾지 못했습니다.")); // 현재 로그인한 유저
+//        System.out.println(year+","+month);
         if (user != null) {
-            return reservationRepository.findReservationsByUserAndMonth(user.getId(), year, month);
+            //            System.out.println("\n\n\n\n\n"+reservationsByUserAndMonth);
+            return reservationRepository.findReservationsByUserAndMonth(userid, year, month);
         } else {
             return null;
         }
@@ -199,6 +201,12 @@ public class MyPageServiceImpl implements MyPageService {
 
     @Override
     public void addTraining(Long studentId, Long trainerId) {
+        if(
+        trainingRepository.findByUserIdAndTrainerIdEquals(studentId, trainerId) != null
+        ) {
+            throw new IllegalArgumentException("이미 수강 중인 회원입니다.");
+        }
+
         Training training = Training.builder()
                 .user(userRepository.findById(studentId)
                         .orElseThrow(() -> new IllegalArgumentException("회원 목록에서 검색에 실패했습니다")))

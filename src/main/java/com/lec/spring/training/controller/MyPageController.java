@@ -55,8 +55,10 @@ public class MyPageController{
     public ResponseEntity<?> getStudentCalendar(@PathVariable Long userid,
                                                 @RequestParam int year,
                                                 @RequestParam int month) {
+//        System.out.println("진입\n\n\n\n\n\n\n\n");
         try {
-            List<MonthReservationDTO> monthDTO = myPageService.filterSchedulesByMonth(userid, year, month);
+            List<MonthReservationDTO> monthDTO = myPageService.filterSchedulesByMonth(userid, year, month+1);
+//            System.out.println(monthDTO);
             return new ResponseEntity<>(monthDTO, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

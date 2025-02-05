@@ -13,6 +13,7 @@ public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     @Mapping(source = "id", target = "userId")
+    @Mapping(source = "gym.id", target = "gymId")
     @Mapping(target = "HBTI", ignore = true)
     @Mapping(source = "birth", target = "birth", dateFormat = "yyyy-MM-dd")
     MyPageUserInfoDTO toDto(User user);
