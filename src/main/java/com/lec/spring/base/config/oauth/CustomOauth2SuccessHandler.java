@@ -59,6 +59,8 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(jsonResponse);
 
+        System.out.println("---------------------------------------\n" + jsonResponse);
+
         getRedirectStrategy().sendRedirect(request, response, authRedirectUri);
     }
 
