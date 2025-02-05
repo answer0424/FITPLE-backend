@@ -1,5 +1,6 @@
 package com.lec.spring.training.repository;
 
+import com.lec.spring.base.domain.User;
 import com.lec.spring.training.DTO.TrainerProfileDTO;
 import com.lec.spring.training.domain.GrantStatus;
 import com.lec.spring.training.DTO.TrainerProfileReadDTO;
@@ -31,6 +32,8 @@ public interface TrainerProfileRepository extends JpaRepository<TrainerProfile, 
     List<TrainerProfile> findMatchingTrainersWithFetch(
             @Param("district") String district,
             @Param("hbtiList") List<String> hbtiList);
+
+    Optional<TrainerProfile> findByTrainer(User username);
 }
 
 
