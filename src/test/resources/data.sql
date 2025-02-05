@@ -1293,6 +1293,14 @@ UPDATE User u
     JOIN Gym g ON u.address = g.address
 SET u.gym_id = g.id
 WHERE u.authority = 'ROLE_TRAINER';
+#
+# INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons)
+# VALUES (126, 51, 10, 5, 2);
+
+# DELETE FROM Training
+# WHERE user_id = 126 AND trainer_id = 51 AND times = 10 AND total_stamps = 5 AND coupons = 2;
+
+
 
 select *
 from user;
@@ -1302,5 +1310,25 @@ from hbti;
 
 select *
 from gym;
+
+select *
+from review;
+
+select *
+from training;
+insert into hbti ( user_id, HBTI, mb_score
+                 , ei_score
+                 , cn_score
+                 , pg_score)
+VALUES (126, 'MENP', 68, 88, 32, 88);
+
+delete from hbti where user_id = 126;
+
+update User
+set address = '서울시 여러분 식초'
+where id = 126;
+update User
+set birth = '1998-06-16'
+where id = 126;
 
 

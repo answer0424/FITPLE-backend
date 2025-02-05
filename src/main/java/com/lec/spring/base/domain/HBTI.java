@@ -2,6 +2,7 @@ package com.lec.spring.base.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Table(name = "HBTI")
@@ -11,6 +12,7 @@ public class HBTI {
     private Long userId;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @ToString.Exclude
     @JoinColumn(name = "UserId", nullable = false)
     private User user;
 

@@ -73,6 +73,11 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register/**").permitAll() // 회원가입 엔드포인트는 인증 필요 없음
+                        .requestMatchers("/send-reset-email").permitAll()
+                        .requestMatchers("/reset-password").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/api/hbti/data").permitAll()
+                        .requestMatchers("/api/hbti/save").permitAll()
                         .requestMatchers("/member/send-reset-email").permitAll()
                         .requestMatchers("/member/reset-password").permitAll()
                         .requestMatchers("/member/detail").authenticated()  //지윤
@@ -80,6 +85,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/hbti/type/*").permitAll()
                         .requestMatchers("/img/**").permitAll()
                         .requestMatchers("/upload/**").permitAll()
+                        .requestMatchers("/api/reviews/**").authenticated()
                         .anyRequest().authenticated());
 
                         // 세션 설정
@@ -105,7 +111,6 @@ public class SecurityConfig {
                         configuration.setAllowCredentials(true);
                         configuration.setAllowedHeaders(List.of("*"));
                         configuration.setMaxAge(3600L);
-                        configuration.setAllowedHeaders(Arrays.asList("*"));
 
                         configuration.setExposedHeaders(List.of("Authorization"));
 

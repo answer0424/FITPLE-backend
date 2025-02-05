@@ -187,11 +187,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
         return convertToDTO(trainerProfile);
     }
 
-    // 승인된 트레이너 목록 조회 (DTO 변환)
-    public List<TrainerProfileReadDTO> getApprovedTrainers() {
-        List<TrainerProfile> trainers = trainerProfileRepository.findByIsAccess(GrantStatus.승인);
-        return trainers.stream().map(this::convertToDTO).collect(Collectors.toList());
-    }
+
 
 
 
