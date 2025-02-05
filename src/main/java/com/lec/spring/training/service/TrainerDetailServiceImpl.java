@@ -212,6 +212,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 .isAccess(trainerProfile.getIsAccess().name())
                 .certifications(trainerProfile.getCertificationList().stream()
                         .map(cert -> CertificationDTO.builder()
+                                .certificationId(cert.getId().getId())
                                 .skills(cert.getSkills())
                                 .imageUrl(cert.getCredentials())
                                 .build())

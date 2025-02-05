@@ -18,6 +18,6 @@ public class SkillsDTO {
     private MultipartFile img;
     /* DB경로만 저장하지만, DTO는 정보를 받아오는 친구고 우리가 받아올 정보는 이미지.  멀티파트 파일을 받아와야한다.*/
 
-    private List<Certification> certificationId;
+    private Long certificationId;
 
 }// end SkillsDTO
