@@ -43,12 +43,21 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         Collection<? extends GrantedAuthority> authorities = oauth2User.getAuthorities();
         String role = authorities.iterator().next().getAuthority();
 
-        // JWT 생성
+        //  JWT 생성
         String token = jwtUtil.generateToken(user, expirationTimeInMs);
         System.out.println("oauth 인증 token: " + token);
 
+        // OAuth 로그인 처리: 클라이언트로 JSON 응답 보내기
+        String jsonResponse = String.format(
+                "{ \"token\": \"%s\", \"user\": { \"id\": %d, \"username\": \"%s\", \"email\": \"%s\", \"nickname\": \"%s\", \"profileImage\": \"%s\" } }",
+                token, user.getId(), user.getUsername(), user.getEmail(), user.getNickname(), user.getProfileImage()
+        );
+
         // cookie에 담기
         response.addCookie(createCookie("accessToken", token));
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().write(jsonResponse);
 
         getRedirectStrategy().sendRedirect(request, response, authRedirectUri);
     }
