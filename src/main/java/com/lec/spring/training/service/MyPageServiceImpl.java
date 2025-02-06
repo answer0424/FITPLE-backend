@@ -2,7 +2,9 @@ package com.lec.spring.training.service;
 
 import com.lec.spring.base.domain.User;
 import com.lec.spring.base.repository.UserRepository;
+import com.lec.spring.base.service.mapper.UserMapper;
 import com.lec.spring.training.DTO.*;
+import com.lec.spring.training.DTO.output.CouponPageTrainerList;
 import com.lec.spring.training.domain.Reservation;
 import com.lec.spring.training.domain.ReservationStatus;
 import com.lec.spring.training.domain.Training;
@@ -26,6 +28,7 @@ public class MyPageServiceImpl implements MyPageService {
     private final ReservationRepository reservationRepository;
     private final TrainingRepository trainingRepository;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
 
 
@@ -131,16 +134,17 @@ public class MyPageServiceImpl implements MyPageService {
 
         Training training = trainingRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("쿠폰 페이지 불러오기에 실패했습니다"));
-        List<User> ids = new ArrayList<>();
+        List<CouponPageTrainerList> ids = new ArrayList<>();
         trainingRepository.findByUserId(studentId)
                 .forEach(t ->
-                        ids.add(t.getTrainer())
+                        ids.add(userMapper.toCouponPageTrainerListDto(t.getTrainer()))
                 );
 
         return CouponPageDTO.builder()
                 .coupons(training.getCoupons())
                 .times(training.getTimes())
                 .nickname(training.getTrainer().getNickname())
+                .gymName(training.getTrainer().getGym().getName())
                 .trainerIds(ids)
                 .build();
     }

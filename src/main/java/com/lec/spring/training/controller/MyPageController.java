@@ -206,6 +206,8 @@ public class MyPageController{
     // 마이페이지에서 일정 상태 변경 처리 로직
     @PatchMapping("/schedule")
     public ResponseEntity<?> updateSchedule(@RequestBody UpdateScheduleDTO DTO) {
+        System.out.println("\n\n\n\n\n\n\n");
+        System.out.println(DTO);
         try {
             if(myPageService.updateStampStatus(DTO.getStatus(), DTO.getReservationId()))
                 return new ResponseEntity<>("완료되었습니다", HttpStatus.OK);
