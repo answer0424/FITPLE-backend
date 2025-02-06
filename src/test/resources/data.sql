@@ -691,7 +691,7 @@ VALUES (1, 1, '2025-01-01 09:00:00', '운동완료', '09:00:00', 45),
 
 UPDATE User
 SET address = '서울특별시 종로구 수표로26길 12'
-WHERE username IN ('Trainer11', 'Trainer69');
+WHERE username IN ('Trainer11', 'Trainer69', 'Trainer60', 'Trainer70');
 
 UPDATE User
 SET address = '서울시 종로구 창신동 328-18'
@@ -701,9 +701,9 @@ UPDATE User
 SET address = '서울시 종로구 종로3가 119번지 지하동 1층 동영타워'
 WHERE username = 'Trainer37';
 
-UPDATE User
-SET address = '서울시 중구 명동 청계천로 24 케이스퀘어 B1'
-WHERE username IN ('Trainer60', 'Trainer70');
+# UPDATE User
+# SET address = '서울시 중구 명동 청계천로 24 케이스퀘어 B1'
+# WHERE username IN ('Trainer60', 'Trainer70');
 
 UPDATE User
 SET address = '서울시 중구 장충단로 253 헬로우APM 8층'
@@ -1330,5 +1330,14 @@ where id = 126;
 update User
 set birth = '1998-06-16'
 where id = 126;
+
+
+
+# 매칭페이지 데이터 불리기 위해...
+UPDATE HBTI
+SET HBTI = 'BICG';
+# 사진 경로 통일 시킴
+UPDATE user
+SET profile_image = 'upload/profile/profile11.jpeg';
 
 

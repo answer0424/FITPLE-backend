@@ -34,14 +34,20 @@ public class TrainerMatchService {
         HBTI userHBTI = hbtiRepository.findByUserId(userId)
                 .orElseThrow(() -> new EntityNotFoundException("HBTI not found for user: " + userId));
 
+        System.out.println("사용자의 hbti입니다 : " + userHBTI);
+
         String userDistrict = extractDistrict(user.getAddress());
         List<String> hbtiTypes = List.of(userHBTI.getHbti());
 
         // 매칭되는 트레이너 찾기
-        return trainerProfileRepository.findMatchingTrainersWithFetch(userDistrict, hbtiTypes)
+        List<TrainerMatchResponseDTO> matchedTrainer = trainerProfileRepository.findMatchingTrainersWithFetch(userDistrict, hbtiTypes)
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+
+        System.out.println("매칭되는 트레이너 입니다 : "+ matchedTrainer);
+
+        return matchedTrainer;
     }
 
     private TrainerMatchResponseDTO convertToDTO(TrainerProfile trainerProfile) {

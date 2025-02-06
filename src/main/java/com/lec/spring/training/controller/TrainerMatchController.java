@@ -29,7 +29,8 @@ public class TrainerMatchController {
             if (matchingTrainers.isEmpty()) {
                 return ResponseEntity.noContent().build();
             }
-
+            System.out.println("매칭된 트레이너 : " + matchingTrainers);
+            System.out.println("매칭된 트레이너 수 : " + matchingTrainers.size());
             return ResponseEntity.ok(matchingTrainers);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest()
