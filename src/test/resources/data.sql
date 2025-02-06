@@ -1331,4 +1331,10 @@ update User
 set birth = '1998-06-16'
 where id = 126;
 
-
+INSERT INTO HBTI ( user_id, HBTI, mb_score
+                 , ei_score
+                 , cn_score
+                 , pg_score)
+VALUES
+-- MICP (3)
+(134, 'MICP', 70, 20, 58, 90);

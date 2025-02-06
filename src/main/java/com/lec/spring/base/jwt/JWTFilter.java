@@ -1,6 +1,8 @@
 package com.lec.spring.base.jwt;
 
 import com.lec.spring.base.config.PrincipalDetails;
+import com.lec.spring.base.domain.Gym;
+import com.lec.spring.base.domain.HBTI;
 import com.lec.spring.base.domain.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -53,7 +55,15 @@ public class JWTFilter extends OncePerRequestFilter {
             // JWT 파싱
             Long id = jwtUtil.getId(token);
             String username = jwtUtil.getUsername(token);
+            String email = jwtUtil.getEmail(token);
+            String nickname = jwtUtil.getNickname(token);
+            String brith = jwtUtil.getBirth(token);
+            String provider = jwtUtil.getProvider(token);
+            String address = jwtUtil.getAddress(token);
             String authority = jwtUtil.getAuthority(token);
+            Gym gym = jwtUtil.getGym(token);
+            HBTI hbti = jwtUtil.getHbti(token);
+            String profileImage = jwtUtil.getProfileImage(token);
 
             System.out.println("✅ JWT 파싱 완료: userId=" + id + ", username=" + username + ", authority=" + authority);
 
@@ -62,7 +72,14 @@ public class JWTFilter extends OncePerRequestFilter {
                     .id(id)
                     .username(username)
                     .password("jwtwithfitple")    // 임시 비밀번호
+                    .email(email)
+                    .nickname(nickname)
+                    .provider(provider)
+                    .address(address)
                     .authority(authority)
+                    .gym(gym)
+                    .hbti(hbti)
+                    .profileImage(profileImage)
                     .build();
 
             // UserDetails 생성

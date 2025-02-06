@@ -70,7 +70,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         if (email == null) {
             email = "fitple" + providerId + "@domain.com";  // 이메일이 없을 때 기본값 설정
         }
-        String nickname = provider + "_" + email;
+        String nickname = username;
 
         System.out.println();
 
