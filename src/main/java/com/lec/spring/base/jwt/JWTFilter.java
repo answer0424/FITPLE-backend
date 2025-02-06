@@ -24,7 +24,7 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
+        System.out.println("💜클라이언트에서 다시 여기로 왔음 JWT 확인해야 하거든");
         System.out.println("🔹 JWTFilter.doFilterInternal() 호출");
 
         // 요청의 Authorization 헤더 가져오기
@@ -77,7 +77,7 @@ public class JWTFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             System.err.println("❌ JWT 파싱 오류: " + e.getMessage());
         }
-
+        System.out.println("🤎여기서 컨트롤러로 가야 함");
         // 다음 필터로 전달
         filterChain.doFilter(request, response);
     }

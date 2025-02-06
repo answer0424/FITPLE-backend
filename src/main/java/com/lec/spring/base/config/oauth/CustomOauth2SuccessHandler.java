@@ -31,6 +31,7 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        System.out.println("💚PrincipalOauth2UserService 다 끝났으면 들어와야겠지??");
         System.out.println("CustomOauth2SuccessHandler onAuthenticationSuccess() 호출");
 
         // OAuth2USer 상속받는 객체
@@ -47,21 +48,18 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String token = jwtUtil.generateToken(user, expirationTimeInMs);
         System.out.println("oauth 인증 token: " + token);
 
-        // OAuth 로그인 처리: 클라이언트로 JSON 응답 보내기
-        String jsonResponse = String.format(
-                "{ \"token\": \"%s\", \"user\": { \"id\": %d, \"username\": \"%s\", \"email\": \"%s\", \"nickname\": \"%s\", \"profileImage\": \"%s\" } }",
-                token, user.getId(), user.getUsername(), user.getEmail(), user.getNickname(), user.getProfileImage()
-        );
-
         // cookie에 담기
         response.addCookie(createCookie("accessToken", token));
-        response.setContentType("application/json");
-        response.setCharacterEncoding("utf-8");
-        response.getWriter().write(jsonResponse);
 
-        System.out.println("---------------------------------------\n" + jsonResponse);
+        System.out.println("💙 여기에 뭐들어있냐?\n");
 
         getRedirectStrategy().sendRedirect(request, response, authRedirectUri);
+        System.out.println("requestURI : " + request.getRequestURI());
+        System.out.println("request header : " + request.getHeader("request-header"));
+        System.out.println("request parameter : " + request.getHeader("request-parameter"));
+        System.out.println("response : " + response);
+        System.out.println("authRedirectUri : " + authRedirectUri);
+        System.out.println("🩵이거 끝나면 " + authRedirectUri + "로 accessToken 보내줄거임");
     }
 
     private Cookie createCookie(String key, String value) {
