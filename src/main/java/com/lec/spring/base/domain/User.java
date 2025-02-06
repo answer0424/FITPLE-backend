@@ -1,6 +1,7 @@
 package com.lec.spring.base.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lec.spring._common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,6 +25,8 @@ public class User extends BaseEntity {
     private Long id;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference // 순환 참조 방지
+    @ToString.Exclude
     private HBTI hbti;
 
     @ManyToOne
@@ -42,8 +45,6 @@ public class User extends BaseEntity {
     private String email;
 
     @Column(length = 200)
-    @ToString.Exclude
-    @JsonIgnore
     private String address;
 
     @Column
@@ -53,13 +54,9 @@ public class User extends BaseEntity {
     private String nickname;
 
     @Column(length = 10)
-    @ToString.Exclude
-    @JsonIgnore
     private String provider;
 
     @Column(length = 100, unique = true)
-    @ToString.Exclude
-    @JsonIgnore
     private String providerId;
 
     @Column(length = 20)

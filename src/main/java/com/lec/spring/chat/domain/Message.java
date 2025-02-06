@@ -11,14 +11,14 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@Builder
 @Entity(name = "Message")
 public class Message extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long messageId;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
@@ -37,6 +37,9 @@ public class Message extends BaseEntity {
 
     @Column(nullable = false)
     private boolean isChecked;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timestamp;  // 메시지 전송 시간
 
 }
 

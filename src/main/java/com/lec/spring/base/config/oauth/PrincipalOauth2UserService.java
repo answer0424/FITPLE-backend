@@ -32,7 +32,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-
+        System.out.println("❤️클라이언트에서 사용자가 요청을 하면 여기에 가장 먼저 들어와야 겠지??");
         // 사용자 프로필 정보 가져오기
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
@@ -50,6 +50,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         // 강제 회원가입 진행
         String provider = userRequest.getClientRegistration().getRegistrationId();
+        System.out.println("🩷" +provider+ " 로 강제 회원가입 하는 중");
 
         OAuth2UserInfo oAuth2UserInfo = switch (provider.toLowerCase()) {
             case "google" -> new GoogleUserInfo(oAuth2User.getAttributes());
@@ -67,13 +68,15 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String password = oauth2Password;
         String email = oAuth2UserInfo.getEmail();
         if (email == null) {
-            email = "fitple@domain.com";  // 이메일이 없을 때 기본값 설정
+            email = "fitple" + providerId + "@domain.com";  // 이메일이 없을 때 기본값 설정
         }
-        String nickname = provider + "_" + email;
+        String nickname = username;
+
+        System.out.println();
 
 
         System.out.println("""
-                [OAuth2인증 회원 정보]
+                🧡[OAuth2인증 회원 정보]
                   username: %s
                   nickname: %s
                   email: %s
@@ -100,7 +103,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             newUser = userRepository.save(newUser);
 
             if (newUser != null) {
-                System.out.println("\noauth2 인증 회원 가입 성공\n");
+                System.out.println("\n💛oauth2 인증 회원 가입 성공\n");
                 user = userRepository.findByUsername(username);
             } else {
                 System.out.println("\noauth2 인증 회원 가입 실패 !\n");
