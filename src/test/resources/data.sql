@@ -1331,4 +1331,3 @@ update User
 set birth = '1998-06-16'
 where id = 126;
 
-

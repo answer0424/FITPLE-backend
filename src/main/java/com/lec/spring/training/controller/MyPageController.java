@@ -38,7 +38,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/member")
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.POST, RequestMethod.GET})
 public class MyPageController{
 
     private final TrainerDetailService trainerDetailService;
