@@ -162,7 +162,7 @@ public class MyPageController{
         }
     }
 
-    // 마이페이지에서 AI 프로필 사진 생성 요청 처리 로직
+//     마이페이지에서 AI 프로필 사진 생성 요청 처리 로직
     @PostMapping("/{userid}/ai-creation")
     public ResponseEntity<?> createAIProfilePicture(@PathVariable String userid) {
         //TODO : AI 빨랑 해야하는대...
