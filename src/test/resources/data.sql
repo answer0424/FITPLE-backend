@@ -1423,3 +1423,6 @@ INSERT INTO reservation (training_id, date, status, start_time, exercise_time) V
     (58, '2025-02-17 09:00:00', '운동전', '09:00:00', 45),
     (58, '2025-02-18 09:00:00', '운동전', '09:00:00', 45),
     (58, '2025-02-19 09:00:00', '운동전', '09:00:00', 45);
+
+insert into message (created_at, content, is_checked, timestamp, chat_id, user_id)
+values (now(),'ㅎㅇㅎㅇ', false, now(), 28, 1);

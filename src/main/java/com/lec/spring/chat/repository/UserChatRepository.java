@@ -1,6 +1,8 @@
 package com.lec.spring.chat.repository;
 
 import com.lec.spring.base.domain.User;
+import com.lec.spring.base.domain.User;
+import com.lec.spring.chat.domain.Chat;
 import com.lec.spring.chat.domain.UserChat;
 import com.lec.spring.chat.domain.UserChatId;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -46,6 +48,9 @@ public interface UserChatRepository extends JpaRepository<UserChat, UserChatId> 
             "WHERE uc.chat.id IN :chatIds AND u.authority = 'ROLE_STUDENT'")
     List<User> findStudentsInChats(@Param("chatIds") List<Long> chatIds);
 
+
+    @Query("SELECT uc.user FROM UserChat uc WHERE uc.chat.id = :chatId AND uc.user.id <> :userId")
+    Optional<User> findOtherUserInChat(Long chatId, Long userId);
 }
 
 
