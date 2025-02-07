@@ -1337,4 +1337,4 @@ INSERT INTO HBTI ( user_id, HBTI, mb_score
                  , pg_score)
 VALUES
 -- MICP (3)
-(134, 'MICP', 70, 20, 58, 90);
+(126, 'MICP', 70, 20, 58, 90);

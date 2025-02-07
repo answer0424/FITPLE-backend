@@ -54,6 +54,7 @@ public class MyPageController{
             System.out.println(userInfo);
             return new ResponseEntity<>(userInfo, HttpStatus.OK);
         } catch (Exception e){
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
