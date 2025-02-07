@@ -1,6 +1,7 @@
 package com.lec.spring.training.DTO;
 
 import com.lec.spring.base.domain.User;
+import com.lec.spring.training.DTO.output.CouponPageTrainerList;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +19,7 @@ public class CouponPageDTO {
 
     private String nickname;
 
-    List<User> trainerIds;
+    private String gymName;
+
+    List<CouponPageTrainerList> trainerIds;
 }

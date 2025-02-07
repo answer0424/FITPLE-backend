@@ -2,7 +2,9 @@ package com.lec.spring.training.service;
 
 import com.lec.spring.base.domain.User;
 import com.lec.spring.base.repository.UserRepository;
+import com.lec.spring.base.service.mapper.UserMapper;
 import com.lec.spring.training.DTO.*;
+import com.lec.spring.training.DTO.output.CouponPageTrainerList;
 import com.lec.spring.training.domain.Reservation;
 import com.lec.spring.training.domain.ReservationStatus;
 import com.lec.spring.training.domain.Training;
@@ -26,15 +28,18 @@ public class MyPageServiceImpl implements MyPageService {
     private final ReservationRepository reservationRepository;
     private final TrainingRepository trainingRepository;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
 
 
     @Override
     public List<MonthReservationDTO> filterSchedulesByMonth(Long userid, int year, int month) {
-        User user = userRepository.findById(userid).orElseThrow(() -> new IllegalArgumentException("유저 정보를 찾지 못했습니다.")); // 현재 로그인한 유저
-
+        User user = userRepository.findById(userid)
+                .orElseThrow(() -> new IllegalArgumentException("유저 정보를 찾지 못했습니다.")); // 현재 로그인한 유저
+//        System.out.println(year+","+month);
         if (user != null) {
-            return reservationRepository.findReservationsByUserAndMonth(user.getId(), year, month);
+            //            System.out.println("\n\n\n\n\n"+reservationsByUserAndMonth);
+            return reservationRepository.findReservationsByUserAndMonth(userid, year, month);
         } else {
             return null;
         }
@@ -129,16 +134,17 @@ public class MyPageServiceImpl implements MyPageService {
 
         Training training = trainingRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("쿠폰 페이지 불러오기에 실패했습니다"));
-        List<User> ids = new ArrayList<>();
+        List<CouponPageTrainerList> ids = new ArrayList<>();
         trainingRepository.findByUserId(studentId)
                 .forEach(t ->
-                        ids.add(t.getTrainer())
+                        ids.add(userMapper.toCouponPageTrainerListDto(t.getTrainer()))
                 );
 
         return CouponPageDTO.builder()
                 .coupons(training.getCoupons())
                 .times(training.getTimes())
                 .nickname(training.getTrainer().getNickname())
+                .gymName(training.getTrainer().getGym().getName())
                 .trainerIds(ids)
                 .build();
     }
@@ -200,6 +206,12 @@ public class MyPageServiceImpl implements MyPageService {
 
     @Override
     public void addTraining(Long studentId, Long trainerId) {
+        if(
+        trainingRepository.findByUserIdAndTrainerIdEquals(studentId, trainerId) != null
+        ) {
+            throw new IllegalArgumentException("이미 수강 중인 회원입니다.");
+        }
+
         Training training = Training.builder()
                 .user(userRepository.findById(studentId)
                         .orElseThrow(() -> new IllegalArgumentException("회원 목록에서 검색에 실패했습니다")))
