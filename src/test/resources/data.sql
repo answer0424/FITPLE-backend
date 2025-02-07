@@ -1338,3 +1338,6 @@ INSERT INTO HBTI ( user_id, HBTI, mb_score
 VALUES
 -- MICP (3)
 (134, 'MICP', 70, 20, 58, 90);
+
+insert into message (created_at, content, is_checked, timestamp, chat_id, user_id)
+values (now(),'ㅎㅇㅎㅇ', false, now(), 28, 1);
