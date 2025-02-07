@@ -63,8 +63,10 @@ public class MyPageController{
     public ResponseEntity<?> getStudentCalendar(@PathVariable Long userid,
                                                 @RequestParam int year,
                                                 @RequestParam int month) {
+//        System.out.println("진입\n\n\n\n\n\n\n\n");
         try {
-            List<MonthReservationDTO> monthDTO = myPageService.filterSchedulesByMonth(userid, year, month);
+            List<MonthReservationDTO> monthDTO = myPageService.filterSchedulesByMonth(userid, year, month+1);
+//            System.out.println(monthDTO);
             return new ResponseEntity<>(monthDTO, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -204,6 +206,8 @@ public class MyPageController{
     // 마이페이지에서 일정 상태 변경 처리 로직
     @PatchMapping("/schedule")
     public ResponseEntity<?> updateSchedule(@RequestBody UpdateScheduleDTO DTO) {
+        System.out.println("\n\n\n\n\n\n\n");
+        System.out.println(DTO);
         try {
             if(myPageService.updateStampStatus(DTO.getStatus(), DTO.getReservationId()))
                 return new ResponseEntity<>("완료되었습니다", HttpStatus.OK);

@@ -9,6 +9,8 @@ import java.util.Date;
 @Builder
 public class MyPageUserInfoDTO {
     long userId;
+    long gymId;
+    String authority;
     String nickname;
     String profileImage;
     String HBTI;
