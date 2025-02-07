@@ -1,5 +1,6 @@
 package com.lec.spring.chat.repository;
 
+import com.lec.spring.base.domain.User;
 import com.lec.spring.chat.domain.Chat;
 import com.lec.spring.chat.domain.UserChat;
 import com.lec.spring.chat.domain.UserChatId;
@@ -35,6 +36,9 @@ public interface UserChatRepository extends JpaRepository<UserChat, UserChatId> 
 
     // 채팅방 목록 조회 시 특정 유저 id 값 확인하기
     List<UserChat> findByUserId(Long userId);  // 사용자가 속한 채팅방 조회
+
+    @Query("SELECT uc.user FROM UserChat uc WHERE uc.chat.id = :chatId AND uc.user.id <> :userId")
+    Optional<User> findOtherUserInChat(Long chatId, Long userId);
 }
 
 
