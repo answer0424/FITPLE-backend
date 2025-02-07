@@ -6,6 +6,7 @@ import com.lec.spring.base.DTO.MyPageUserInfoDTO;
 import com.lec.spring.base.config.PrincipalDetails;
 import com.lec.spring.base.service.HbtiService;
 import com.lec.spring.base.service.UserService;
+import com.lec.spring.chat.repository.UserChatRepository;
 import com.lec.spring.training.DTO.*;
 import com.lec.spring.training.DTO.input.TrainerIdStudentIdDTO;
 import com.lec.spring.training.DTO.input.UpdateProfileImage;
@@ -44,6 +45,7 @@ public class MyPageController{
     private final MyPageService myPageService;
     private final UserService userService;
     private final HbtiService hbtiService;
+    private final UserChatRepository userChatRepository;
 
 
     // 마이페이지 info 컴포넌트(좌측 내 정보)
@@ -113,6 +115,8 @@ public class MyPageController{
     @GetMapping("/{userid}/register")
     public ResponseEntity<?> registerSchedule(@PathVariable Long userid) {
         List<StudentListDTO> studentListDTO = myPageService.getMyStudentList(userid);
+        System.out.println("트레이너의 회원리스트 입니다 : " + studentListDTO);
+        System.out.println();
         if(!studentListDTO.isEmpty()) {
 
             return new ResponseEntity<>(studentListDTO, HttpStatus.OK);
@@ -138,12 +142,19 @@ public class MyPageController{
 //        }
 //    }
 
-    // 트레이너 페이지에서 학생 검색 로직
-    @GetMapping("/{userid}/register/search")
-    public ResponseEntity<?> searchStudentsForSchedule(@PathVariable Long userid,
-                                                       @RequestParam String studentName) {
-        //TODO : 채팅 기반 검색
-        return new ResponseEntity<>("", HttpStatus.OK);
+
+    // 트레이너 페이지에서 학생 검색 (개별)
+// hjy : 채팅과 관련된 페이지임.
+    @GetMapping("/{userId}/register/search")
+    public ResponseEntity<?> searchStudentsForSchedule(@PathVariable Long userId) {
+        List<StudentListDTO> studentList = myPageService.findStudentByChats(userId);
+
+        if (studentList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("채팅방에서 해당 트레이너와 연결된 학생을 찾을 수 없습니다.");
+        }
+
+        return ResponseEntity.ok(studentList);
     }
 
     // 트레이너 페이지에서 학생별 일정 조회 로직

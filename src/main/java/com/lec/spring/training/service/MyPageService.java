@@ -37,8 +37,8 @@ public interface MyPageService {
     //- 인덱스 0번 트레이너의 쿠폰 페이지
     CouponPageDTO getMyTrainerPage(Long userId);
 
-    //- 채팅 목록에서 회원 이름 검색
-    StudentListDTO findStudentByChats(Long trainerId, String studentName);
+    //- 트레이너 채팅방에 존재하는 회원리스트
+    List<StudentListDTO> findStudentByChats(Long trainerId);
 
     //- 트레이닝에 추가하기
     void addTraining(Long studentId, Long trainerId);
