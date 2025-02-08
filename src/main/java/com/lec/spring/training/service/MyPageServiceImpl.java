@@ -3,8 +3,6 @@ package com.lec.spring.training.service;
 import com.lec.spring.base.domain.User;
 import com.lec.spring.base.repository.UserRepository;
 import com.lec.spring.base.service.mapper.UserMapper;
-import com.lec.spring.chat.repository.ChatRepository;
-import com.lec.spring.chat.repository.UserChatRepository;
 import com.lec.spring.chat.repository.UserChatRepository;
 import com.lec.spring.training.DTO.*;
 import com.lec.spring.training.DTO.output.CouponPageTrainerList;
@@ -14,11 +12,9 @@ import com.lec.spring.training.domain.ReservationStatus;
 import com.lec.spring.training.domain.Training;
 import com.lec.spring.training.repository.ReservationRepository;
 import com.lec.spring.training.repository.TrainingRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -120,7 +116,6 @@ public class MyPageServiceImpl implements MyPageService {
     public boolean useCoupon(Long studentId, Long trainerId) {
         long trainingId = findTrainingId(studentId, trainerId);
 
-
         Training training = trainingRepository.findById(trainingId)
                 .orElseThrow(() -> new IllegalArgumentException("쿠폰 확인에 실패했습니다."));
 
@@ -143,11 +138,16 @@ public class MyPageServiceImpl implements MyPageService {
                 .orElseThrow(() -> new IllegalArgumentException("쿠폰 페이지 불러오기에 실패했습니다"));
         List<CouponPageTrainerList> ids = new ArrayList<>();
         trainingRepository.findByUserId(studentId)
-                .forEach(t ->
-                        ids.add(userMapper.toCouponPageTrainerListDto(t.getTrainer()))
+                .forEach(t -> {
+                    CouponPageTrainerList trainer = userMapper.toCouponPageTrainerListDto(t.getTrainer());
+                    trainer.setCoupons(t.getCoupons());
+                    trainer.setTimes(t.getTimes());
+                    ids.add(trainer);
+                    }
                 );
 
         return CouponPageDTO.builder()
+                .trainerId(trainerId)
                 .coupons(training.getCoupons())
                 .times(training.getTimes())
                 .nickname(training.getTrainer().getNickname())
@@ -196,6 +196,7 @@ public class MyPageServiceImpl implements MyPageService {
 
     @Override
     public CouponPageDTO getMyTrainerPage(Long userId) {
+//        System.out.println("\n\n\n서비스\n\n\n\n" + userId);
         Long trainerId = trainingRepository.findByUserId(userId).get(0).getTrainer().getId();
         System.out.println("trainerId: " + trainerId);
 
@@ -206,7 +207,7 @@ public class MyPageServiceImpl implements MyPageService {
     // 트레이너 채팅
     @Override
     public List<StudentListDTO> findStudentByChats(Long trianerId) {
-
+        try {
         // 트레이너가 속한 채팅 목록 가져오기
         List<Long> chatIds = userChatRepository.findChatIdsByUserId(trianerId);
 //            System.out.println("chatIds : " + chatIds);
@@ -223,7 +224,8 @@ public class MyPageServiceImpl implements MyPageService {
         System.out.println("studentDTOs : " + studentDTOs);
 
             return null;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return null;
         }
     }

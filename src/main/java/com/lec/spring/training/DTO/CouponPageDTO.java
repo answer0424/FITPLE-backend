@@ -13,13 +13,15 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class CouponPageDTO {
-    private int coupons;
+    int coupons;
 
-    private Integer times;
+    Integer times;
 
-    private String nickname;
+    String nickname;
 
-    private String gymName;
+    String gymName;
+
+    long trainerId;
 
     List<CouponPageTrainerList> trainerIds;
 }

@@ -91,6 +91,7 @@ public class MyPageController{
     // 학생 마이페이지 스탬프 조회 로직
     @GetMapping("/{userid}/stamp")
     public ResponseEntity<?> getStudentStamp(@PathVariable Long userid) {
+//        System.out.println("\n\n\n컨트롤\n\n" + userid);
         try {
             CouponPageDTO couponPageDTO = myPageService.getMyTrainerPage(userid);
 
@@ -270,6 +271,7 @@ public class MyPageController{
     // 학생 마이페이지에서 쿠폰 사용 처리 로직
     @PatchMapping("/use-coupons")
     public ResponseEntity<?> useCoupons(@RequestBody TrainerIdStudentIdDTO DTO) {
+        System.out.println("들어옴\n\n\n\n\n\n\n\n\n\n" + DTO);
         try {
             if(myPageService.useCoupon(DTO.getStudentId(), DTO.getTrainerId())){
                 return new ResponseEntity<>("쿠폰 사용에 성공했습니다", HttpStatus.OK);
