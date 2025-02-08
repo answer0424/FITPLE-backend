@@ -272,13 +272,18 @@ public class MyPageServiceImpl implements MyPageService {
 //        return new StudentListDTO(userId, "Unknown", 0, new ArrayList<>()); // 예외 발생 시 빈 리스트 반환
 //    }
 //}
-
+    @Transactional
     @Override
     public void addSchedule(CreateReservationDTO reservationDTO, Long studentId) {
+        // trainingId로 트레이닝 정보를 조회
+        Training training = trainingRepository.findById(reservationDTO.getTrainingId())
+                .orElseThrow(() -> new IllegalArgumentException("일정 등록에 실패했습니다. 트레이닝 정보가 유효하지 않습니다."));
+
+        // Reservation 객체 생성
         Reservation reservation = Reservation.builder()
-                .date(reservationDTO.getDate())
-                .training(trainingRepository.findById(reservationDTO.getTrainingId())
-                        .orElseThrow(() -> new IllegalArgumentException("일정 등록에 실패했습니다.")))
+                .date(reservationDTO.getDate())  // 예약 날짜
+                .training(training)  // 트레이닝 정보
+                .status(ReservationStatus.운동전)  // 기본 상태를 '운동전'으로 설정
                 .build();
 
         System.out.println("reservation : " + reservation);

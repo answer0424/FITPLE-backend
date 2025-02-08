@@ -89,7 +89,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/chat/**").permitAll()
                         .requestMatchers("/ws-chat/**").permitAll()
                         .requestMatchers("/member/**").permitAll()
-                        .requestMatchers("/member/register/add-schedule/**").permitAll()
+                        .requestMatchers("/member/register/add-schedule/{userId}").permitAll()
+                        .requestMatchers("/member/{userId}/register/search").permitAll()
 
                         .anyRequest().authenticated());
 
