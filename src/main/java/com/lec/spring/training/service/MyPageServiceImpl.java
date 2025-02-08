@@ -15,7 +15,6 @@ import com.lec.spring.training.repository.TrainingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -69,14 +68,17 @@ public class MyPageServiceImpl implements MyPageService {
             reservation.setStatus(ReservationStatus.valueOf(status));
 
             if (status.equals("운동중")) {
+                System.out.println("운동중입니다");
                 reservation.setStartTime(LocalTime.now());
             }
 
             if (status.equals("운동완료")) {
+                System.out.println("운동완료입니다");
                 // 두 시간 간의 차이 계산
                 Duration duration = Duration.between(reservation.getStartTime(), LocalTime.now());
                 int exerciseTime = (int) duration.toMinutes();
                 reservation.setExerciseTime(exerciseTime);
+                System.out.println("총 운동시간 : " + exerciseTime);
 
                 Training training = trainingRepository.findById(reservation.getTraining().getId())
                         .orElseThrow(() -> new IllegalArgumentException("스탬프 추가에 실패했습니다"));
@@ -202,7 +204,7 @@ public class MyPageServiceImpl implements MyPageService {
 
     // 트레이너 채팅
     @Override
-    public List<StudentListDTO> findStudentByChats(Long trianerId) {
+    public List<StudentDTO> findStudentByChats(Long trianerId) {
 
         // 트레이너가 속한 채팅 목록 가져오기
         List<Long> chatIds = userChatRepository.findChatIdsByUserId(trianerId);
@@ -217,15 +219,14 @@ public class MyPageServiceImpl implements MyPageService {
                 .map(s -> new StudentDTO(s.getId(), s.getNickname()))
                 .collect(Collectors.toList());
 
-        System.out.println("studentDTOs : " + studentDTOs);
+        System.out.println("studentDTOs : " + studentDTOs);//
 
-        return null;
-
+        return studentDTOs;
 
     }
 
     @Override
-    public void addTraining(Long studentId, Long trainerId) {
+    public void addTraining(Long studentId, Long trainerId, int times) {
         if(
                 trainingRepository.findByUserIdAndTrainerIdEquals(studentId, trainerId) != null
         ) {
@@ -237,7 +238,7 @@ public class MyPageServiceImpl implements MyPageService {
                         .orElseThrow(() -> new IllegalArgumentException("회원 목록에서 검색에 실패했습니다")))
                 .trainer(userRepository.findById(trainerId)
                         .orElseThrow(() -> new IllegalArgumentException("트레이너 목록에서 검색에 실패했습니다")))
-                .times(0)
+                .times(times)
                 .build();
         System.out.println("traing : " + training);
         trainingRepository.saveAndFlush(training);

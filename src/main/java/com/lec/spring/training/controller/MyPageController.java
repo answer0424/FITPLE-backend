@@ -11,6 +11,7 @@ import com.lec.spring.training.DTO.*;
 import com.lec.spring.training.DTO.input.TrainerIdStudentIdDTO;
 import com.lec.spring.training.DTO.input.UpdateProfileImage;
 import com.lec.spring.training.DTO.input.UpdateScheduleDTO;
+import com.lec.spring.training.DTO.output.StudentDTO;
 import com.lec.spring.training.domain.Reservation;
 import com.lec.spring.training.service.MyPageService;
 import com.lec.spring.base.domain.User;
@@ -112,7 +113,7 @@ public class MyPageController{
         }
     }
 
-    // 트레이너 페이지 일정 등록 학생 목록 조회 로직 (사용완)
+    // 트레이너 페이지 일정 등록 학생 목록 조회 로직 ok
     @GetMapping("/{userid}/register")
     public ResponseEntity<?> registerSchedule(@PathVariable Long userid) {
         System.out.println("목록조회 시작합니담");
@@ -146,20 +147,21 @@ public class MyPageController{
 
 
     // 트레이너 페이지에서 학생 검색
-// hjy : 채팅과 관련된 페이지임.
+// hjy : 채팅과 관련된 페이지임. ok
     @GetMapping("/{userId}/register/search")
     public ResponseEntity<?> searchStudentsForSchedule(@PathVariable Long userId) {
-        System.out.println("##########  SerarchStudent시작");
-        List<StudentListDTO> studentList = myPageService.findStudentByChats(userId);
+        System.out.println("##########  SearchStudent 시작");
+        List<StudentDTO> studentList = myPageService.findStudentByChats(userId);
         System.out.println("학생 리스트 : " + studentList);
 
-        if (studentList.isEmpty()) {
+        if (studentList == null || studentList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("채팅방에서 해당 트레이너와 연결된 학생을 찾을 수 없습니다.");
         }
 
         return ResponseEntity.ok(studentList);
     }
+
 
     // 트레이너 페이지에서 학생별 일정 조회 로직
     @GetMapping("/{userid}/calendar/student/{studentId}")
@@ -185,7 +187,7 @@ public class MyPageController{
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
-    // 트레이너 페이지에서 일정 등록 추가 처리 로직
+    // 트레이너 페이지에서 일정 등록 추가 처리 로직 ok
     @PostMapping("/register/add-schedule/{userId}")
     public ResponseEntity<?> addSchedule(@PathVariable Long userId,
                                          @RequestBody CreateReservationDTO reservationDTO) {
@@ -202,11 +204,11 @@ public class MyPageController{
     }
 
 
-    // 트레이너 페이지 회원 추가 처리 로직
+    // 트레이너 페이지 회원 추가 처리 로직 ok
     @PostMapping("/register/add-member")
     public ResponseEntity<?> addMemberToSchedule(@RequestBody TrainerIdStudentIdDTO DTO) {
         try {
-            myPageService.addTraining(DTO.getStudentId(), DTO.getTrainerId());
+            myPageService.addTraining(DTO.getStudentId(), DTO.getTrainerId(),DTO.getTimes());
             return new ResponseEntity<>("회원 추가에 성공했습니다", HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

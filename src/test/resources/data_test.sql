@@ -26,7 +26,7 @@ UPDATE HBTI
 SET HBTI = 'BICG';
 # 사진 경로 통일 시킴
 UPDATE user
-SET profile_image = 'upload/profile/profile11.jpeg';
+SET profile_image = 'upload/profile/njz.jpeg';
 
 
 INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons) VALUES
@@ -81,6 +81,8 @@ WHERE chat_id IN (11,12, 13, 14, 15, 16, 17);
 TRUNCATE TABLE message;
 
 TRUNCATE TABLE user_chat;
+
+TRUNCATE TABLE training;
 
 SELECT * FROM user_chat WHERE user_id = 51;
 
