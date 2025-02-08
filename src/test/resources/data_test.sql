@@ -36,6 +36,10 @@ INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons) VALUES
                     (3, 126, 20, 9, 2),
                     (4, 126, 25, 3, 3);
 
+UPDATE training
+SET coupons = 3
+WHERE id = 56;
+
 
     # reservation 더미데이터
 UPDATE reservation
@@ -90,3 +94,8 @@ SELECT * FROM user_chat WHERE user_id = 51;
 
 
 Select * from user_chat where user_id = 51;
+
+
+UPDATE user
+SET gym_id = 2
+WHERE id IN (51, 52, 53);

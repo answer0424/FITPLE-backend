@@ -68,17 +68,14 @@ public class MyPageServiceImpl implements MyPageService {
             reservation.setStatus(ReservationStatus.valueOf(status));
 
             if (status.equals("운동중")) {
-                System.out.println("운동중입니다");
                 reservation.setStartTime(LocalTime.now());
             }
 
             if (status.equals("운동완료")) {
-                System.out.println("운동완료입니다");
                 // 두 시간 간의 차이 계산
                 Duration duration = Duration.between(reservation.getStartTime(), LocalTime.now());
                 int exerciseTime = (int) duration.toMinutes();
                 reservation.setExerciseTime(exerciseTime);
-                System.out.println("총 운동시간 : " + exerciseTime);
 
                 Training training = trainingRepository.findById(reservation.getTraining().getId())
                         .orElseThrow(() -> new IllegalArgumentException("스탬프 추가에 실패했습니다"));
@@ -119,7 +116,6 @@ public class MyPageServiceImpl implements MyPageService {
     public boolean useCoupon(Long studentId, Long trainerId) {
         long trainingId = findTrainingId(studentId, trainerId);
 
-
         Training training = trainingRepository.findById(trainingId)
                 .orElseThrow(() -> new IllegalArgumentException("쿠폰 확인에 실패했습니다."));
 
@@ -142,11 +138,16 @@ public class MyPageServiceImpl implements MyPageService {
                 .orElseThrow(() -> new IllegalArgumentException("쿠폰 페이지 불러오기에 실패했습니다"));
         List<CouponPageTrainerList> ids = new ArrayList<>();
         trainingRepository.findByUserId(studentId)
-                .forEach(t ->
-                        ids.add(userMapper.toCouponPageTrainerListDto(t.getTrainer()))
+                .forEach(t -> {
+                    CouponPageTrainerList trainer = userMapper.toCouponPageTrainerListDto(t.getTrainer());
+                    trainer.setCoupons(t.getCoupons());
+                    trainer.setTimes(t.getTimes());
+                    ids.add(trainer);
+                    }
                 );
 
         return CouponPageDTO.builder()
+                .trainerId(trainerId)
                 .coupons(training.getCoupons())
                 .times(training.getTimes())
                 .nickname(training.getTrainer().getNickname())
@@ -195,6 +196,7 @@ public class MyPageServiceImpl implements MyPageService {
 
     @Override
     public CouponPageDTO getMyTrainerPage(Long userId) {
+//        System.out.println("\n\n\n서비스\n\n\n\n" + userId);
         Long trainerId = trainingRepository.findByUserId(userId).get(0).getTrainer().getId();
         System.out.println("trainerId: " + trainerId);
 

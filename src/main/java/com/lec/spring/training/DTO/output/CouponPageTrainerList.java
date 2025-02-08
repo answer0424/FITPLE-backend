@@ -8,8 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CouponPageTrainerList {
-    long userId;
+    long trainerId;
     String nickname;
     String profileImage;
     String gymName;
+    int coupons;
+    Integer times;
 }

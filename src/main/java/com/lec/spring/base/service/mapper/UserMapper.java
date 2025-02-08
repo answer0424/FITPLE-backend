@@ -27,7 +27,7 @@ public interface UserMapper {
     @Mapping(target = "authority", ignore = true)
     User toEntity(MyPageUserInfoDTO dto);
 
-    @Mapping(source = "id", target = "userId")
+    @Mapping(source = "id", target = "trainerId")
     @Mapping(source = "nickname", target = "nickname")
     @Mapping(source = "profileImage", target = "profileImage")
     @Mapping(source = "gym.name", target = "gymName")
