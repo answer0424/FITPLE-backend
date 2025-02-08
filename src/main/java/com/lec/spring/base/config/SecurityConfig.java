@@ -88,9 +88,12 @@ public class SecurityConfig {
                         .requestMatchers("/api/reviews/**").authenticated()
                         .requestMatchers("/api/chat/**").permitAll()
                         .requestMatchers("/ws-chat/**").permitAll()
+                        .requestMatchers("/member/**").permitAll()
+                        .requestMatchers("/member/register/add-schedule/**").permitAll()
+
                         .anyRequest().authenticated());
 
-                        // 세션 설정
+        // 세션 설정
         http
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
