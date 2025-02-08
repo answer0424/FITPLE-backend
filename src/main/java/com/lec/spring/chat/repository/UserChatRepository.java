@@ -39,6 +39,17 @@ public interface UserChatRepository extends JpaRepository<UserChat, UserChatId> 
 
     @Query("SELECT uc.user FROM UserChat uc WHERE uc.chat.id = :chatId AND uc.user.id <> :userId")
     Optional<User> findOtherUserInChat(Long chatId, Long userId);
+
+
+    //상대가 나와 같은 채팅방에 속해있는지 확인.
+    @Query("""
+        SELECT COUNT(uc1.chat.id) > 0 
+        FROM UserChat uc1 
+        JOIN UserChat uc2 ON uc1.chat.id = uc2.chat.id
+        WHERE uc1.user.id = :trainerId
+        AND uc2.user.id = :studentId
+    """)
+    boolean existsCommonChatRoom(@Param("trainerId") Long myId, @Param("studentId") Long otherId);
 }
 
 

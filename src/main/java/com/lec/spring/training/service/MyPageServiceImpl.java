@@ -3,6 +3,8 @@ package com.lec.spring.training.service;
 import com.lec.spring.base.domain.User;
 import com.lec.spring.base.repository.UserRepository;
 import com.lec.spring.base.service.mapper.UserMapper;
+import com.lec.spring.chat.repository.ChatRepository;
+import com.lec.spring.chat.repository.UserChatRepository;
 import com.lec.spring.training.DTO.*;
 import com.lec.spring.training.DTO.output.CouponPageTrainerList;
 import com.lec.spring.training.domain.Reservation;
@@ -10,6 +12,7 @@ import com.lec.spring.training.domain.ReservationStatus;
 import com.lec.spring.training.domain.Training;
 import com.lec.spring.training.repository.ReservationRepository;
 import com.lec.spring.training.repository.TrainingRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +32,7 @@ public class MyPageServiceImpl implements MyPageService {
     private final TrainingRepository trainingRepository;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserChatRepository userChatRepository;
 
 
 
@@ -198,11 +202,26 @@ public class MyPageServiceImpl implements MyPageService {
 
             //TODO : 채팅 기반 검색
 
+
+
             return null;
         } catch (Exception e) {
             return null;
         }
     }
+
+    // 충돌방지 findStudentByChats에 넣을 코드
+//    if(userChatRepository.existsCommonChatRoom(trainerId, studentId)){
+//        Training training = Training.builder()
+//                .trainer(userRepository.findById(trainerId)
+//                        .orElseThrow(() -> new EntityNotFoundException("유저를 찾지 못했습니다. 다시 시도해주세요")))
+//                .user(userRepository.findById(studentId)
+//                        .orElseThrow(() -> new EntityNotFoundException("유저를 찾지 못했습니다. 다시 시도해주세요")))
+//                .build();
+//        trainingRepository.saveAndFlush(training);
+//    } else {
+//        throw new RuntimeException("데이터 저장 실패, 잠시 후 다시 시도해주세요.");
+//    }
 
     @Override
     public void addTraining(Long studentId, Long trainerId) {
