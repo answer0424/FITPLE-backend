@@ -17,5 +17,6 @@ public class StudentListDTO {
     private String nickname;
 
     private int times;
+    private int trainingId; //hjy
     private List<StudentDTO> students;
 }

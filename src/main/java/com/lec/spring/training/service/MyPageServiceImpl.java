@@ -178,6 +178,7 @@ public class MyPageServiceImpl implements MyPageService {
         trainingRepository.findByTrainerId(trainerId).forEach(e ->
                 studentList.add(
                         StudentListDTO.builder()
+                                .trainingId(Math.toIntExact(e.getId()))
                                 .times(e.getTimes())
                                 .nickname(e.getUser().getNickname())
                                 .userId(e.getUser().getId())
@@ -193,40 +194,35 @@ public class MyPageServiceImpl implements MyPageService {
     @Override
     public CouponPageDTO getMyTrainerPage(Long userId) {
         Long trainerId = trainingRepository.findByUserId(userId).get(0).getTrainer().getId();
+        System.out.println("trainerId: " + trainerId);
 
         return changeCouponPageByTrainer(userId, trainerId);
     }
 
 
+    // 트레이너 채팅
     @Override
-    public List<StudentListDTO> findStudentByChats(Long trainerId) {
+    public List<StudentListDTO> findStudentByChats(Long trianerId) {
+
         // 트레이너가 속한 채팅 목록 가져오기
-        List<Long> chatIds = userChatRepository.findChatIdsByUserId(trainerId);
+        List<Long> chatIds = userChatRepository.findChatIdsByUserId(trianerId);
+//            System.out.println("chatIds : " + chatIds);
 
-        if (chatIds.isEmpty()) {
-            System.out.println("해당 트레이너가 속한 채팅이 없습니다.");
-            return new ArrayList<>(); // 빈 리스트 반환
-        }
-
-        // 트레이너와 같은 채팅방에 참여한 학생 검색
+        // 트레이너와 같은 채팅방에 참여한 학생 검색해기
         List<User> students = userChatRepository.findStudentsInChats(chatIds);
-        System.out.println(trainerId + " 트레이너의 학생들입니다 : " + students);
+        System.out.println(trianerId + " 트레이너의 학생들입니다 : " + students);
 
-        // 학생 정보를 StudentListDTO 리스트로 변환
-        List<StudentListDTO> studentListDTOs = students.stream()
-                .map(student -> new StudentListDTO(
-                        student.getId(),
-                        student.getNickname(),
-                        0,  // times 필드 초기값 (필요에 따라 변경)
-                        List.of(new StudentDTO(student.getId(), student.getNickname()))
-                ))
+        // 결과를 DTO로 변환
+        List<StudentDTO> studentDTOs = students.stream()
+                .map(s -> new StudentDTO(s.getId(), s.getNickname()))
                 .collect(Collectors.toList());
 
-        System.out.println("studentListDTOs : " + studentListDTOs);
+        System.out.println("studentDTOs : " + studentDTOs);
 
-        return studentListDTOs;
+        return null;
+
+
     }
-
 
     @Override
     public void addTraining(Long studentId, Long trainerId) {
@@ -243,7 +239,7 @@ public class MyPageServiceImpl implements MyPageService {
                         .orElseThrow(() -> new IllegalArgumentException("트레이너 목록에서 검색에 실패했습니다")))
                 .times(0)
                 .build();
-
+        System.out.println("traing : " + training);
         trainingRepository.saveAndFlush(training);
 
     }
@@ -278,12 +274,14 @@ public class MyPageServiceImpl implements MyPageService {
 //}
 
     @Override
-    public void addSchedule(CreateReservationDTO reservationDTO, long studentId) {
+    public void addSchedule(CreateReservationDTO reservationDTO, Long studentId) {
         Reservation reservation = Reservation.builder()
                 .date(reservationDTO.getDate())
                 .training(trainingRepository.findById(reservationDTO.getTrainingId())
                         .orElseThrow(() -> new IllegalArgumentException("일정 등록에 실패했습니다.")))
                 .build();
+
+        System.out.println("reservation : " + reservation);
 
         reservationRepository.save(reservation);
     }

@@ -11,6 +11,7 @@ import com.lec.spring.training.DTO.*;
 import com.lec.spring.training.DTO.input.TrainerIdStudentIdDTO;
 import com.lec.spring.training.DTO.input.UpdateProfileImage;
 import com.lec.spring.training.DTO.input.UpdateScheduleDTO;
+import com.lec.spring.training.domain.Reservation;
 import com.lec.spring.training.service.MyPageService;
 import com.lec.spring.base.domain.User;
 import com.lec.spring.base.service.UserService;
@@ -111,9 +112,10 @@ public class MyPageController{
         }
     }
 
-    // 트레이너 페이지 일정 등록 학생 목록 조회 로직
+    // 트레이너 페이지 일정 등록 학생 목록 조회 로직 (사용완)
     @GetMapping("/{userid}/register")
     public ResponseEntity<?> registerSchedule(@PathVariable Long userid) {
+        System.out.println("목록조회 시작합니담");
         List<StudentListDTO> studentListDTO = myPageService.getMyStudentList(userid);
         System.out.println("트레이너의 회원리스트 입니다 : " + studentListDTO);
         System.out.println();
@@ -143,11 +145,13 @@ public class MyPageController{
 //    }
 
 
-    // 트레이너 페이지에서 학생 검색 (개별)
+    // 트레이너 페이지에서 학생 검색
 // hjy : 채팅과 관련된 페이지임.
     @GetMapping("/{userId}/register/search")
     public ResponseEntity<?> searchStudentsForSchedule(@PathVariable Long userId) {
+        System.out.println("##########  SerarchStudent시작");
         List<StudentListDTO> studentList = myPageService.findStudentByChats(userId);
+        System.out.println("학생 리스트 : " + studentList);
 
         if (studentList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -185,13 +189,18 @@ public class MyPageController{
     @PostMapping("/register/add-schedule/{userId}")
     public ResponseEntity<?> addSchedule(@PathVariable Long userId,
                                          @RequestBody CreateReservationDTO reservationDTO) {
+        System.out.println("일정 등록 추가 시작");
+        System.out.println("전송된 데이터: " + reservationDTO);  // 전송된 데이터 확인
+        System.out.println("User ID from JWT: " + userId);
         try {
             myPageService.addSchedule(reservationDTO, userId);
             return new ResponseEntity<>("일정 등록에 성공했습니다", HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
 
     // 트레이너 페이지 회원 추가 처리 로직
     @PostMapping("/register/add-member")

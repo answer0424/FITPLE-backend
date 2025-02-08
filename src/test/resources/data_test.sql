@@ -82,5 +82,9 @@ TRUNCATE TABLE message;
 
 TRUNCATE TABLE user_chat;
 
+SELECT * FROM user_chat WHERE user_id = 51;
+
+
+
 
 Select * from user_chat where user_id = 51;

@@ -44,7 +44,7 @@ public interface MyPageService {
     void addTraining(Long studentId, Long trainerId);
 
     //- 일정 추가 기능
-    void addSchedule(CreateReservationDTO reservationDTO, long studentId);
+    void addSchedule(CreateReservationDTO reservationDTO, Long studentId);
 
     //- 일정 추가 기능
     void deleteSchedule(long reservationId);
