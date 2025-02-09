@@ -297,7 +297,7 @@ public class MyPageController{
     }
 
     //[트레이너 상세페이지 회원정보 불러오기]
-    @GetMapping("/member/detail")
+    @GetMapping("/detail")
     public ResponseEntity<Object> getMemberDetail(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         System.out.println("principal details : " + principalDetails);
         User user = userService.findByUsername(principalDetails.getUsername());
@@ -306,7 +306,7 @@ public class MyPageController{
     }
 
     // [이전 정보 불러오기]
-    @GetMapping("/member/update-detail")
+    @GetMapping("/update-detail")
     public ResponseEntity<Object> updateMemberDetail(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         TrainerProfileReadDTO userProfile = trainerDetailService.getTrainerProfileById(principalDetails.getUser().getId());
         System.out.println("현재유저 : " + principalDetails.getUser().getUsername() + " 현재 유저 프로필 : " + userProfile);
@@ -338,7 +338,7 @@ public class MyPageController{
 
     // [트레이너 상세페이지 작성]
     /*메소드와 메소드 사이에 정보를 보낼 때는 매개변수로 보내는 것을 잊지말자.!*/
-    @PostMapping(value = "/member/detail", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/detail", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> createTrainerProfile(
             @ModelAttribute TrainerProfileDTO trainerProfileDTO,
             @AuthenticationPrincipal PrincipalDetails user,
