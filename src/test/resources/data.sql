@@ -1335,7 +1335,7 @@ where id = 126;
 
 INSERT INTO HBTI ( user_id, HBTI, mb_score
                  , ei_score
-                 , cn_score
+                 , cn_score1
                  , pg_score)
 VALUES
 -- MICP (3)
@@ -1368,3 +1368,13 @@ INSERT INTO reservation (training_id, date, status, start_time, exercise_time) V
     (58, '2025-02-17 09:00:00', '운동전', '09:00:00', 45),
     (58, '2025-02-18 09:00:00', '운동전', '09:00:00', 45),
     (58, '2025-02-19 09:00:00', '운동전', '09:00:00', 45);
+
+
+ALTER TABLE Review MODIFY COLUMN content LONGTEXT;
+update User
+set profile_image = '/upload/profile/profile5.png'
+where id = 127;
+
+SELECT id, username, profile_Image FROM User WHERE id = 127;
+
+
