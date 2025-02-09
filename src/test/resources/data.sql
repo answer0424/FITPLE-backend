@@ -1390,7 +1390,7 @@ where id = 126;
 
 INSERT INTO HBTI ( user_id, HBTI, mb_score
                  , ei_score
-                 , cn_score
+                 , cn_score1
                  , pg_score)
 VALUES
 -- MICP (3)
@@ -1401,7 +1401,18 @@ INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons) VALUES
  (126, 53, 40, 5, 0)
 ;
 
-INSERT INTO reservation (training_id, date, status, start_time, exercise_time) VALUES
+
+
+
+ALTER TABLE Review MODIFY COLUMN content LONGTEXT;
+update User
+set profile_image = '/upload/profile/profile5.png'
+where id = 127;
+
+SELECT id, username, profile_Image FROM User WHERE id = 127;
+
+
+
     (57, '2025-02-01 09:00:00', '운동완료', '09:00:00', 45),
     (56, '2025-02-02 15:00:00', '운동완료', '15:00:00', 45),
     (57, '2025-02-02 18:00:00', '운동완료', '18:00:00', 45),
@@ -1426,3 +1437,4 @@ INSERT INTO reservation (training_id, date, status, start_time, exercise_time) V
 
 insert into message (created_at, content, is_checked, timestamp, chat_id, user_id)
 values (now(),'ㅎㅇㅎㅇ', false, now(), 28, 1);
+
