@@ -13,9 +13,9 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     // 특정 채팅방의 메시지를 시간 순으로 가져오기
     List<Message> findByChatIdOrderByTimestampAsc(Long chatId);
 
-    // 메시지 읽음 처리
-    @Query("UPDATE Message m SET m.isChecked = :isChecked WHERE m.chat.id = :chatId")
+    @Query("UPDATE Message m SET m.isChecked = true WHERE m.chat.id = :chatId AND m.user.id <> :userId")
     @Modifying
     @Transactional
-    void updateIsCheckedByChatId(@Param("chatId") Long chatId, @Param("isChecked") Boolean isChecked);
+    void updateIsCheckedByChatId(@Param("chatId") Long chatId, @Param("userId") Long userId);
+
 }

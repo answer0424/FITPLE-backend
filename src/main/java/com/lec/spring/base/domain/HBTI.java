@@ -1,5 +1,6 @@
 package com.lec.spring.base.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -13,6 +14,7 @@ public class HBTI {
 
     @OneToOne(cascade = CascadeType.ALL)
     @ToString.Exclude
+    @JsonBackReference // 순환 참조 방지
     @JoinColumn(name = "UserId", nullable = false)
     private User user;
 

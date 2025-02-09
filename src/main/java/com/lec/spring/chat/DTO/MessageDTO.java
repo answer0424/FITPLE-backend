@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,6 +18,7 @@ public class MessageDTO {
     private Long userId;
     private String content;
     private boolean isChecked;
+    private LocalDateTime createdAt;
 
     public static MessageDTO fromEntity(Message message) {
         return MessageDTO.builder()
@@ -22,6 +26,7 @@ public class MessageDTO {
                 .userId(message.getUser().getId())
                 .content(message.getContent())
                 .isChecked(message.isChecked())
+                .createdAt(message.getCreatedAt())
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.lec.spring.training.DTO;
 
+import com.lec.spring.training.domain.ReservationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,4 +15,5 @@ public class MonthReservationDTO {
     long userId;
     String nickname;
     LocalDateTime date;
+    ReservationStatus status;
 }

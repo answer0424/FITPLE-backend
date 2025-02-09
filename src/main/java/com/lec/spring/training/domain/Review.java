@@ -30,7 +30,7 @@ public class Review extends BaseEntity {
     @Column(nullable = false)
     private Byte rating;
 
-    @Column
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
 }
 
