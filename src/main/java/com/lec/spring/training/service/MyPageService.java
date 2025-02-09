@@ -1,6 +1,7 @@
 package com.lec.spring.training.service;
 
 import com.lec.spring.training.DTO.*;
+import com.lec.spring.training.DTO.output.StudentDTO;
 import com.lec.spring.training.domain.Training;
 
 import java.time.LocalDateTime;
@@ -37,14 +38,14 @@ public interface MyPageService {
     //- 인덱스 0번 트레이너의 쿠폰 페이지
     CouponPageDTO getMyTrainerPage(Long userId);
 
-    //- 채팅 목록에서 회원 이름 검색
-    StudentListDTO findStudentByChats(Long trainerId, String studentName);
+    //- 트레이너 채팅방에 존재하는 회원리스트
+    List<StudentDTO> findStudentByChats(Long trainerId);
 
     //- 트레이닝에 추가하기
-    void addTraining(Long studentId, Long trainerId);
+    void addTraining(Long studentId, Long trainerId, int times);
 
     //- 일정 추가 기능
-    void addSchedule(CreateReservationDTO reservationDTO, long studentId);
+    void addSchedule(CreateReservationDTO reservationDTO, Long studentId);
 
     //- 일정 추가 기능
     void deleteSchedule(long reservationId);

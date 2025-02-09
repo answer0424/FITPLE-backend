@@ -140,6 +140,12 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
+    // 특정 1:1 채팅방에서 상대방 유저 찾기
+    public User getOtherUserInChat(Long chatId, Long userId) {
+        return userChatRepository.findOtherUserInChat(chatId, userId)
+                .orElse(null); // 상대방이 없을 경우 null 반환
+    }
+
     // 채팅 목록 불러오기
     @Transactional(readOnly = true)
     public List<MessageDTO> getChatMessages(Long chatId) {
@@ -149,9 +155,9 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
-    // 채팅방 입장 시 메시지 읽음 처리
-    public void updateChatIsChecked(Long chatId) {
-        messageRepository.updateIsCheckedByChatId(chatId, true);
+    public void updateChatIsChecked(Long chatId, Long userId) {
+        messageRepository.updateIsCheckedByChatId(chatId, userId);
     }
+
 
 }
