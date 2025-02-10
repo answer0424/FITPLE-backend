@@ -169,7 +169,7 @@ public class MyPageServiceImpl implements MyPageService {
         Training training = trainingRepository.findById(findTrainingId(studentId, trainerId))
                 .orElseThrow(() -> new IllegalArgumentException("남은 횟수 불러오기에 실패했습니다"));
 
-        training.setTimes(training.getTimes() + times);
+        training.setTimes( times);
 
         return trainingRepository.saveAndFlush(training).getTimes();
     }
@@ -206,26 +206,18 @@ public class MyPageServiceImpl implements MyPageService {
 
     // 트레이너 채팅
     @Override
-    public List<StudentDTO> findStudentByChats(Long trianerId) {
+    public List<StudentDTO> findStudentByChats(Long trainerId, String searchQuery) {
+        List<Long> chatIds = userChatRepository.findChatIdsByUserId(trainerId);
 
-        // 트레이너가 속한 채팅 목록 가져오기
-        List<Long> chatIds = userChatRepository.findChatIdsByUserId(trianerId);
-//            System.out.println("chatIds : " + chatIds);
+        // 검색어가 없으면 null 전달 → 모든 학생 조회 가능
+        List<User> students = userChatRepository.findStudentsInChats(chatIds,
+                searchQuery != null && !searchQuery.trim().isEmpty() ? searchQuery : null);
 
-        // 트레이너와 같은 채팅방에 참여한 학생 검색해기
-        List<User> students = userChatRepository.findStudentsInChats(chatIds);
-        System.out.println(trianerId + " 트레이너의 학생들입니다 : " + students);
-
-        // 결과를 DTO로 변환
-        List<StudentDTO> studentDTOs = students.stream()
+        return students.stream()
                 .map(s -> new StudentDTO(s.getId(), s.getNickname()))
                 .collect(Collectors.toList());
-
-        System.out.println("studentDTOs : " + studentDTOs);//
-
-        return studentDTOs;
-
     }
+
 
     @Override
     public void addTraining(Long studentId, Long trainerId, int times) {
