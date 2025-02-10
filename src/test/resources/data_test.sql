@@ -99,3 +99,7 @@ Select * from user_chat where user_id = 51;
 UPDATE user
 SET gym_id = 2
 WHERE id IN (51, 52, 53);
+
+UPDATE user
+SET authority = 'ROLE_ADMIN'
+WHERE id=172;

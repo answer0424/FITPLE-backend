@@ -91,7 +91,7 @@ public class SecurityConfig {
                         .requestMatchers("/member/**").permitAll()
                         .requestMatchers("/member/register/add-schedule/{userId}").permitAll()
                         .requestMatchers("/member/{userId}/register/search").permitAll()
-
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
 
         // 세션 설정

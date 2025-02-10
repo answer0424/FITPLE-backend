@@ -15,6 +15,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -98,9 +100,6 @@ public class UserService {
         return userRepository.findByUsername(username.toUpperCase());
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
 
     //마이페이지 유저 정보 채우기
     public MyPageUserInfoDTO getMyPageUserInfo(long id) {
@@ -108,13 +107,6 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("유저 탐색에 실패했습니다"));
 
         MyPageUserInfoDTO uInfo = userMapper.toDto(u);
-
-//        System.out.println("-------------------------------------" + uInfo);
-
-        //TODO 전역 예외처리 컨트롤러 제작 후 사용
-//        uInfo.setHBTI(hbtiRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("유저 HBTI 탐색에 실패했습니다"))
-//                .getHbti());
 
         Optional<HBTI> h = hbtiRepository.findById(id);
 
@@ -124,19 +116,8 @@ public class UserService {
             uInfo.setHBTI(h.orElseThrow().getHbti());
         }
 
-//        System.out.println( uInfo +"-------------------------------------");
-
         return uInfo;
 
-//        return MyPageUserInfoDTO.builder()
-//                .userId(id)
-//                .nickname(u.getNickname())
-//                .profileImage(u.getProfileImage())
-//                .email(u.getEmail())
-//                .birth(u.getBirth())
-//                .address(u.getAddress())
-//                .HBTI(hbti)
-//                .build();
     }
 
 
@@ -157,24 +138,47 @@ public class UserService {
     public void changeUserProfile(MyPageUserInfoDTO newUserInfo){
         User user = userRepository.findById(newUserInfo.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("등록된 유저를 찾는데 실패했습니다."));
-        //매우 짜치는 반복코드. MapStruct 어노테이션 고려
-//        if (newUserInfo.getNickname() != null) {
-//            user.setNickname(newUserInfo.getNickname());}
-//        if (newUserInfo.getAddress() != null) {
-//            user.setAddress(newUserInfo.getAddress());}
-//        if (newUserInfo.getEmail() != null) {
-//            user.setEmail(newUserInfo.getEmail());}
-//        if (newUserInfo.getBirth() != null) {
-//            user.setBirth(newUserInfo.getBirth());}
-        userMapper.UserFromMyPageUserInfoDto(newUserInfo, user);
-
-        userRepository.save(user);
     }
 
     //유저 탈퇴
-    public void DeleteMember(long id) {
+    public void deleteUser(long id) {
         userRepository.delete(userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("탈퇴할 유저 검색에 실패했습니다")));
         userRepository.flush();
     }
+
+    public Page<User> getAllTrainers(Pageable pageable) {
+        return userRepository.findByAuthority("ROLE_TRAINER", pageable);
+    }
+
+    public Page<User> getAllStudents(Pageable pageable) {
+        return userRepository.findByAuthority("ROLE_STUDENT", pageable);
+    }
+
+
+    @Transactional
+    public void deleteTrainer(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        if (!"ROLE_TRAINER".equals(user.getAuthority())) {
+            throw new IllegalArgumentException("User is not a trainer");
+        }
+
+        userRepository.delete(user);
+    }
+
+    @Transactional
+    public void deleteStudent(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        if (!"ROLE_STUDENT".equals(user.getAuthority())) {
+            throw new IllegalArgumentException("User is not a student");
+        }
+
+        userRepository.delete(user);
+    }
 }
+
+

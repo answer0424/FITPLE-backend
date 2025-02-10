@@ -7,10 +7,11 @@ import com.lec.spring.training.domain.Training;
 import com.lec.spring.training.repository.ReviewRepository;
 import com.lec.spring.training.repository.TrainingRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,4 +103,19 @@ public class ReviewService {
 
         reviewRepository.deleteById(reviewId);
     }
+
+    public Page<Review> getAllReviewsWithDetails(Pageable pageable) {
+        return reviewRepository.findAll(pageable);
+    }
+
+    public Review getReviewDetails(Long reviewId) {
+        return reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new EntityNotFoundException("Review not found"));
+    }
+
+    @Transactional
+    public void deleteReviewByAdmin(Long reviewId) {
+        reviewRepository.deleteById(reviewId);
+    }
+
 }
