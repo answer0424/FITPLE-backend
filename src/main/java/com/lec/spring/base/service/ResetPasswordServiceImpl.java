@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.FrameworkServlet;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.naming.Context;
@@ -29,18 +30,21 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private static int number;
+    private static final String FRONTEND_URL = "http://localhost:5173";
 
 
     public ResetPasswordServiceImpl(RedisTemplate redisTemplate,
                                     EmailAuthService emailAuthService,
                                     UserRepository userRepository,
                                     PasswordEncoder passwordEncoder,
-                                    JavaMailSender mailSender) {
+                                    JavaMailSender mailSender,
+                                    ResetPasswordRepository resetPasswordRepository) {
         this.redisTemplate = redisTemplate;
         this.emailAuthService = emailAuthService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.mailSender = mailSender;
+        this.resetPasswordRepository = resetPasswordRepository;
     }
     // # 랜덤 번호 생성
     @Override
@@ -72,11 +76,11 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
         redisTemplate.opsForValue().set(uuid, user.getUsername(), 3, TimeUnit.MINUTES);
 
         // 동적 URL 생성
-        String resetLink = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/member/send-reset-password")
-                .queryParam("id", user.getUsername())
-                .queryParam("uuid", uuid)
-                .toUriString();
+        String resetLink = String.format("%s/member/reset-password/%s/%s",
+                FRONTEND_URL,
+                user.getId(),
+                uuid
+        );
 
         System.out.println(resetLink);
 
@@ -87,6 +91,7 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
                 "<p>안녕하세요, " + user.getUsername() + "님.</p>" +
                 "<p>아래 링크를 클릭하여 비밀번호를 재설정해주세요:</p>" +
                 "<a href=\"" + resetLink + "\">비밀번호 재설정</a>" +
+                resetLink+
                 "</body>" +
                 "</html>";
 

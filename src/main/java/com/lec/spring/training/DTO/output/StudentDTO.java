@@ -7,11 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CouponPageTrainerList {
-    long trainerId;
-    String nickname;
-    String profileImage;
-    String gymName;
-    int coupons;
-    Integer times;
+public class StudentDTO {
+    private Long id;
+    private String nickname;
 }

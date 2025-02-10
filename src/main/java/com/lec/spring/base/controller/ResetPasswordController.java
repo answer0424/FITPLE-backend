@@ -29,7 +29,7 @@ public class ResetPasswordController {
                 return ResponseEntity.ok(result);
             }
 
-            return (ResponseEntity<String>) ResponseEntity.badRequest();
+            return  ResponseEntity.badRequest().build();
 
 
     }
@@ -37,15 +37,15 @@ public class ResetPasswordController {
     // 비밀번호 재설정
     @PostMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestParam Long id,
-                                                @RequestParam String newPassword,
-                                                @RequestParam String code,
-                                                @RequestParam String email) {
+                                                @RequestParam String newPassword
+
+                                               ) {
         try {
-            // 인증 코드 검증
-            resetPasswordService.verifyAuthorizationCode(code, email);
+
 
             // 비밀번호 변경
             boolean isUpdated = resetPasswordService.updatePassword(id, newPassword);
+            System.out.println("isUpdated : " + isUpdated);
             if (isUpdated) {
                 return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
             } else {
