@@ -86,7 +86,7 @@ public class HbtiController {
     @GetMapping("/{userId}/result")
     public ResponseEntity<Map<String, Object>> getHbtiResultWithDetailsAndMatches(@PathVariable Long userId) {
         try {
-            Map<String, Object> result = hbtiService.getHbtiResultWithDetailsAndMatches(userId);
+            Map<String, Object> result = hbtiService.findTopMatches(userId);
             return ResponseEntity.ok(result);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
