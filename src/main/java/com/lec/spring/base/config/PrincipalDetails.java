@@ -66,6 +66,10 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return profileImage;
     }
 
+    public Long getId() {
+        return user.getId();
+    }
+
     // 사용자의 권한 정보를 반환
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
