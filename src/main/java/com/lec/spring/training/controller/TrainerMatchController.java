@@ -1,5 +1,7 @@
 package com.lec.spring.training.controller;
 
+import com.lec.spring.base.service.HbtiMatcher;
+import com.lec.spring.base.service.HbtiService;
 import com.lec.spring.training.DTO.TrainerMatchResponseDTO;
 import com.lec.spring.training.service.TrainerMatchService;
 import jakarta.persistence.EntityNotFoundException;
@@ -8,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -19,17 +20,29 @@ import java.util.Map;
 public class TrainerMatchController {
 
     private final TrainerMatchService trainerMatchService;
+    private final HbtiMatcher hbtiMatcher;
 
     @GetMapping("/{userId}/result/match")
     public ResponseEntity<?> getMatchingTrainers(@PathVariable Long userId) {
         try {
+            // 1. 먼저 HBTI 매칭 결과를 가져옴
+            Map<String, Object> matchResult = hbtiMatcher.findTopMatches(userId);
+            List<Map<String, Object>> topMatches = (List<Map<String, Object>>) matchResult.get("topMatches");
+
+            // 2. 매칭된 HBTI 타입들 추출
+            List<String> matchingHbtiTypes = topMatches.stream()
+                    .map(match -> (String) match.get("hbtiType"))
+                    .toList();
+
+            // 3. 해당 HBTI 타입을 가진 트레이너들 중 같은 구에 있는 트레이너 찾기
             List<TrainerMatchResponseDTO> matchingTrainers =
-                    trainerMatchService.findMatchingTrainersByUserId(userId);
+                    trainerMatchService.findTrainersByDistrictAndHbtiTypes(userId, matchingHbtiTypes, topMatches);
 
             if (matchingTrainers.isEmpty()) {
                 return ResponseEntity.noContent().build();
             }
 
+            log.info("매칭된 트레이너 수: {}", matchingTrainers.size());
             return ResponseEntity.ok(matchingTrainers);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.badRequest()

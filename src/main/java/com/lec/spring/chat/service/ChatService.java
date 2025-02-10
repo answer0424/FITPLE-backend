@@ -155,9 +155,23 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
-    public void updateChatIsChecked(Long chatId, Long userId) {
-        messageRepository.updateIsCheckedByChatId(chatId, userId);
+    @Transactional
+    public List<Long> updateChatIsChecked(Long chatId, Long userId) {
+        // 읽음 처리할 메시지 목록 가져오기
+        List<Message> unreadMessages = messageRepository.findUnreadMessages(chatId, userId);
+
+        // 읽음 처리할 메시지 ID 목록
+        List<Long> messageIds = unreadMessages.stream()
+                .map(Message::getMessageId)
+                .collect(Collectors.toList());
+
+        if (!messageIds.isEmpty()) {
+            messageRepository.markMessagesAsRead(chatId, userId);
+        }
+
+        return messageIds; // 읽음 처리된 메시지 ID 리스트 반환
     }
+
 
 
 }

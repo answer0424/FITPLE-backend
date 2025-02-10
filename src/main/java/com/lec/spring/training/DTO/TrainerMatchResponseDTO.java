@@ -16,4 +16,5 @@ public class TrainerMatchResponseDTO {
     private String hbti;
     private String gymName;
     private String profileImage;
+    private Integer matchScore;
 }

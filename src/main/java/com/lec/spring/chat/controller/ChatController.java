@@ -57,9 +57,6 @@ public class ChatController {
         return ResponseEntity.ok(chatDTOs);
     }
 
-
-
-
     // 특정 채팅방의 메시지 목록 불러오기
     @GetMapping("/{chatId}/messages")
     public ResponseEntity<List<MessageDTO>> getChatMessages(
