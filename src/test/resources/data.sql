@@ -252,6 +252,54 @@ VALUES ('Trainer11', 'password11', 'trainer11@example.com', 'TrainerNick11', 'Tr
        ('Trainer85', 'password85', 'trainer85@example.com', 'TrainerNick85', '서울특별시 금천구 Trainer Address 85',
         '2004-10-10', '/img/profile85.png', 'ROLE_TRAINER', NOW());
 
+INSERT INTO User (username, password, email, nickname, address, birth, profile_image, authority, created_at)
+VALUES
+    ('Trainer89', 'password89', 'trainer89@example.com', 'TrainerNick89', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile89.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer90', 'password90', 'trainer90@example.com', 'TrainerNick90', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile90.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer91', 'password91', 'trainer91@example.com', 'TrainerNick91', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile91.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer92', 'password92', 'trainer92@example.com', 'TrainerNick92', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile92.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer93', 'password93', 'trainer93@example.com', 'TrainerNick93', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile93.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer94', 'password94', 'trainer94@example.com', 'TrainerNick94', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile94.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer95', 'password95', 'trainer95@example.com', 'TrainerNick95', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile95.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer96', 'password96', 'trainer96@example.com', 'TrainerNick96', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile96.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer97', 'password97', 'trainer97@example.com', 'TrainerNick97', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile97.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer98', 'password98', 'trainer98@example.com', 'TrainerNick98', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile98.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer99', 'password99', 'trainer99@example.com', 'TrainerNick99', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile99.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer100', 'password100', 'trainer100@example.com', 'TrainerNick100', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile100.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer101', 'password101', 'trainer101@example.com', 'TrainerNick101', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile101.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer102', 'password102', 'trainer102@example.com', 'TrainerNick102', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile102.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer103', 'password103', 'trainer103@example.com', 'TrainerNick103', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile103.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer104', 'password104', 'trainer104@example.com', 'TrainerNick104', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile104.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer105', 'password105', 'trainer105@example.com', 'TrainerNick105', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile105.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer106', 'password106', 'trainer106@example.com', 'TrainerNick106', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile106.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer107', 'password107', 'trainer107@example.com', 'TrainerNick107', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile107.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer108', 'password108', 'trainer108@example.com', 'TrainerNick108', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile108.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer109', 'password109', 'trainer109@example.com', 'TrainerNick109', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile109.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer110', 'password110', 'trainer110@example.com', 'TrainerNick110', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile110.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer111', 'password111', 'trainer111@example.com', 'TrainerNick111', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile111.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer112', 'password112', 'trainer112@example.com', 'TrainerNick112', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile112.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer113', 'password113', 'trainer113@example.com', 'TrainerNick113', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile113.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer114', 'password114', 'trainer114@example.com', 'TrainerNick114', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile114.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer115', 'password115', 'trainer115@example.com', 'TrainerNick115', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile115.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer116', 'password116', 'trainer116@example.com', 'TrainerNick116', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile116.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer117', 'password117', 'trainer117@example.com', 'TrainerNick117', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile117.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer118', 'password118', 'trainer118@example.com', 'TrainerNick118', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile118.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer119', 'password119', 'trainer119@example.com', 'TrainerNick119', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile119.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer120', 'password120', 'trainer120@example.com', 'TrainerNick120', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile120.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer121', 'password121', 'trainer121@example.com', 'TrainerNick121', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile121.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer122', 'password122', 'trainer122@example.com', 'TrainerNick122', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile122.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer123', 'password123', 'trainer123@example.com', 'TrainerNick123', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile123.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer124', 'password124', 'trainer124@example.com', 'TrainerNick124', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile124.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer125', 'password125', 'trainer125@example.com', 'TrainerNick125', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile125.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer126', 'password126', 'trainer126@example.com', 'TrainerNick126', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile126.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer127', 'password127', 'trainer127@example.com', 'TrainerNick127', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile127.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer128', 'password128', 'trainer128@example.com', 'TrainerNick128', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile128.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer129', 'password129', 'trainer129@example.com', 'TrainerNick129', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile129.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer130', 'password130', 'trainer130@example.com', 'TrainerNick130', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile130.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer131', 'password131', 'trainer131@example.com', 'TrainerNick131', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile131.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer132', 'password132', 'trainer132@example.com', 'TrainerNick132', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile132.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer133', 'password133', 'trainer133@example.com', 'TrainerNick133', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', '1985-05-01', '/upload/profile/profile133.png', 'ROLE_TRAINER', NOW()),
+    ('Trainer134', 'password134', 'trainer134@example.com', 'TrainerNick134', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile134.png', 'ROLE_TRAINER', NOW());
 
 INSERT INTO trainer_profile (id, trainer_id, per_price, content, career, is_access)
 VALUES (1, 51, 50000, 'Experienced trainer with expertise in fitness.', '2010-05-01',
@@ -364,7 +412,54 @@ VALUES (1, 51, 50000, 'Experienced trainer with expertise in fitness.', '2010-05
        (74, 124, 75000,  'Pilates instructor with flexibility focus.', '2023-08-14', '승인'),
        (75, 125, 60000,  'Expert in weightlifting and powerlifting.', '2015-04-01',
         '승인');
-
+INSERT INTO trainer_profile (id, trainer_id, per_price, content, career, is_access)
+VALUES
+    (76, 126, 65000, 'Expert in functional training and cardio.', '2015-05-01', '승인'),
+    (77, 127, 70000, 'Specialized in weight loss and muscle building.', '2015-06-02', '대기'),
+    (78, 128, 75000, 'Professional yoga and meditation instructor.', '2015-07-03', '승인'),
+    (79, 129, 60000, 'CrossFit and HIIT training specialist.', '2015-08-04', '승인'),
+    (80, 130, 80000, 'Experienced bodybuilding coach.', '2015-09-05', '거절'),
+    (81, 131, 65000, 'Focus on rehabilitation and strength training.', '2015-10-06', '대기'),
+    (82, 132, 70000, 'Pilates and core strength expert.', '2015-11-07', '승인'),
+    (83, 133, 75000, 'Martial arts and self-defense trainer.', '2015-12-08', '승인'),
+    (84, 134, 60000, 'Endurance and cardio specialist.', '2016-01-09', '대기'),
+    (85, 135, 80000, 'Athletic performance improvement coach.', '2016-02-10', '승인'),
+    (86, 136, 65000, 'Weightlifting and powerlifting expert.', '2016-03-11', '승인'),
+    (87, 137, 70000, 'Flexibility and mobility trainer.', '2016-04-12', '거절'),
+    (88, 138, 75000, 'High-energy bootcamp instructor.', '2016-05-13', '대기'),
+    (89, 139, 60000, 'Posture correction specialist.', '2016-06-14', '승인'),
+    (90, 140, 80000, 'Sports-specific training coach.', '2016-07-15', '승인'),
+    (91, 141, 65000, 'Nutrition and fitness expert.', '2016-08-16', '대기'),
+    (92, 142, 70000, 'Specialized in injury prevention.', '2016-09-17', '승인'),
+    (93, 143, 75000, 'Mindfulness and yoga trainer.', '2016-10-18', '승인'),
+    (94, 144, 60000, 'Functional movement specialist.', '2016-11-19', '거절'),
+    (95, 145, 80000, 'Group fitness instructor.', '2016-12-20', '대기'),
+    (96, 146, 65000, 'Strength and conditioning coach.', '2017-01-21', '승인'),
+    (97, 147, 70000, 'CrossFit competition trainer.', '2017-02-22', '승인'),
+    (98, 148, 75000, 'Recovery and mobility expert.', '2017-03-23', '대기'),
+    (99, 149, 60000, 'High-performance athletics coach.', '2017-04-24', '승인'),
+    (100, 150, 80000, 'Bodyweight training specialist.', '2017-05-25', '거절'),
+    (101, 151, 65000, 'Martial arts conditioning expert.', '2017-06-26', '대기'),
+    (102, 152, 70000, 'Endurance sports trainer.', '2017-07-27', '승인'),
+    (103, 153, 75000, 'Core and stability specialist.', '2017-08-28', '승인'),
+    (104, 154, 60000, 'Fitness nutrition advisor.', '2017-09-29', '대기'),
+    (105, 155, 80000, 'Athletic movement coach.', '2017-10-30', '승인'),
+    (106, 156, 65000, 'Strength training expert.', '2017-11-01', '승인'),
+    (107, 157, 70000, 'Flexibility and yoga instructor.', '2017-12-02', '거절'),
+    (108, 158, 75000, 'HIIT and cardio specialist.', '2018-01-03', '대기'),
+    (109, 159, 60000, 'Rehabilitation exercise trainer.', '2018-02-04', '승인'),
+    (110, 160, 80000, 'Performance enhancement coach.', '2018-03-05', '승인'),
+    (111, 161, 65000, 'Weightlifting technique expert.', '2018-04-06', '대기'),
+    (112, 162, 70000, 'Functional fitness trainer.', '2018-05-07', '승인'),
+    (113, 163, 75000, 'Sports conditioning specialist.', '2018-06-08', '승인'),
+    (114, 164, 60000, 'Mobility and movement coach.', '2018-07-09', '거절'),
+    (115, 165, 80000, 'Group training instructor.', '2018-08-10', '대기'),
+    (116, 166, 65000, 'Strength and power coach.', '2018-09-11', '승인'),
+    (117, 167, 70000, 'Cardio and endurance specialist.', '2018-10-12', '승인'),
+    (118, 168, 75000, 'Athletic development trainer.', '2018-11-13', '대기'),
+    (119, 169, 60000, 'Posture and core expert.', '2018-12-14', '승인'),
+    (120, 170, 80000, 'High-intensity training specialist.', '2019-01-15', '거절'),
+    (121, 171, 65000, 'Fitness and wellness coach.', '2019-02-16', '승인');
 
 INSERT INTO HBTI ( user_id, HBTI, mb_score
                  , ei_score
@@ -532,6 +627,85 @@ VALUES
 (125, 'MENP', 75, 86, 33, 86)
 ;
 
+INSERT INTO HBTI (user_id, HBTI, mb_score, ei_score, cn_score, pg_score)
+VALUES
+-- MICP (3명)
+(126, 'MICP', 73, 25, 60, 87),
+(127, 'MICP', 71, 28, 58, 85),
+(128, 'MICP', 74, 26, 59, 88),
+
+-- MECP (3명)
+(129, 'MECP', 72, 85, 61, 86),
+(130, 'MECP', 75, 83, 58, 89),
+(131, 'MECP', 70, 87, 60, 85),
+
+-- BICP (3명)
+(132, 'BICP', 33, 27, 58, 86),
+(133, 'BICP', 31, 25, 60, 88),
+(134, 'BICP', 34, 28, 57, 85),
+
+-- BECP (3명)
+(135, 'BECP', 32, 84, 59, 87),
+(136, 'BECP', 35, 86, 61, 85),
+(137, 'BECP', 30, 83, 58, 89),
+
+-- MICG (3명)
+(138, 'MICG', 72, 26, 59, 31),
+(139, 'MICG', 75, 24, 57, 29),
+(140, 'MICG', 71, 27, 60, 32),
+
+-- MECG (3명)
+(141, 'MECG', 73, 85, 58, 30),
+(142, 'MECG', 76, 87, 60, 28),
+(143, 'MECG', 70, 84, 59, 31),
+
+-- BICG (3명)
+(144, 'BICG', 32, 25, 58, 29),
+(145, 'BICG', 34, 27, 60, 31),
+(146, 'BICG', 31, 26, 57, 30),
+
+-- BECG (3명)
+(147, 'BECG', 33, 85, 59, 31),
+(148, 'BECG', 35, 83, 58, 29),
+(149, 'BECG', 32, 86, 60, 30),
+
+-- MINP (3명)
+(150, 'MINP', 74, 27, 33, 86),
+(151, 'MINP', 71, 25, 31, 88),
+(152, 'MINP', 73, 26, 34, 85),
+
+-- MENP (3명)
+(153, 'MENP', 72, 84, 32, 87),
+(154, 'MENP', 75, 86, 35, 85),
+(155, 'MENP', 70, 83, 33, 89),
+
+-- BINP (3명)
+(156, 'BINP', 33, 26, 32, 86),
+(157, 'BINP', 31, 28, 34, 88),
+(158, 'BINP', 34, 25, 31, 85),
+
+-- BENP (3명)
+(159, 'BENP', 32, 85, 33, 87),
+(160, 'BENP', 35, 83, 31, 85),
+(161, 'BENP', 30, 86, 34, 86),
+
+-- MING (3명)
+(162, 'MING', 73, 27, 32, 31),
+(163, 'MING', 71, 25, 34, 29),
+(164, 'MING', 74, 26, 31, 30),
+
+-- MENG (3명)
+(165, 'MENG', 72, 84, 33, 31),
+(166, 'MENG', 75, 86, 31, 29),
+(167, 'MENG', 70, 83, 34, 30),
+
+-- BING (2명)
+(168, 'BING', 33, 27, 32, 31),
+(169, 'BING', 31, 25, 33, 29),
+
+-- BENG (2명)
+(170, 'BENG', 34, 85, 32, 30),
+(171, 'BENG', 32, 83, 34, 31);
 
 INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons) VALUES
      (1, 51, 10, 5, 0),
@@ -1371,72 +1545,59 @@ from review;
 
 select *
 from training;
-insert into hbti ( user_id, HBTI, mb_score
-                 , ei_score
-                 , cn_score
-                 , pg_score)
-VALUES (126, 'MENP', 68, 88, 32, 88);
+
+# insert into hbti ( user_id, HBTI, mb_score
+#                  , ei_score
+#                  , cn_score
+#                  , pg_score)
+# VALUES (126, 'MENP', 68, 88, 32, 88);
 
 
-delete from hbti where user_id = 126;
-delete from training where id = 59;
+# delete from hbti where user_id = 126;
+# delete from training where id = 59;
 
-update User
-set address = '서울시 여러분 식초'
-where id = 126;
-update User
-set birth = '1998-06-16'
-where id = 126;
+# update User
+# set address = '서울시 여러분 식초'
+# where id = 126;
+# update User
+# set birth = '1998-06-16'
+# where id = 126;
 
-INSERT INTO HBTI ( user_id, HBTI, mb_score
-                 , ei_score
-                 , cn_score1
-                 , pg_score)
-VALUES
--- MICP (3)
-(134, 'MICP', 70, 20, 58, 90);
-INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons) VALUES
-#  (126, 51, 40, 5, 0)
- (126, 52, 40, 5, 0),
- (126, 53, 40, 5, 0)
-;
+# INSERT INTO HBTI ( user_id, HBTI, mb_score
+#                  , ei_score
+#                  , cn_score
+#                  , pg_score)
+# VALUES
+# -- MICP (3)
+# (134, 'MICP', 70, 20, 58, 90);
+# INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons) VALUES
+# #  (126, 51, 40, 5, 0)
+#  (126, 52, 40, 5, 0),
+#  (126, 53, 40, 5, 0)
+# ;
 
-
-
-
-ALTER TABLE Review MODIFY COLUMN content LONGTEXT;
-update User
-set profile_image = '/upload/profile/profile5.png'
-where id = 127;
-
-SELECT id, username, profile_Image FROM User WHERE id = 127;
-
-
-
-    (57, '2025-02-01 09:00:00', '운동완료', '09:00:00', 45),
-    (56, '2025-02-02 15:00:00', '운동완료', '15:00:00', 45),
-    (57, '2025-02-02 18:00:00', '운동완료', '18:00:00', 45),
-    (56, '2025-02-03 09:00:00', '운동완료', '09:00:00', 45),
-    (57, '2025-02-04 09:00:00', '운동완료', '09:00:00', 45),
-    (56, '2025-02-04 12:00:00', '운동완료', '12:00:00', 45),
-    (57, '2025-02-05 09:00:00', '운동완료', '09:00:00', 45),
-    (56, '2025-02-06 09:00:00', '운동전', '09:00:00', 45),
-    (57, '2025-02-07 09:00:00', '운동전', '09:00:00', 45),
-    (56, '2025-02-08 09:00:00', '운동전', '09:00:00', 45),
-    (57, '2025-02-09 09:00:00', '운동전', '09:00:00', 45),
-    (56, '2025-02-10 09:00:00', '운동전', '09:00:00', 45),
-    (57, '2025-02-11 09:00:00', '운동전', '09:00:00', 45),
-    (56, '2025-02-12 09:00:00', '운동전', '09:00:00', 45),
-    (57, '2025-02-13 09:00:00', '운동전', '09:00:00', 45),
-    (56, '2025-02-14 09:00:00', '운동전', '09:00:00', 45),
-    (57, '2025-02-15 09:00:00', '운동전', '09:00:00', 45),
-    (56, '2025-02-16 09:00:00', '운동전', '09:00:00', 45),
-    (57, '2025-02-17 09:00:00', '운동전', '09:00:00', 45),
-    (56, '2025-02-18 09:00:00', '운동전', '09:00:00', 45),
-    (57, '2025-02-19 09:00:00', '운동전', '09:00:00', 45);
-
-insert into message (created_at, content, is_checked, timestamp, chat_id, user_id)
-values (now(),'ㅎㅇㅎㅇ', false, now(), 28, 1);
+# INSERT INTO reservation (training_id, date, status, start_time, exercise_time) VALUES
+#     (58, '2025-02-01 09:00:00', '운동완료', '09:00:00', 45),
+#     (58, '2025-02-02 15:00:00', '운동완료', '15:00:00', 45),
+#     (58, '2025-02-02 18:00:00', '운동완료', '18:00:00', 45),
+#     (58, '2025-02-03 09:00:00', '운동완료', '09:00:00', 45),
+#     (58, '2025-02-04 09:00:00', '운동완료', '09:00:00', 45),
+#     (58, '2025-02-04 12:00:00', '운동완료', '12:00:00', 45),
+#     (58, '2025-02-05 09:00:00', '운동완료', '09:00:00', 45),
+#     (58, '2025-02-06 09:00:00', '운동전', '09:00:00', 45),
+#     (58, '2025-02-07 09:00:00', '운동전', '09:00:00', 45),
+#     (58, '2025-02-08 09:00:00', '운동전', '09:00:00', 45),
+#     (58, '2025-02-09 09:00:00', '운동전', '09:00:00', 45),
+#     (58, '2025-02-10 09:00:00', '운동전', '09:00:00', 45),
+#     (58, '2025-02-11 09:00:00', '운동전', '09:00:00', 45),
+#     (58, '2025-02-12 09:00:00', '운동전', '09:00:00', 45),
+#     (58, '2025-02-13 09:00:00', '운동전', '09:00:00', 45),
+#     (58, '2025-02-14 09:00:00', '운동전', '09:00:00', 45),
+#     (58, '2025-02-15 09:00:00', '운동전', '09:00:00', 45),
+#     (58, '2025-02-16 09:00:00', '운동전', '09:00:00', 45),
+#     (58, '2025-02-17 09:00:00', '운동전', '09:00:00', 45),
+#     (58, '2025-02-18 09:00:00', '운동전', '09:00:00', 45),
+#     (58, '2025-02-19 09:00:00', '운동전', '09:00:00', 45);
 
 
 # 매칭페이지 데이터 불리기 위해...
