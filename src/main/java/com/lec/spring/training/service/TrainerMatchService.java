@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,29 +26,35 @@ public class TrainerMatchService {
     private final TrainerProfileRepository trainerProfileRepository;
     private final HbtiRepository hbtiRepository;
 
-    public List<TrainerMatchResponseDTO> findMatchingTrainersByUserId(Long userId) {
-        // 사용자 조회
+    public List<TrainerMatchResponseDTO> findTrainersByDistrictAndHbtiTypes(Long userId, List<String> hbtiTypes, List<Map<String, Object>> topMatches) {
+        // 사용자의 구 정보 조회
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-        // 사용자의 HBTI 조회
-        HBTI userHBTI = hbtiRepository.findByUserId(userId)
-                .orElseThrow(() -> new EntityNotFoundException("HBTI not found for user: " + userId));
-
         String userDistrict = extractDistrict(user.getAddress());
-        List<String> hbtiTypes = List.of(userHBTI.getHbti());
 
-        // 매칭되는 트레이너 찾기
+        // 해당 구의 매칭되는 HBTI를 가진 트레이너들 조회
         return trainerProfileRepository.findMatchingTrainersWithFetch(userDistrict, hbtiTypes)
                 .stream()
-                .map(this::convertToDTO)
+                .map(trainer -> {
+                    // 해당 트레이너의 HBTI 타입에 맞는 매칭 점수 찾기
+                    Integer matchScore = topMatches.stream()
+                            .filter(match -> match.get("hbtiType").equals(
+                                    hbtiRepository.findByUserId(trainer.getTrainer().getId())
+                                            .map(HBTI::getHbti)
+                                            .orElse(null)
+                            ))
+                            .map(match -> (Integer) match.get("score"))
+                            .findFirst()
+                            .orElse(0);
+
+                    return convertToDTO(trainer, matchScore);
+                })
                 .collect(Collectors.toList());
     }
 
-    private TrainerMatchResponseDTO convertToDTO(TrainerProfile trainerProfile) {
+    private TrainerMatchResponseDTO convertToDTO(TrainerProfile trainerProfile, Integer matchScore) {
         User trainer = trainerProfile.getTrainer();
-
-        // trainer의 id로 HBTI 정보 조회
         HBTI trainerHBTI = hbtiRepository.findByUserId(trainer.getId())
                 .orElse(null);
 
@@ -58,9 +65,9 @@ public class TrainerMatchService {
                 .hbti(trainerHBTI != null ? trainerHBTI.getHbti() : null)
                 .gymName(trainer.getGym().getName())
                 .profileImage(trainer.getProfileImage())
+                .matchScore(matchScore)  // 매칭 점수 추가
                 .build();
     }
-
     private String extractDistrict(String address) {
         if (address == null) return "";
         return Arrays.stream(address.split(" "))

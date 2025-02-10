@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class HbtiService {
+public class HbtiService implements HbtiMatcher{
 
     private final HbtiRepository hbtiRepository;
     private final UserRepository userRepository;
@@ -247,60 +247,6 @@ public class HbtiService {
         return scores.stream().mapToDouble(Integer::doubleValue).average().orElse(0);
     }
 
-    public Map<String, Object> getHbtiResultWithDetailsAndMatches(Long userId) throws IOException {
-        // HBTI 결과 및 퍼센트 계산
-        HBTI hbti = getHbtiByUserId(userId);
-        Map<String, Double> percentages = Map.of(
-                "M", hbti.getMbScore(),
-                "B", 100 - hbti.getMbScore(),
-                "E", hbti.getEiScore(),
-                "I", 100 - hbti.getEiScore(),
-                "C", hbti.getCnScore(),
-                "N", 100 - hbti.getCnScore(),
-                "P", hbti.getPgScore(),
-                "G", 100 - hbti.getPgScore()
-        );
-
-        // JSON 데이터 로드 및 트레이너 HBTI와의 매칭 계산
-        Map<String, Object> allHbtiData = loadHbtiData();
-        List<Map.Entry<String, Integer>> matches = allHbtiData.entrySet().stream()
-                .map(entry -> Map.entry(
-                        entry.getKey(),
-                        calculateMatchScore(percentages, entry.getKey())
-                ))
-                .sorted((a, b) -> b.getValue().compareTo(a.getValue())) // 점수 내림차순 정렬
-                .limit(3) // 상위 3개의 HBTI만 선택
-                .toList();
-
-        // 매칭된 트레이너 정보 조합 (dogImage와 label만 포함)
-        List<Map<String, Object>> topMatches = matches.stream()
-                .map(match -> {
-                    Map<String, Object> hbtiData = (Map<String, Object>) allHbtiData.get(match.getKey());
-                    return Map.of(
-                            "hbtiType", match.getKey(),
-                            "score", match.getValue(),
-                            "details", Map.of(
-                                    "dogImage", hbtiData.get("dogImage"),
-                                    "label", hbtiData.get("label")
-                            )
-                    );
-                })
-                .toList();
-
-        // 현재 유저의 HBTI 상세 정보
-        Map<String, Object> details = getHbtiDataByType(hbti.getHbti());
-
-        // 결과 조합
-        Map<String, Object> result = Map.of(
-                "hbtiType", hbti.getHbti(),
-                "percentages", percentages,
-                "details", details,
-                "topMatches", topMatches
-        );
-
-        return result;
-    }
-
     private int calculateMatchScore(Map<String, Double> userDimensions, String trainerType) {
         // 트레이너의 각 차원을 점수로 변환
         Map<String, Integer> trainerDimensions = Map.of(
@@ -338,7 +284,60 @@ public class HbtiService {
         return hbtiRepository.findUsersByHbtiType(hbtiType);
     }
 
+    @Override
+    public Map<String, Object> findTopMatches(Long userId) throws IOException {
+        // 사용자의 HBTI 결과 조회
+        HBTI hbti = hbtiRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("HBTI result not found for user: " + userId));
 
+        // 상세 정보 조회
+        Map<String, Object> details = getHbtiDataByType(hbti.getHbti());
+
+        Map<String, Double> percentages = Map.of(
+                "M", hbti.getMbScore(),
+                "B", 100 - hbti.getMbScore(),
+                "E", hbti.getEiScore(),
+                "I", 100 - hbti.getEiScore(),
+                "C", hbti.getCnScore(),
+                "N", 100 - hbti.getCnScore(),
+                "P", hbti.getPgScore(),
+                "G", 100 - hbti.getPgScore()
+        );
+
+        // JSON 데이터 로드 및 트레이너 HBTI와의 매칭 계산
+        Map<String, Object> allHbtiData = loadHbtiData();
+        List<Map.Entry<String, Integer>> matches = allHbtiData.entrySet().stream()
+                .map(entry -> Map.entry(
+                        entry.getKey(),
+                        calculateMatchScore(percentages, entry.getKey())
+                ))
+                .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
+                .limit(3)
+                .toList();
+
+        // 매칭된 정보 조합
+        List<Map<String, Object>> topMatches = matches.stream()
+                .map(match -> {
+                    Map<String, Object> hbtiData = (Map<String, Object>) allHbtiData.get(match.getKey());
+                    return Map.of(
+                            "hbtiType", match.getKey(),
+                            "score", match.getValue(),
+                            "details", Map.of(
+                                    "dogImage", hbtiData.get("dogImage"),
+                                    "label", hbtiData.get("label")
+                            )
+                    );
+                })
+                .toList();
+
+        // 결과 조합
+        return Map.of(
+                "hbtiType", hbti.getHbti(),
+                "percentages", percentages,
+                "details", details,
+                "topMatches", topMatches
+        );
+    }
 } // end class
 
 
