@@ -91,7 +91,8 @@ public class SecurityConfig {
                         .requestMatchers("/member/**").permitAll()
                         .requestMatchers("/member/register/add-schedule/{userId}").permitAll()
                         .requestMatchers("/member/{userId}/register/search").permitAll()
-
+                        .requestMatchers("/member/{userid}/calendar/student/{studentId}").permitAll()
+//                        .requestMatchers("/member/{userid}/calendar/student/{studentId}").permitAll()
                         .anyRequest().authenticated());
 
         // 세션 설정

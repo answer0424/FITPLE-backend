@@ -19,6 +19,7 @@ public class MessageDTO {
     private String content;
     private boolean isChecked;
     private LocalDateTime createdAt;
+    private Long chatId;
 
     public static MessageDTO fromEntity(Message message) {
         return MessageDTO.builder()
@@ -27,6 +28,7 @@ public class MessageDTO {
                 .content(message.getContent())
                 .isChecked(message.isChecked())
                 .createdAt(message.getCreatedAt())
+                .chatId(message.getChat().getId())
                 .build();
     }
 }
