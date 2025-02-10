@@ -60,6 +60,7 @@ public class UserController {
 
     @GetMapping("/user") // 지윤
     public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal PrincipalDetails userDetails){
+        System.out.println("🖤JWTFilter 끝나면 와야 함 그리고 클라이언트 단으로 다시 보낼 거야");
         System.out.println("##########UserDetails: " + userDetails.toString());  // userDetails 객체 상태 확인
         if (userDetails != null) {
             User user = userDetails.getUser();

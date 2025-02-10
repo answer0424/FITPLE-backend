@@ -2,6 +2,7 @@ package com.lec.spring.base.service;
 
 import com.lec.spring.base.DTO.MyPageUserInfoDTO;
 import com.lec.spring.base.domain.Gym;
+import com.lec.spring.base.domain.HBTI;
 import com.lec.spring.base.domain.User;
 import com.lec.spring.base.DTO.UserRegistrationDTO;
 import com.lec.spring.base.repository.GymRepository;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -109,9 +111,18 @@ public class UserService {
 
 //        System.out.println("-------------------------------------" + uInfo);
 
-        uInfo.setHBTI(hbtiRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("유저 HBTI 탐색에 실패했습니다"))
-                .getHbti());
+        //TODO 전역 예외처리 컨트롤러 제작 후 사용
+//        uInfo.setHBTI(hbtiRepository.findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException("유저 HBTI 탐색에 실패했습니다"))
+//                .getHbti());
+
+        Optional<HBTI> h = hbtiRepository.findById(id);
+
+        if(!h.isPresent()) {
+            uInfo.setHBTI(null);
+        } else {
+            uInfo.setHBTI(h.orElseThrow().getHbti());
+        }
 
 //        System.out.println( uInfo +"-------------------------------------");
 

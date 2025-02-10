@@ -18,7 +18,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     List<Reservation> findByStatus(ReservationStatus status);
 
-    @Query("SELECT new com.lec.spring.training.DTO.MonthReservationDTO(r.id, u.id, u.nickname, r.date) " +
+    @Query("SELECT new com.lec.spring.training.DTO.MonthReservationDTO(r.id, u.id, u.nickname, r.date, r.status) " +
             "FROM Reservation r JOIN r.training t JOIN t.user u JOIN t.trainer tr " +
             "WHERE tr.id = :trainerId AND u.id = :studentId AND FUNCTION('YEAR', r.date) = :year AND FUNCTION('MONTH', r.date) = :month")
     List<MonthReservationDTO> findReservationsByStudentAndMonth(@Param("studentId") Long studentId,
@@ -39,7 +39,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
             "(r.id, " +
             "CASE WHEN tr.id = :userId THEN u.id ELSE tr.id END, " +
             "CASE WHEN tr.id = :userId THEN u.nickname ELSE tr.nickname END," +
-            "r.date) " +
+            "r.date, r.status) " +
             "FROM Reservation r JOIN r.training t JOIN t.user u JOIN t.trainer tr " +
             "WHERE FUNCTION('YEAR', r.date) = :year AND FUNCTION('MONTH', r.date) = :month AND (u.id = :userId OR tr.id = :userId)")
     List<MonthReservationDTO> findReservationsByUserAndMonth(@Param("userId") Long userId,
