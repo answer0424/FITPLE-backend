@@ -1599,3 +1599,89 @@ from training;
 #     (58, '2025-02-18 09:00:00', '운동전', '09:00:00', 45),
 #     (58, '2025-02-19 09:00:00', '운동전', '09:00:00', 45);
 
+
+
+UPDATE user
+SET authority = 'ROLE_ADMIN'
+WHERE id=172;
+
+SELECT COUNT(*) FROM user;
+SELECT COUNT(*) FROM user WHERE authority = 'ROLE_STUDENT';
+
+
+
+SELECT
+    TABLE_NAME,
+    COLUMN_NAME,
+    CONSTRAINT_NAME,
+    REFERENCED_TABLE_NAME,
+    REFERENCED_COLUMN_NAME
+FROM
+    INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE
+    REFERENCED_TABLE_NAME = 'user';
+
+-- Message 테이블
+ALTER TABLE message
+    DROP FOREIGN KEY FKb3y6etti1cfougkdr0qiiemgv;
+
+ALTER TABLE message
+    ADD CONSTRAINT FKb3y6etti1cfougkdr0qiiemgv
+        FOREIGN KEY (user_id) REFERENCES user(id)
+            ON DELETE CASCADE;
+
+-- Trainer Profile 테이블
+ALTER TABLE trainer_profile
+    DROP FOREIGN KEY FKsa8fl19kt6x0o5kam4y9jp0r8;
+
+ALTER TABLE trainer_profile
+    ADD CONSTRAINT FKsa8fl19kt6x0o5kam4y9jp0r8
+        FOREIGN KEY (trainer_id) REFERENCES user(id)
+            ON DELETE CASCADE;
+
+-- Training 테이블 (trainer_id)
+ALTER TABLE training
+    DROP FOREIGN KEY FKa34ur7f6qsejqio84v9at8ylj;
+
+ALTER TABLE training
+    ADD CONSTRAINT FKa34ur7f6qsejqio84v9at8ylj
+        FOREIGN KEY (trainer_id) REFERENCES user(id)
+            ON DELETE CASCADE;
+
+-- Training 테이블 (user_id)
+ALTER TABLE training
+    DROP FOREIGN KEY FKfoy157kvf3lmam5gv5u2ty487;
+
+ALTER TABLE training
+    ADD CONSTRAINT FKfoy157kvf3lmam5gv5u2ty487
+        FOREIGN KEY (user_id) REFERENCES user(id)
+            ON DELETE CASCADE;
+
+-- User Chat 테이블
+ALTER TABLE user_chat
+    DROP FOREIGN KEY FKojd9hqbl3e7kq3vvr9ym218i4;
+
+ALTER TABLE user_chat
+    ADD CONSTRAINT FKojd9hqbl3e7kq3vvr9ym218i4
+        FOREIGN KEY (user_id) REFERENCES user(id)
+            ON DELETE CASCADE;
+
+SELECT
+    TABLE_NAME,
+    COLUMN_NAME,
+    CONSTRAINT_NAME,
+    REFERENCED_TABLE_NAME,
+    REFERENCED_COLUMN_NAME
+FROM
+    INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE
+    REFERENCED_TABLE_NAME = 'trainer_profile';
+
+-- Certification 테이블의 trainer_profile 외래키에 CASCADE 설정 추가
+ALTER TABLE certification
+    DROP FOREIGN KEY FKie9b3w133xxeonxqdw4c4jqr4;
+
+ALTER TABLE certification
+    ADD CONSTRAINT FKie9b3w133xxeonxqdw4c4jqr4
+        FOREIGN KEY (trainer_profile_id) REFERENCES trainer_profile(id)
+            ON DELETE CASCADE;
