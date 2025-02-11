@@ -108,7 +108,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                     .career(trainerProfileDTO.getCareer())
                     .content(trainerProfileDTO.getContent())
                     .perPrice(trainerProfileDTO.getPerPrice())
-                    .isAccess(승인)
+                    .isAccess(대기)
                     .build();
 
             System.out.println("db저장 시작");

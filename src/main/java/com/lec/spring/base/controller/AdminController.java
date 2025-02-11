@@ -1,9 +1,13 @@
 package com.lec.spring.base.controller;
 
+import com.lec.spring.base.DTO.TrainerInfoDTO;
 import com.lec.spring.base.domain.User;
 import com.lec.spring.base.service.UserService;
+import com.lec.spring.training.DTO.ReviewResponseDTO;
+import com.lec.spring.training.DTO.StudentListDTO;
 import com.lec.spring.training.DTO.TrainerProfileReadDTO;
 import com.lec.spring.training.domain.Review;
+import com.lec.spring.training.service.MyPageService;
 import com.lec.spring.training.service.ReviewService;
 import com.lec.spring.training.service.TrainerDetailService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/admin")
@@ -23,6 +29,7 @@ public class AdminController {
     private final UserService userService;
     private final ReviewService reviewService;
     private final TrainerDetailService trainerDetailService;
+    private final MyPageService myPageService;
 
     @GetMapping("/users")
     public ResponseEntity<Page<User>> getUsers(
@@ -34,6 +41,11 @@ public class AdminController {
         Pageable pageable = PageRequest.of(page, size,
                 Sort.by(Sort.Direction.fromString(direction), sortBy != null ? sortBy : "id"));
         return ResponseEntity.ok(userService.getAllStudents(pageable));
+    }
+
+    @GetMapping("/students/{studentId}/trainers")
+    public ResponseEntity<List<TrainerInfoDTO>> getStudentTrainers(@PathVariable Long studentId) {
+        return ResponseEntity.ok(userService.getTrainerInfoForStudent(studentId));
     }
 
     @GetMapping("/trainers")
@@ -53,6 +65,12 @@ public class AdminController {
         return ResponseEntity.ok(trainerDetailService.getTrainerProfileById(trainerId));
     }
 
+    @GetMapping("/trainers/{trainerId}/students")
+    public ResponseEntity<List<StudentListDTO>> getTrainerStudents(@PathVariable Long trainerId) {
+        List<StudentListDTO> students = myPageService.getMyStudentList(trainerId);
+        return ResponseEntity.ok(students);
+    }
+
     @DeleteMapping("/users/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId, @RequestParam String role) {
         if ("ROLE_TRAINER".equals(role)) {
@@ -66,7 +84,7 @@ public class AdminController {
     }
 
     @GetMapping("/reviews")
-    public ResponseEntity<Page<Review>> getReviews(
+    public ResponseEntity<Page<ReviewResponseDTO>> getReviews(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String sortBy,
@@ -74,7 +92,8 @@ public class AdminController {
 
         Pageable pageable = PageRequest.of(page, size,
                 Sort.by(Sort.Direction.fromString(direction), sortBy != null ? sortBy : "id"));
-        return ResponseEntity.ok(reviewService.getAllReviewsWithDetails(pageable));
+        Page<ReviewResponseDTO> reviews = reviewService.getAllReviewsWithDetails(pageable);
+        return ResponseEntity.ok(reviews);
     }
 
     @GetMapping("/reviews/{reviewId}")

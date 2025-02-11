@@ -185,6 +185,7 @@ public class MyPageServiceImpl implements MyPageService {
                                 .times(e.getTimes())
                                 .nickname(e.getUser().getNickname())
                                 .userId(e.getUser().getId())
+                                .email(e.getUser().getEmail())
                                 .build()
                 )
         );

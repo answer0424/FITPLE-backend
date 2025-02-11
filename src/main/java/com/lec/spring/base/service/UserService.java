@@ -1,6 +1,7 @@
 package com.lec.spring.base.service;
 
 import com.lec.spring.base.DTO.MyPageUserInfoDTO;
+import com.lec.spring.base.DTO.TrainerInfoDTO;
 import com.lec.spring.base.domain.Gym;
 import com.lec.spring.base.domain.HBTI;
 import com.lec.spring.base.domain.User;
@@ -9,7 +10,10 @@ import com.lec.spring.base.repository.GymRepository;
 import com.lec.spring.base.repository.HbtiRepository;
 import com.lec.spring.base.repository.UserRepository;
 import com.lec.spring.base.service.mapper.UserMapper;
+import com.lec.spring.training.domain.Training;
+import com.lec.spring.training.repository.TrainingRepository;
 import com.lec.spring.training.service.ImgServiceImpl;
+import com.lec.spring.training.service.MyPageService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -37,6 +42,8 @@ public class UserService {
     private final ImgServiceImpl imgService;
     private final UserMapper userMapper;
     private final HbtiRepository hbtiRepository;
+    private final TrainingRepository trainingRepository;
+    private final MyPageService myPageService;
 
     @Value("${app.image.profile}")
     String dir;
@@ -153,6 +160,19 @@ public class UserService {
 
     public Page<User> getAllStudents(Pageable pageable) {
         return userRepository.findByAuthority("ROLE_STUDENT", pageable);
+    }
+
+    // adminpage
+    public List<TrainerInfoDTO> getTrainerInfoForStudent(Long studentId) {
+        List<Training> trainings = trainingRepository.findByUserId(studentId);
+        return trainings.stream()
+                .map(training -> TrainerInfoDTO.builder()
+                        .trainerId(training.getTrainer().getId())
+                        .email(training.getTrainer().getEmail())
+                        .name(training.getTrainer().getNickname())
+                        .remainingSessions(myPageService.getPtCount(studentId, training.getTrainer().getId()))
+                        .build())
+                .collect(Collectors.toList());
     }
 
 

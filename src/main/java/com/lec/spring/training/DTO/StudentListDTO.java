@@ -15,6 +15,7 @@ import java.util.List;
 public class StudentListDTO {
     private Long userId;
     private String nickname;
+    private String email;
 
     private int times;
     private int trainingId; //hjy

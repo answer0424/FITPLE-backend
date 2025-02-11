@@ -1,6 +1,7 @@
 package com.lec.spring.training.service;
 
 import com.lec.spring.base.domain.User;
+import com.lec.spring.base.repository.UserRepository;
 import com.lec.spring.training.DTO.ReviewResponseDTO;
 import com.lec.spring.training.domain.Review;
 import com.lec.spring.training.domain.Training;
@@ -20,10 +21,12 @@ import java.util.stream.Collectors;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final TrainingRepository trainingRepository;
+    private final UserRepository userRepository;
 
-    public ReviewService(ReviewRepository reviewRepository, TrainingRepository trainingRepository) {
+    public ReviewService(ReviewRepository reviewRepository, TrainingRepository trainingRepository, UserRepository userRepository) {
         this.reviewRepository = reviewRepository;
         this.trainingRepository = trainingRepository;
+        this.userRepository = userRepository;
     }
 
     public List<ReviewResponseDTO> getReviewsByTrainerId(Long trainerId, Long userId) {
@@ -104,8 +107,27 @@ public class ReviewService {
         reviewRepository.deleteById(reviewId);
     }
 
-    public Page<Review> getAllReviewsWithDetails(Pageable pageable) {
-        return reviewRepository.findAll(pageable);
+    public Page<ReviewResponseDTO> getAllReviewsWithDetails(Pageable pageable) {
+        return reviewRepository.findAll(pageable).map(review -> {
+            User user = userRepository.findById(review.getTraining().getUser().getId())
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+            Training training = review.getTraining();
+            User trainer = userRepository.findById(training.getTrainer().getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Trainer not found"));
+
+            return ReviewResponseDTO.builder()
+                    .id(review.getId())
+                    .trainingId(training.getId())
+                    .userId(user.getId())
+                    .username(user.getUsername())
+                    .trainerName(trainer.getUsername())
+                    .userProfileImage(user.getProfileImage())
+                    .trainerProfileImage(trainer.getProfileImage())
+                    .rating(review.getRating())
+                    .content(review.getContent())
+                    .createdAt(review.getCreatedAt())
+                    .build();
+        });
     }
 
     public Review getReviewDetails(Long reviewId) {
