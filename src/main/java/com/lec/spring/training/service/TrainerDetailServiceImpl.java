@@ -102,15 +102,13 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 return updateTrainerProfile(certificationSkills, trainerProfileDTO);
             }
 
-
-
             // 신규 트레이너 프로필 생성
             TrainerProfile trainerProfile = TrainerProfile.builder()
                     .trainer(trainer)
                     .career(trainerProfileDTO.getCareer())
                     .content(trainerProfileDTO.getContent())
                     .perPrice(trainerProfileDTO.getPerPrice())
-                    .isAccess(승인)
+                    .isAccess(대기)
                     .build();
 
             System.out.println("db저장 시작");
@@ -186,9 +184,6 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
         return convertToDTO(trainerProfile);
     }
-
-
-
 
 
     private TrainerProfileReadDTO convertToDTO(TrainerProfile trainerProfile) {
@@ -270,6 +265,16 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
         certificationRepository.saveAll(certifications);
         System.out.println("트레이너 프로필 및 자격증 저장 완료: " + trainerProfile.getId());
+    }
+
+    @Override
+    @Transactional
+    public void updateTrainerGrantStatus(Long trainerId, GrantStatus status) {
+        TrainerProfile profile = trainerProfileRepository.findByTrainerId(trainerId)
+                .orElseThrow(() -> new EntityNotFoundException("Trainer profile not found for trainer ID: " + trainerId));
+
+        profile.setIsAccess(status);
+        trainerProfileRepository.save(profile);
     }
 
 }// end TrainerDetailService

@@ -101,5 +101,6 @@ SET gym_id = 2
 WHERE id IN (51, 52, 53);
 
 UPDATE user
-SET authority = 'ROLE_STUDENT'
-WHERE id = 126;
+SET authority = 'ROLE_ADMIN'
+WHERE id=172;
+
