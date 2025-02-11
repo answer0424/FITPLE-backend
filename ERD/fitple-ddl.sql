@@ -213,3 +213,10 @@ ALTER TABLE AI_PROMPT
 ALTER TABLE HBTI
     ADD CONSTRAINT fk_HBTI_User1 FOREIGN KEY (UserId)
         REFERENCES User (id);
+
+ALTER TABLE message DROP FOREIGN KEY FKmejd0ykokrbuekwwgd5a5xt8a;
+
+ALTER TABLE message
+    ADD CONSTRAINT FKmejd0ykokrbuekwwgd5a5xt8
+        FOREIGN KEY (chat_Id) REFERENCES chat(id)
+            ON DELETE CASCADE;

@@ -1,5 +1,6 @@
 package com.lec.spring.chat.controller;
 
+import com.lec.spring.base.config.PrincipalDetails;
 import com.lec.spring.base.config.SecurityConfig;
 import com.lec.spring.base.domain.User;
 import com.lec.spring.chat.DTO.ChatDTO;
@@ -9,6 +10,7 @@ import com.lec.spring.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +27,12 @@ public class ChatController {
 
     // 채팅방 생성(이미 존재한다면 재사용)
     @PostMapping("/create")
-    public ResponseEntity<Chat> createChat(@RequestParam(name = "userId") Long userId,@RequestParam(name = "trainerId") Long trainerId) {
+    public ResponseEntity<Chat> createChat(
+            @RequestParam(name = "userId") Long userId,
+            @RequestParam(name = "trainerId") Long trainerId
+    ) {
+        System.out.println(userId);
+        System.out.println(trainerId);
         System.out.println(userId + "와 " + trainerId + "간의 채팅방이 생성되었습니다.");
         return ResponseEntity.ok(chatService.createOrGetChat(userId, trainerId));
     }

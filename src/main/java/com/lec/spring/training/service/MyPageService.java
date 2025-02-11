@@ -39,7 +39,7 @@ public interface MyPageService {
     CouponPageDTO getMyTrainerPage(Long userId);
 
     //- 트레이너 채팅방에 존재하는 회원리스트
-    List<StudentDTO> findStudentByChats(Long trainerId);
+    List<StudentDTO> findStudentByChats(Long trainerId, String searchQuery );
 
     //- 트레이닝에 추가하기
     void addTraining(Long studentId, Long trainerId, int times);
