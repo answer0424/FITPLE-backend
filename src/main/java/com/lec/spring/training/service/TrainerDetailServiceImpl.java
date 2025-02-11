@@ -267,6 +267,15 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
         System.out.println("트레이너 프로필 및 자격증 저장 완료: " + trainerProfile.getId());
     }
 
+    @Override
+    @Transactional
+    public void updateTrainerGrantStatus(Long trainerId, GrantStatus status) {
+        TrainerProfile profile = trainerProfileRepository.findByTrainerId(trainerId)
+                .orElseThrow(() -> new EntityNotFoundException("Trainer profile not found for trainer ID: " + trainerId));
+
+        profile.setIsAccess(status);
+        trainerProfileRepository.save(profile);
+    }
 
 }// end TrainerDetailService
 

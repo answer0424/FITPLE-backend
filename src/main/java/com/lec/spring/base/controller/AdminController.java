@@ -6,10 +6,12 @@ import com.lec.spring.base.service.UserService;
 import com.lec.spring.training.DTO.ReviewResponseDTO;
 import com.lec.spring.training.DTO.StudentListDTO;
 import com.lec.spring.training.DTO.TrainerProfileReadDTO;
+import com.lec.spring.training.domain.GrantStatus;
 import com.lec.spring.training.domain.Review;
 import com.lec.spring.training.service.MyPageService;
 import com.lec.spring.training.service.ReviewService;
 import com.lec.spring.training.service.TrainerDetailService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -69,6 +71,26 @@ public class AdminController {
     public ResponseEntity<List<StudentListDTO>> getTrainerStudents(@PathVariable Long trainerId) {
         List<StudentListDTO> students = myPageService.getMyStudentList(trainerId);
         return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/trainers/{trainerId}/grant-status")
+    public ResponseEntity<String> getTrainerGrantStatus(@PathVariable Long trainerId) {
+        TrainerProfileReadDTO profile = trainerDetailService.getTrainerProfileById(trainerId);
+        return ResponseEntity.ok(profile.getIsAccess());
+    }
+
+    @PutMapping("/trainers/{trainerId}/grant-status")
+    public ResponseEntity<?> updateTrainerGrantStatus(
+            @PathVariable Long trainerId,
+            @RequestParam GrantStatus status) {
+        try {
+            trainerDetailService.updateTrainerGrantStatus(trainerId, status);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/users/{userId}")
