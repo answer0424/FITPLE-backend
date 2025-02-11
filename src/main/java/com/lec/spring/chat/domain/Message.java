@@ -5,6 +5,8 @@ import com.lec.spring._common.domain.BaseEntity;
 import com.lec.spring.base.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 
@@ -24,12 +26,14 @@ public class Message extends BaseEntity {
     @JoinColumn(name = "userId", nullable = false)
     @ToString.Exclude
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "chatId", nullable = false)
     @ToString.Exclude
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)  // Chat 삭제 시 Message 자동 삭제
     private Chat chat;
 
     @Column(nullable = false)

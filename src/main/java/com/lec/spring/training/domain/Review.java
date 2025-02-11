@@ -8,8 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
-import java.util.Date;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Data
 @AllArgsConstructor
@@ -25,6 +25,7 @@ public class Review extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "trainingId", nullable = false, unique = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Training training;
 
     @Column(nullable = false)

@@ -5,6 +5,7 @@ import com.lec.spring.training.DTO.SkillsDTO;
 import com.lec.spring.training.DTO.TrainerProfileDTO;
 import com.lec.spring.training.DTO.TrainerProfileReadDTO;
 import com.lec.spring.training.domain.Certification;
+import com.lec.spring.training.domain.GrantStatus;
 import com.lec.spring.training.domain.TrainerProfile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,9 +23,5 @@ public interface TrainerDetailService {
     // 특정 트레이너 ID로 트레이너 프로필 조회 (DTO 변환)
     TrainerProfileReadDTO getTrainerProfileById(Long trainerId);
 
-
-
-
-
-
-}// end TrainerDetailService
+    void updateTrainerGrantStatus(Long trainerId, GrantStatus status);
+}
