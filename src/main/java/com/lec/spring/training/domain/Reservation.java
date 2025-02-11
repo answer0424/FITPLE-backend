@@ -7,6 +7,8 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalTime;
 import java.util.Date;
@@ -25,6 +27,7 @@ public class Reservation {
     @JoinColumn(name = "trainingId", nullable = false)
     @ToString.Exclude
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Training training;
 
     @Column(nullable = false)

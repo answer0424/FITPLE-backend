@@ -3,6 +3,8 @@ package com.lec.spring.training.domain;
 import com.lec.spring.base.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -23,6 +25,7 @@ public class TrainerProfile {
 
     @OneToOne
     @JoinColumn(name = "trainerId", nullable = false)
+    @OnDelete(action= OnDeleteAction.CASCADE)
     private User trainer;
 
     @Column(nullable = false)

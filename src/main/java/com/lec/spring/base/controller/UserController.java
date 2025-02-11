@@ -69,12 +69,5 @@ public class UserController {
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-
-    @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-//        System.out.println(users);
-        return ResponseEntity.ok(users);
-    }
 }
 

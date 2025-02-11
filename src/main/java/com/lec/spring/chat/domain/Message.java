@@ -26,6 +26,7 @@ public class Message extends BaseEntity {
     @JoinColumn(name = "userId", nullable = false)
     @ToString.Exclude
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToOne

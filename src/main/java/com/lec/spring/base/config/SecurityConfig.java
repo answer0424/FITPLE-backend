@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -91,8 +92,9 @@ public class SecurityConfig {
                         .requestMatchers("/member/**").permitAll()
                         .requestMatchers("/member/register/add-schedule/{userId}").permitAll()
                         .requestMatchers("/member/{userId}/register/search").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/member/{userid}/calendar/student/{studentId}").permitAll()
-//                        .requestMatchers("/member/{userid}/calendar/student/{studentId}").permitAll()
+
                         .anyRequest().authenticated());
 
         // 세션 설정
