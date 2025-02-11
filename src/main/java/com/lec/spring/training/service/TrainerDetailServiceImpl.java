@@ -164,8 +164,12 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
             System.out.println();
             System.out.println("existingImageUrls: " + existingImageUrls);
+            // 📌 새로운 자격증(사진)이 존재하는 경우에만 저장 수행
+            if (certificationSkills != null && !certificationSkills.isEmpty() && certificationSkills.stream().anyMatch(s -> s.getImg() != null && !s.getImg().isEmpty())) {
+                saveCertification(certificationSkills, profile);
+            }
 
-            saveCertification(certificationSkills, profile);
+
             System.out.println("수정완료 : " + profile.getId());
 
             // 트레이너 프로필 저장
