@@ -204,8 +204,8 @@ public class MyPageController{
         System.out.println("전송된 데이터: " + reservationDTO);  // 전송된 데이터 확인
         System.out.println("User ID from JWT: " + userId);
         try {
-            myPageService.addSchedule(reservationDTO, userId);
-            return new ResponseEntity<>("일정 등록에 성공했습니다", HttpStatus.OK);
+            MonthReservationDTO reservation = myPageService.addSchedule(reservationDTO, userId);
+            return new ResponseEntity<>(reservation, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -261,11 +261,11 @@ public class MyPageController{
 //        System.out.println("Received Content-Type: " + contentType);
 //        int userId = 1;
 //        String profileImage = "아";
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nReceived userId: " + userId);
-        System.out.println("Received profileImage: " + profileImage);
+//        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
+//                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
+//                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
+//                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nReceived userId: " + userId);
+//        System.out.println("Received profileImage: " + profileImage);
         try {
             userService.changeUserProfileImage(profileImage, userId);
             return new ResponseEntity<>("", HttpStatus.OK);

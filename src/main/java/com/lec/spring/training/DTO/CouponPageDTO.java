@@ -23,5 +23,7 @@ public class CouponPageDTO {
 
     long trainerId;
 
+    int stamp;
+
     List<CouponPageTrainerList> trainerIds;
 }

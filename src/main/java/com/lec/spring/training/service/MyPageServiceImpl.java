@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -116,6 +117,8 @@ public class MyPageServiceImpl implements MyPageService {
     public boolean useCoupon(Long studentId, Long trainerId) {
         long trainingId = findTrainingId(studentId, trainerId);
 
+        System.out.println(trainingId + "\n\n\n\n\n");
+
         Training training = trainingRepository.findById(trainingId)
                 .orElseThrow(() -> new IllegalArgumentException("쿠폰 확인에 실패했습니다."));
 
@@ -153,6 +156,7 @@ public class MyPageServiceImpl implements MyPageService {
                 .nickname(training.getTrainer().getNickname())
                 .gymName(training.getTrainer().getGym().getName())
                 .trainerIds(ids)
+                .stamp(training.getTotal_stamps())
                 .build();
     }
 
@@ -270,21 +274,33 @@ public class MyPageServiceImpl implements MyPageService {
 //}
     @Transactional
     @Override
-    public void addSchedule(CreateReservationDTO reservationDTO, Long studentId) {
+    public MonthReservationDTO addSchedule(CreateReservationDTO reservationDTO, Long studentId) {
         // trainingId로 트레이닝 정보를 조회
         Training training = trainingRepository.findById(reservationDTO.getTrainingId())
                 .orElseThrow(() -> new IllegalArgumentException("일정 등록에 실패했습니다. 트레이닝 정보가 유효하지 않습니다."));
 
+//        System.out.println(reservationDTO.getDate().atZone(ZoneId.of("UTC"))
+//                .withZoneSameInstant(ZoneId.of("Asia/Seoul")) + "\n\n\n\n\n\n\n\n\n\n\n");
         // Reservation 객체 생성
         Reservation reservation = Reservation.builder()
-                .date(reservationDTO.getDate())  // 예약 날짜
+                .date(reservationDTO.getDate().plusHours(9))  // 예약 날짜
                 .training(training)  // 트레이닝 정보
                 .status(ReservationStatus.운동전)  // 기본 상태를 '운동전'으로 설정
                 .build();
 
         System.out.println("reservation : " + reservation);
 
-        reservationRepository.save(reservation);
+        reservation = reservationRepository.save(reservation);
+
+        MonthReservationDTO monthReservationDTO = MonthReservationDTO.builder()
+                .reservationId(reservation.getId())
+                .date(reservation.getDate())
+                .status(reservation.getStatus())
+                .nickname(userRepository.findById(studentId).orElseThrow().getNickname())
+                .userId(studentId)
+                .build();
+
+        return monthReservationDTO;
     }
 
     @Override
@@ -301,6 +317,9 @@ public class MyPageServiceImpl implements MyPageService {
 
     @Override
     public long findTrainingId(Long studentId, Long trainerId) {
+        System.out.println("\n\n\n\n\n\n\n\n\n\n");
+        System.out.println("studentId: " + studentId);
+        System.out.println("trainerId: " + trainerId);
         Training training = trainingRepository.findByUserIdAndTrainerIdEquals(studentId, trainerId);
         return training.getId();
     }
