@@ -104,3 +104,6 @@ UPDATE user
 SET authority = 'ROLE_ADMIN'
 WHERE id=172;
 
+update training
+set user_id = 1 , trainer_id = 52
+where id = 2;

@@ -88,6 +88,7 @@ public class SecurityConfig {
                         .requestMatchers("/upload/**").permitAll()
                         .requestMatchers("/api/reviews/**").authenticated()
                         .requestMatchers("/api/chat/**").permitAll()
+                        .requestMatchers("/api/quiz/search").permitAll()
                         .requestMatchers("/ws-chat/**").permitAll()
                         .requestMatchers("/member/**").permitAll()
                         .requestMatchers("/member/register/add-schedule/{userId}").permitAll()
