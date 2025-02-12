@@ -10,6 +10,7 @@ import java.util.List;
 @Builder
 public class TrainerProfileReadDTO {
     private Long id;
+    private Long trainerId;
     private String trainerName;
     private String trainerEmail;
     private String trainerProfileImage;
