@@ -79,23 +79,17 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 throw new AccessDeniedException("트레이너 권한이 필요합니다");
             }
 
-
+            if (skills.size() != images.size()) {
+                throw new IllegalArgumentException("자격증과 이미지의 개수가 일치하지 않습니다.");
+            }
 
             List<SkillsDTO> certificationSkills = new ArrayList<>();
             for (int i = 0; i < skills.size(); i++) {
                 SkillsDTO skillsDTO = new SkillsDTO();
                 skillsDTO.setSkills(skills.get(i).trim());
-
-                // NPE 방지 처리
-                if (images != null && i < images.size() && images.get(i) != null) {
-                    skillsDTO.setImg(images.get(i));
-                } else {
-                    skillsDTO.setImg(null); // 또는 기본 이미지 설정 가능
-                }
-
+                skillsDTO.setImg(images.get(i));
                 certificationSkills.add(skillsDTO);
             }
-
 //            trainerProfileDTO.setCertificationSkills(certificationSkills);
 
 
@@ -106,15 +100,6 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 System.out.println("기존 트레이너 프로필이 존재하므로 업데이트를 수행합니다: " + existingProfile.get().getId());
                 trainerProfileDTO.setTrainerId(existingProfile.get().getId());
                 return updateTrainerProfile(certificationSkills, trainerProfileDTO);
-            }
-
-
-            if (skills.size() != images.size()) {
-                throw new IllegalArgumentException("자격증과 이미지의 개수가 일치하지 않습니다.");
-            }
-
-            if (images.isEmpty()) {
-                throw new IllegalArgumentException("프로필 생성 시 최소 한 개의 자격증 이미지가 필요합니다.");
             }
 
             // 신규 트레이너 프로필 생성
@@ -152,10 +137,6 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
             // 트레이너 프로필 조회
             TrainerProfile profile = trainerProfileRepository.findById(trainerProfileDTO.getTrainerId())
                     .orElseThrow(() -> new IllegalArgumentException("해당 ID의 트레이너 프로필이 존재하지 않습니다."));
-
-            if (profile.getIsAccess() != 승인 && profile.getIsAccess() != 거절) {
-                throw new IllegalStateException("트레이너 프로필은 승인 또는 거절 상태일 때만 수정할 수 있습니다.");
-            }
 
             // 수정 가능한 필드 업데이트
             if (trainerProfileDTO.getPerPrice() != null) profile.setPerPrice(trainerProfileDTO.getPerPrice());
