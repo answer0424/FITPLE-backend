@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class JWTFilter extends OncePerRequestFilter {
 
@@ -89,6 +90,7 @@ public class JWTFilter extends OncePerRequestFilter {
                     .provider(provider)
                     .address(address)
                     .authority(authority)
+                    .birth(new Date(brith))
                     .gym(gym)
                     .hbti(hbti)
                     .profileImage(profileImage)

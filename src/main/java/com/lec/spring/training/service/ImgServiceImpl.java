@@ -1,5 +1,6 @@
 package com.lec.spring.training.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +17,8 @@ import java.util.logging.Logger;
 @Service
 public class ImgServiceImpl implements ImgService {
     private static final Logger logger = Logger.getLogger(ImgServiceImpl.class.getName());
-    private static final String BASE_UPLOAD_DIR = "./uploads/certification";
+    @Value("${app.image.upload}")
+    private String BASE_UPLOAD_DIR;
 
     @Override
     public List<String> saveImages(List<MultipartFile> files, String dir) throws IOException {
@@ -80,7 +82,11 @@ public class ImgServiceImpl implements ImgService {
         Files.copy(file.getInputStream(), targetPath);
         logger.info("File saved to: " + targetPath);
 
-        return targetPath.toString();
+        Path relativePath = uploadPath.relativize(targetPath);
+
+        System.out.println("상대 경로가 나온다면?" + dir + "/" + relativePath);
+
+        return dir + "/" + relativePath;
     }
 
     private String getFileExtension(String filename) {

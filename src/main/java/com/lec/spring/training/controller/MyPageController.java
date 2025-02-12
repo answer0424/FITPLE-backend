@@ -219,6 +219,7 @@ public class MyPageController{
     // 마이페이지에서 회원 정보 수정 처리 로직
     @PatchMapping("/mypage")
     public ResponseEntity<?> updateMemberInfo(@RequestBody MyPageUserInfoDTO newUserInfo) {
+        System.out.println(newUserInfo + "\n\n\n\n들어옴");
         try {
             userService.changeUserProfile(newUserInfo);
             return new ResponseEntity<>("", HttpStatus.OK);
@@ -243,13 +244,19 @@ public class MyPageController{
 
     // 마이페이지에서 프로필 사진 변경 처리 로직
     @PatchMapping("/profile-img")
-    @Transactional
-    public ResponseEntity<?> updateProfileImage(@RequestPart("userId") Long userId,
-                                                @RequestPart("profileImage") MultipartFile profileImage,
-                                                HttpServletRequest request) {
-        String contentType = request.getContentType();
-        System.out.println("Received Content-Type: " + contentType);
-        System.out.println("Received userId: " + userId);
+//    @Transactional
+    public ResponseEntity<?> updateProfileImage(
+            @RequestParam("userId") Long userId,
+            @RequestPart(required = false) MultipartFile profileImage
+    ) {
+//        String contentType = request.getContentType();
+//        System.out.println("Received Content-Type: " + contentType);
+//        int userId = 1;
+//        String profileImage = "아";
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
+                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
+                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
+                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nReceived userId: " + userId);
         System.out.println("Received profileImage: " + profileImage);
         try {
             userService.changeUserProfileImage(profileImage, userId);

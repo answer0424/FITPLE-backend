@@ -143,10 +143,14 @@ public class UserService {
     //유저 프로필 이미지 변경
     @Transactional(rollbackOn = Exception.class)
     public boolean changeUserProfileImage(MultipartFile image, Long userId) {
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n 프사 바뀌어요요");
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("유저 검색에 실패했습니다."));
         try {
-            user.setProfileImage(imgService.saveImage(image, dir));
+            String ddir = imgService.saveImage(image, dir);
+            System.out.println(ddir);
+            user.setProfileImage(ddir);
+            userRepository.saveAndFlush(user);
             return true;
         } catch (IOException e) {
             throw new RuntimeException("이미지 저장 중 오류 발생");
@@ -168,7 +172,24 @@ public class UserService {
 //            user.setBirth(newUserInfo.getBirth());}
         userMapper.UserFromMyPageUserInfoDto(newUserInfo, user);
 
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
+
+        // trainer 회원가입 시 GYM 정보도 같이 저장
+        if("ROLE_TRAINER".equals(user.getAuthority())) {
+            Gym gym = gymRepository.findByAddress(newUserInfo.getAddress());
+            if (gym == null) {
+                gym = Gym.builder()
+                        .name(newUserInfo.getGym().getName())
+                        .address(newUserInfo.getGym().getAddress())
+                        .latitude(newUserInfo.getGym().getLatitude())
+                        .longitude(newUserInfo.getGym().getLongitude())
+                        .build();
+                gymRepository.save(gym);
+            }
+
+            user.setGym(gym);   // gymId 저장
+            user = userRepository.saveAndFlush(user);
+        }
     }
 
     //유저 탈퇴
