@@ -104,3 +104,24 @@ UPDATE user
 SET authority = 'ROLE_ADMIN'
 WHERE id=172;
 
+update user
+    set username = 'TRAINER11'
+    where id = 51;
+
+update user
+set username = 'trainer12'
+where id = 52;
+
+
+update user
+set username = 'RUNNER1'
+where id = 1;
+
+
+update trainer_profile
+set is_access = '승인'
+where id = 1;
+
+update training
+set coupons = 1000
+where user_id = 1;
