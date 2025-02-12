@@ -1,7 +1,10 @@
 package com.lec.spring.training.controller;
 
+import com.lec.spring.base.domain.User;
+import com.lec.spring.base.repository.UserRepository;
 import com.lec.spring.base.service.HbtiMatcher;
 import com.lec.spring.base.service.HbtiService;
+import com.lec.spring.base.service.UserService;
 import com.lec.spring.training.DTO.TrainerMatchResponseDTO;
 import com.lec.spring.training.service.TrainerMatchService;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class TrainerMatchController {
-
+    private final UserRepository userRepository;
     private final TrainerMatchService trainerMatchService;
     private final HbtiMatcher hbtiMatcher;
 
@@ -53,4 +56,13 @@ public class TrainerMatchController {
                     .body(Map.of("error", "Failed to find matching trainers"));
         }
     }
+
+    //
+    @GetMapping("/search")
+    public ResponseEntity<?> getTrainers() {
+        List<User> trainer = userRepository.findByAuthorities( "ROLE_TRAINER");
+        System.out.println("trainer: " + trainer);
+        return ResponseEntity.ok(trainer);
+    }
+
 }
