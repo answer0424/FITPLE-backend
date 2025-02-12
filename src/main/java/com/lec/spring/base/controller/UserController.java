@@ -62,19 +62,16 @@ public class UserController {
     public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal PrincipalDetails userDetails){
         System.out.println("🖤JWTFilter 끝나면 와야 함 그리고 클라이언트 단으로 다시 보낼 거야");
         System.out.println("##########UserDetails: " + userDetails.toString());  // userDetails 객체 상태 확인
+
+//        userService.findByUsername(userDetails.getUsername());
+
         if (userDetails != null) {
-            User user = userDetails.getUser();
+//            User user = userDetails.getUser();
+            User user = userService.findByUsername(userDetails.getUsername());
             System.out.println("###########현재 회원: " + user);
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-    }
-
-    @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-//        System.out.println(users);
-        return ResponseEntity.ok(users);
     }
 }
 

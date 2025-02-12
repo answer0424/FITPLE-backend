@@ -708,57 +708,57 @@ VALUES
 (171, 'BENG', 32, 83, 34, 31);
 
 INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons) VALUES
-     (1, 51, 10, 5, 0),
-     (38, 51, 10, 5, 0),
-     (2, 52, 15, 7, 1),
-     (3, 53, 20, 9, 2),
-     (4, 54, 25, 3, 3),
-     (5, 55, 12, 6, 0),
-     (6, 56, 18, 2, 1),
-     (7, 57, 22, 8, 2),
-     (8, 58, 30, 4, 3),
-     (9, 59, 14, 1, 0),
-     (10, 60, 17, 7, 1),
-     (11, 61, 10, 9, 0),
-     (12, 62, 15, 3, 1),
-     (13, 63, 20, 5, 2),
-     (14, 64, 25, 8, 3),
-     (15, 65, 12, 2, 0),
-     (16, 66, 18, 4, 1),
-     (17, 67, 22, 6, 2),
-     (18, 68, 30, 0, 3),
-     (19, 69, 14, 9, 0),
-     (20, 70, 17, 3, 1),
-     (21, 71, 10, 2, 0),
-     (22, 72, 15, 5, 1),
-     (23, 73, 20, 7, 2),
-     (24, 74, 25, 4, 3),
-     (25, 75, 12, 6, 0),
-     (26, 76, 18, 1, 1),
-     (27, 77, 22, 8, 2),
-     (28, 78, 30, 9, 3),
-     (29, 79, 14, 2, 0),
-     (30, 80, 17, 5, 1),
-     (31, 81, 10, 4, 0),
-     (32, 82, 15, 3, 1),
-     (33, 83, 20, 7, 2),
-     (34, 84, 25, 1, 3),
-     (35, 85, 12, 0, 0),
-     (36, 86, 18, 6, 1),
-     (37, 87, 22, 5, 2),
-     (38, 88, 30, 9, 3),
-     (39, 89, 14, 8, 0),
-     (40, 90, 17, 2, 1),
-     (41, 91, 10, 4, 0),
-     (42, 92, 15, 3, 1),
-     (43, 93, 20, 5, 2),
-     (44, 94, 25, 7, 3),
-     (45, 95, 12, 1, 0),
-     (46, 96, 18, 6, 1),
-     (47, 97, 22, 9, 2),
-     (48, 98, 30, 8, 3),
-     (49, 99, 14, 0, 0),
-     (50, 100, 17, 4, 1);
+                                                                             (1, 51, 10, 5, 0),
+                                                                             (38, 51, 10, 5, 0),
+                                                                             (2, 52, 15, 7, 1),
+                                                                             (3, 53, 20, 9, 2),
+                                                                             (4, 54, 25, 3, 3),
+                                                                             (5, 55, 12, 6, 0),
+                                                                             (6, 56, 18, 2, 1),
+                                                                             (7, 57, 22, 8, 2),
+                                                                             (8, 58, 30, 4, 3),
+                                                                             (9, 59, 14, 1, 0),
+                                                                             (10, 60, 17, 7, 1),
+                                                                             (11, 61, 10, 9, 0),
+                                                                             (12, 62, 15, 3, 1),
+                                                                             (13, 63, 20, 5, 2),
+                                                                             (14, 64, 25, 8, 3),
+                                                                             (15, 65, 12, 2, 0),
+                                                                             (16, 66, 18, 4, 1),
+                                                                             (17, 67, 22, 6, 2),
+                                                                             (18, 68, 30, 0, 3),
+                                                                             (19, 69, 14, 9, 0),
+                                                                             (20, 70, 17, 3, 1),
+                                                                             (21, 71, 10, 2, 0),
+                                                                             (22, 72, 15, 5, 1),
+                                                                             (23, 73, 20, 7, 2),
+                                                                             (24, 74, 25, 4, 3),
+                                                                             (25, 75, 12, 6, 0),
+                                                                             (26, 76, 18, 1, 1),
+                                                                             (27, 77, 22, 8, 2),
+                                                                             (28, 78, 30, 9, 3),
+                                                                             (29, 79, 14, 2, 0),
+                                                                             (30, 80, 17, 5, 1),
+                                                                             (31, 81, 10, 4, 0),
+                                                                             (32, 82, 15, 3, 1),
+                                                                             (33, 83, 20, 7, 2),
+                                                                             (34, 84, 25, 1, 3),
+                                                                             (35, 85, 12, 0, 0),
+                                                                             (36, 86, 18, 6, 1),
+                                                                             (37, 87, 22, 5, 2),
+                                                                             (38, 88, 30, 9, 3),
+                                                                             (39, 89, 14, 8, 0),
+                                                                             (40, 90, 17, 2, 1),
+                                                                             (41, 91, 10, 4, 0),
+                                                                             (42, 92, 15, 3, 1),
+                                                                             (43, 93, 20, 5, 2),
+                                                                             (44, 94, 25, 7, 3),
+                                                                             (45, 95, 12, 1, 0),
+                                                                             (46, 96, 18, 6, 1),
+                                                                             (47, 97, 22, 9, 2),
+                                                                             (48, 98, 30, 8, 3),
+                                                                             (49, 99, 14, 0, 0),
+                                                                             (50, 100, 17, 4, 1);
 
 # reservation 더미데이터
 INSERT INTO reservation (id, training_id, date, status, start_time, exercise_time)
@@ -1599,3 +1599,89 @@ from training;
 #     (58, '2025-02-18 09:00:00', '운동전', '09:00:00', 45),
 #     (58, '2025-02-19 09:00:00', '운동전', '09:00:00', 45);
 
+
+
+UPDATE user
+SET authority = 'ROLE_ADMIN'
+WHERE id=172;
+
+SELECT COUNT(*) FROM user;
+SELECT COUNT(*) FROM user WHERE authority = 'ROLE_STUDENT';
+
+
+
+SELECT
+    TABLE_NAME,
+    COLUMN_NAME,
+    CONSTRAINT_NAME,
+    REFERENCED_TABLE_NAME,
+    REFERENCED_COLUMN_NAME
+FROM
+    INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE
+    REFERENCED_TABLE_NAME = 'user';
+
+-- Message 테이블
+ALTER TABLE message
+    DROP FOREIGN KEY FKb3y6etti1cfougkdr0qiiemgv;
+
+ALTER TABLE message
+    ADD CONSTRAINT FKb3y6etti1cfougkdr0qiiemgv
+        FOREIGN KEY (user_id) REFERENCES user(id)
+            ON DELETE CASCADE;
+
+-- Trainer Profile 테이블
+ALTER TABLE trainer_profile
+    DROP FOREIGN KEY FKsa8fl19kt6x0o5kam4y9jp0r8;
+
+ALTER TABLE trainer_profile
+    ADD CONSTRAINT FKsa8fl19kt6x0o5kam4y9jp0r8
+        FOREIGN KEY (trainer_id) REFERENCES user(id)
+            ON DELETE CASCADE;
+
+-- Training 테이블 (trainer_id)
+ALTER TABLE training
+    DROP FOREIGN KEY FKa34ur7f6qsejqio84v9at8ylj;
+
+ALTER TABLE training
+    ADD CONSTRAINT FKa34ur7f6qsejqio84v9at8ylj
+        FOREIGN KEY (trainer_id) REFERENCES user(id)
+            ON DELETE CASCADE;
+
+-- Training 테이블 (user_id)
+ALTER TABLE training
+    DROP FOREIGN KEY FKfoy157kvf3lmam5gv5u2ty487;
+
+ALTER TABLE training
+    ADD CONSTRAINT FKfoy157kvf3lmam5gv5u2ty487
+        FOREIGN KEY (user_id) REFERENCES user(id)
+            ON DELETE CASCADE;
+
+-- User Chat 테이블
+ALTER TABLE user_chat
+    DROP FOREIGN KEY FKojd9hqbl3e7kq3vvr9ym218i4;
+
+ALTER TABLE user_chat
+    ADD CONSTRAINT FKojd9hqbl3e7kq3vvr9ym218i4
+        FOREIGN KEY (user_id) REFERENCES user(id)
+            ON DELETE CASCADE;
+
+SELECT
+    TABLE_NAME,
+    COLUMN_NAME,
+    CONSTRAINT_NAME,
+    REFERENCED_TABLE_NAME,
+    REFERENCED_COLUMN_NAME
+FROM
+    INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE
+    REFERENCED_TABLE_NAME = 'trainer_profile';
+
+-- Certification 테이블의 trainer_profile 외래키에 CASCADE 설정 추가
+ALTER TABLE certification
+    DROP FOREIGN KEY FKie9b3w133xxeonxqdw4c4jqr4;
+
+ALTER TABLE certification
+    ADD CONSTRAINT FKie9b3w133xxeonxqdw4c4jqr4
+        FOREIGN KEY (trainer_profile_id) REFERENCES trainer_profile(id)
+            ON DELETE CASCADE;

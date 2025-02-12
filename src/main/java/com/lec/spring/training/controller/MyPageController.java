@@ -150,9 +150,13 @@ public class MyPageController{
     // 트레이너 페이지에서 학생 검색
 // hjy : 채팅과 관련된 페이지임. ok
     @GetMapping("/{userId}/register/search")
-    public ResponseEntity<?> searchStudentsForSchedule(@PathVariable Long userId) {
-        System.out.println("##########  SearchStudent 시작");
-        List<StudentDTO> studentList = myPageService.findStudentByChats(userId);
+    public ResponseEntity<?> searchStudentsForSchedule(
+            @PathVariable Long userId,
+            @RequestParam(required = false) String searchQuery) { // 검색어 추가
+
+        System.out.println("##########  SearchStudent 시작 - 검색어: " + searchQuery);
+
+        List<StudentDTO> studentList = myPageService.findStudentByChats(userId, searchQuery);
         System.out.println("학생 리스트 : " + studentList);
 
         if (studentList == null || studentList.isEmpty()) {
@@ -164,14 +168,18 @@ public class MyPageController{
     }
 
 
+
     // 트레이너 페이지에서 학생별 일정 조회 로직
     @GetMapping("/{userid}/calendar/student/{studentId}")
     public ResponseEntity<?> getTrainerCalendarForStudent(@PathVariable Long userid,
                                                           @PathVariable Long studentId,
                                                           @RequestParam int year,
                                                           @RequestParam int month) {
+        System.out.println("학생 별 일정 시갖ㄱ");
         List<MonthReservationDTO> monthReservationDTO =
                 myPageService.getSchedulesByMember(studentId, userid, year, month);
+
+        System.out.println("monthReservationDTO : " + monthReservationDTO);
 
         if(!monthReservationDTO.isEmpty()) {
 
@@ -325,7 +333,7 @@ public class MyPageController{
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteMember(@PathVariable Long userId) {
         try {
-            userService.DeleteMember(userId);
+            userService.deleteUser(userId);
             return new ResponseEntity<>("탈퇴처리 되었습니다", HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

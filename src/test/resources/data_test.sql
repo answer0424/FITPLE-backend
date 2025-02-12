@@ -2,7 +2,7 @@ insert into hbti ( user_id, HBTI, mb_score
                  , ei_score
                  , cn_score
                  , pg_score)
-VALUES (129, 'MENP', 68, 88, 32, 88);
+VALUES (126, 'MENP', 68, 88, 32, 88);
 
 delete from hbti where user_id = 126;
 
@@ -19,7 +19,7 @@ INSERT INTO HBTI ( user_id, HBTI, mb_score
                  , pg_score)
 VALUES
 -- MICP (3)
-(127, 'MICP', 70, 20, 58, 90);
+(126, 'BENG', 70, 20, 58, 90);
 
 # 매칭페이지 데이터 불리기 위해...
 UPDATE HBTI
@@ -99,6 +99,12 @@ Select * from user_chat where user_id = 51;
 UPDATE user
 SET gym_id = 2
 WHERE id IN (51, 52, 53);
+
+UPDATE user
+SET authority = 'ROLE_ADMIN'
+WHERE id=172;
+
+
 
 
 INSERT INTO reservation (training_id, date, status, start_time, exercise_time)

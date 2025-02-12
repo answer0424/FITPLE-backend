@@ -102,15 +102,13 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 return updateTrainerProfile(certificationSkills, trainerProfileDTO);
             }
 
-
-
             // 신규 트레이너 프로필 생성
             TrainerProfile trainerProfile = TrainerProfile.builder()
                     .trainer(trainer)
                     .career(trainerProfileDTO.getCareer())
                     .content(trainerProfileDTO.getContent())
                     .perPrice(trainerProfileDTO.getPerPrice())
-                    .isAccess(승인)
+                    .isAccess(대기)
                     .build();
 
             System.out.println("db저장 시작");
@@ -164,8 +162,12 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
             System.out.println();
             System.out.println("existingImageUrls: " + existingImageUrls);
+            // 📌 새로운 자격증(사진)이 존재하는 경우에만 저장 수행
+            if (certificationSkills != null && !certificationSkills.isEmpty() && certificationSkills.stream().anyMatch(s -> s.getImg() != null && !s.getImg().isEmpty())) {
+                saveCertification(certificationSkills, profile);
+            }
 
-            saveCertification(certificationSkills, profile);
+
             System.out.println("수정완료 : " + profile.getId());
 
             // 트레이너 프로필 저장
@@ -186,9 +188,6 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
         return convertToDTO(trainerProfile);
     }
-
-
-
 
 
     private TrainerProfileReadDTO convertToDTO(TrainerProfile trainerProfile) {
@@ -270,6 +269,16 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
         certificationRepository.saveAll(certifications);
         System.out.println("트레이너 프로필 및 자격증 저장 완료: " + trainerProfile.getId());
+    }
+
+    @Override
+    @Transactional
+    public void updateTrainerGrantStatus(Long trainerId, GrantStatus status) {
+        TrainerProfile profile = trainerProfileRepository.findByTrainerId(trainerId)
+                .orElseThrow(() -> new EntityNotFoundException("Trainer profile not found for trainer ID: " + trainerId));
+
+        profile.setIsAccess(status);
+        trainerProfileRepository.save(profile);
     }
 
 }// end TrainerDetailService

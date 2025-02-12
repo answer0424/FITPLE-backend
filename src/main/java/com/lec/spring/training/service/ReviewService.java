@@ -1,16 +1,18 @@
 package com.lec.spring.training.service;
 
 import com.lec.spring.base.domain.User;
+import com.lec.spring.base.repository.UserRepository;
 import com.lec.spring.training.DTO.ReviewResponseDTO;
 import com.lec.spring.training.domain.Review;
 import com.lec.spring.training.domain.Training;
 import com.lec.spring.training.repository.ReviewRepository;
 import com.lec.spring.training.repository.TrainingRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,10 +21,12 @@ import java.util.stream.Collectors;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final TrainingRepository trainingRepository;
+    private final UserRepository userRepository;
 
-    public ReviewService(ReviewRepository reviewRepository, TrainingRepository trainingRepository) {
+    public ReviewService(ReviewRepository reviewRepository, TrainingRepository trainingRepository, UserRepository userRepository) {
         this.reviewRepository = reviewRepository;
         this.trainingRepository = trainingRepository;
+        this.userRepository = userRepository;
     }
 
     public List<ReviewResponseDTO> getReviewsByTrainerId(Long trainerId, Long userId) {
@@ -102,4 +106,38 @@ public class ReviewService {
 
         reviewRepository.deleteById(reviewId);
     }
+
+    public Page<ReviewResponseDTO> getAllReviewsWithDetails(Pageable pageable) {
+        return reviewRepository.findAll(pageable).map(review -> {
+            User user = userRepository.findById(review.getTraining().getUser().getId())
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+            Training training = review.getTraining();
+            User trainer = userRepository.findById(training.getTrainer().getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Trainer not found"));
+
+            return ReviewResponseDTO.builder()
+                    .id(review.getId())
+                    .trainingId(training.getId())
+                    .userId(user.getId())
+                    .username(user.getUsername())
+                    .trainerName(trainer.getUsername())
+                    .userProfileImage(user.getProfileImage())
+                    .trainerProfileImage(trainer.getProfileImage())
+                    .rating(review.getRating())
+                    .content(review.getContent())
+                    .createdAt(review.getCreatedAt())
+                    .build();
+        });
+    }
+
+    public Review getReviewDetails(Long reviewId) {
+        return reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new EntityNotFoundException("Review not found"));
+    }
+
+    @Transactional
+    public void deleteReviewByAdmin(Long reviewId) {
+        reviewRepository.deleteById(reviewId);
+    }
+
 }

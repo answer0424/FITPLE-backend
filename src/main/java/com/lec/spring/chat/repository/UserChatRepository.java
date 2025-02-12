@@ -45,8 +45,11 @@ public interface UserChatRepository extends JpaRepository<UserChat, UserChatId> 
 
     // 트레이너의 채팅방에 참여한 학생 조회
     @Query("SELECT u FROM User u JOIN UserChat uc ON u.id = uc.user.id " +
-            "WHERE uc.chat.id IN :chatIds AND u.authority = 'ROLE_STUDENT'")
-    List<User> findStudentsInChats(@Param("chatIds") List<Long> chatIds);
+            "WHERE uc.chat.id IN :chatIds AND u.authority = 'ROLE_STUDENT' " +
+            "AND (:nickname IS NULL OR u.nickname LIKE %:nickname%)")
+    List<User> findStudentsInChats(@Param("chatIds") List<Long> chatIds,
+                                   @Param("nickname") String nickname);
+
 
 
     @Query("SELECT uc.user FROM UserChat uc WHERE uc.chat.id = :chatId AND uc.user.id <> :userId")
