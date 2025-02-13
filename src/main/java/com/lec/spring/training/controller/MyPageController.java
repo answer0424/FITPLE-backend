@@ -288,6 +288,7 @@ public class MyPageController{
             userService.deleteUser(userId);
             return new ResponseEntity<>("탈퇴처리 되었습니다", HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
