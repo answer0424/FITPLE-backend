@@ -6,13 +6,11 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
-//        (exclude = {SecurityAutoConfiguration.class})
 @EnableJpaAuditing
 public class FitpleApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(FitpleApplication.class, args);
-
     }
 
 }

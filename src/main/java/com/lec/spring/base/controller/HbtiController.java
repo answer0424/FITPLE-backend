@@ -54,12 +54,9 @@ public class HbtiController {
     @PostMapping("/save")
     public ResponseEntity<String> saveHbtiResult(@RequestBody HbtiAnswer request) {
         try {
-            System.out.println("Saving HBTI result for user: " + request.getUserId());
             hbtiService.processHbti(request.getUserId(), request.getAnswers());
-            System.out.println("HBTI result saved successfully");
             return ResponseEntity.ok("HBTI 결과가 성공적으로 저장되었습니다.");
         } catch (Exception e) {
-            System.err.println("Error saving HBTI result: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
         }

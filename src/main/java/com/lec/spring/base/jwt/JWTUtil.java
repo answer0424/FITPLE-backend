@@ -60,7 +60,7 @@ public class JWTUtil {
                     .signWith(secretKey)
                     .compact();
         } catch (Exception e) {
-            System.err.println("❌ JWT 생성 오류: " + e.getMessage());
+            System.err.println(e.getMessage());
         }
 
         return null;
@@ -156,7 +156,7 @@ public class JWTUtil {
 
             return gym;
         } catch (Exception e) {
-            System.err.println("❌ JWT 파싱 오류: " + e.getMessage());
+            System.err.println(e.getMessage());
         }
         return null;
     }
@@ -180,7 +180,7 @@ public class JWTUtil {
 
             return hbti;
         } catch (Exception e) {
-            System.err.println("❌ JWT 파싱 오류: " + e.getMessage());
+            System.err.println(e.getMessage());
         }
         return null;
     }

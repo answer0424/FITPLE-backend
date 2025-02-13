@@ -31,8 +31,6 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        System.out.println("💚PrincipalOauth2UserService 다 끝났으면 들어와야겠지??");
-        System.out.println("CustomOauth2SuccessHandler onAuthenticationSuccess() 호출");
 
         // OAuth2USer 상속받는 객체
         PrincipalDetails oauth2User = (PrincipalDetails) authentication.getPrincipal();
@@ -46,20 +44,12 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         //  JWT 생성
         String token = jwtUtil.generateToken(user, expirationTimeInMs);
-        System.out.println("oauth 인증 token: " + token);
 
         // cookie에 담기
         response.addCookie(createCookie("accessToken", token));
 
-        System.out.println("💙 여기에 뭐들어있냐?\n");
 
         getRedirectStrategy().sendRedirect(request, response, authRedirectUri);
-        System.out.println("requestURI : " + request.getRequestURI());
-        System.out.println("request header : " + request.getHeader("request-header"));
-        System.out.println("request parameter : " + request.getHeader("request-parameter"));
-        System.out.println("response : " + response);
-        System.out.println("authRedirectUri : " + authRedirectUri);
-        System.out.println("🩵이거 끝나면 " + authRedirectUri + "로 accessToken 보내줄거임");
     }
 
     private Cookie createCookie(String key, String value) {

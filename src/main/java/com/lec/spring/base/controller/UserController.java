@@ -27,7 +27,7 @@ public class UserController {
 
     @PostMapping("/student")
     public ResponseEntity<?> registerStudent(@RequestBody UserRegistrationDTO registration) {
-        System.out.println("student 권한으로 회원가입 요청");
+
         User user = userService.registerUser(registration, "ROLE_STUDENT");
         if(user == null){
             return new ResponseEntity<>("Student registered failed", HttpStatus.CONFLICT);
@@ -38,7 +38,6 @@ public class UserController {
 
     @PostMapping("/trainer")
     public ResponseEntity<?> registerTrainer(@RequestBody UserRegistrationDTO registration) {
-        System.out.println("trainer 권한으로 회원가입 요청");
         User user = userService.registerUser(registration, "ROLE_TRAINER");
         if(user == null){
             return new ResponseEntity<>("Trainer registered failed", HttpStatus.CONFLICT);
@@ -58,17 +57,12 @@ public class UserController {
     }
 
 
-    @GetMapping("/user") // 지윤
+    @GetMapping("/user")
     public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal PrincipalDetails userDetails){
-        System.out.println("🖤JWTFilter 끝나면 와야 함 그리고 클라이언트 단으로 다시 보낼 거야");
-        System.out.println("##########UserDetails: " + userDetails.toString());  // userDetails 객체 상태 확인
 
-//        userService.findByUsername(userDetails.getUsername());
 
         if (userDetails != null) {
-//            User user = userDetails.getUser();
             User user = userService.findByUsername(userDetails.getUsername());
-            System.out.println("###########현재 회원: " + user);
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

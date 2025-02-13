@@ -31,23 +31,18 @@ public class ChatController {
             @RequestParam(name = "userId") Long userId,
             @RequestParam(name = "trainerId") Long trainerId
     ) {
-        System.out.println(userId);
-        System.out.println(trainerId);
-        System.out.println(userId + "와 " + trainerId + "간의 채팅방이 생성되었습니다.");
         return ResponseEntity.ok(chatService.createOrGetChat(userId, trainerId));
     }
 
     // 채팅방 나가기
     @DeleteMapping("/{chatId}/leave/{userId}")
     public ResponseEntity<Void> leaveChat(@PathVariable Long chatId, @PathVariable Long userId) {
-        System.out.println(userId + "가" + chatId + "을 떠났습니다.");
         chatService.leaveChat(chatId, userId);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/rooms/{userId}")
     public ResponseEntity<List<ChatDTO>> getUserChats(@PathVariable Long userId) {
-        System.out.println("채팅방 목록을 불러옴");
 
         // 사용자가 참여한 채팅방 목록 가져오기
         List<Chat> chats = chatService.getUserChats(userId);
@@ -70,8 +65,6 @@ public class ChatController {
             @PathVariable Long chatId,
             @RequestParam Long userId // 로그인된 사용자 ID를 프론트에서 전달
     ) {
-        System.out.println(chatId + "방의 메시지가 읽음 처리됨 (요청한 사용자: " + userId + ")");
-
         // 로그인한 사용자가 보낸 메시지는 읽음 처리 X
         chatService.updateChatIsChecked(chatId, userId);
 

@@ -4,7 +4,6 @@ import java.util.Map;
 
 public class GoogleUserInfo implements OAuth2UserInfo {
 
-    // ↓ loadUser() 로 받아온 OAuth2User.getAttributes() 결과를 담을거다
     private Map<String, Object> attributes;
 
     public GoogleUserInfo(Map<String, Object> attributes) {
