@@ -18,15 +18,12 @@ public class PrincipalDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        // DB 조회
         User user = userService.findByUsername(username);
 
-        if(user != null) {
-            // UserDetails 에 담아서 return 하면 AuthenticationManager 가 검증함
+        if (user != null) {
             return new PrincipalDetails(user);
         }
 
-        // 해당 username 의 user 가 없다면
         throw new UsernameNotFoundException(username);
     }
 }

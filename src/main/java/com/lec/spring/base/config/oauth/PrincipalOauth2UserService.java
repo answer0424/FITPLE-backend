@@ -79,7 +79,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             newUser = userRepository.save(newUser);
 
             if (newUser != null) {
-                System.out.println("\n💛oauth2 인증 회원 가입 성공\n");
                 user = userRepository.findByUsername(username);
             }
         }

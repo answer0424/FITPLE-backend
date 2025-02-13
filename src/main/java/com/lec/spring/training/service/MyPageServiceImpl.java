@@ -65,7 +65,6 @@ public class MyPageServiceImpl implements MyPageService {
 
         try {
             reservation.setStatus(ReservationStatus.valueOf(status));
-            System.out.println("받은 값 : " + reservation.getStatus());
 
             if (status.equals("운동중")) {
                 reservation.setStartTime(LocalTime.now());
@@ -82,7 +81,6 @@ public class MyPageServiceImpl implements MyPageService {
                 int stamp = training.getTotal_stamps() + 1;
                 if(stamp >= 10) {
                     // 스탬프  - 쿠폰 변환
-                    System.out.println("들어옴?");
                     StampToCoupon(training, stamp);
                 } else {
                     training.setTotal_stamps(training.getTotal_stamps() + 1);
@@ -190,16 +188,12 @@ public class MyPageServiceImpl implements MyPageService {
                 )
         );
 
-        System.out.println("studentList: " + studentList);
-
         return studentList;
     }
 
     @Override
     public CouponPageDTO getMyTrainerPage(Long userId) {
         Long trainerId = trainingRepository.findByUserId(userId).get(0).getTrainer().getId();
-        System.out.println("trainerId: " + trainerId);
-
         return changeCouponPageByTrainer(userId, trainerId);
     }
 
@@ -234,7 +228,6 @@ public class MyPageServiceImpl implements MyPageService {
                         .orElseThrow(() -> new IllegalArgumentException("트레이너 목록에서 검색에 실패했습니다")))
                 .times(times)
                 .build();
-        System.out.println("traing : " + training);
         trainingRepository.saveAndFlush(training);
 
     }
@@ -254,7 +247,6 @@ public class MyPageServiceImpl implements MyPageService {
                 .status(ReservationStatus.운동전)  // 기본 상태를 '운동전'으로 설정
                 .build();
 
-        System.out.println("reservation : " + reservation);
 
         reservation = reservationRepository.save(reservation);
 
@@ -283,8 +275,6 @@ public class MyPageServiceImpl implements MyPageService {
 
     @Override
     public long findTrainingId(Long studentId, Long trainerId) {
-        System.out.println("studentId: " + studentId);
-        System.out.println("trainerId: " + trainerId);
         Training training = trainingRepository.findByUserIdAndTrainerIdEquals(studentId, trainerId);
         return training.getId();
     }

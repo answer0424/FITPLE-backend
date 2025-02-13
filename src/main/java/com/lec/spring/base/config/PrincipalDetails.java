@@ -22,7 +22,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     private String profileImage;
 
     public User getUser(){
-        System.out.println("여기 유저 정보다!! = >>>"  + user);
         return user;
     }
 
@@ -99,7 +98,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return true;
     }
 
-    // OAuth2User 인터페이스 구현
     @Override
     public Map<String, Object> getAttributes() {
         return attributes;

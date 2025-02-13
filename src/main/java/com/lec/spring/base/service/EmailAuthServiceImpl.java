@@ -21,17 +21,14 @@ public class EmailAuthServiceImpl implements EmailAuthService {
             redisTemplate.opsForValue().set(PREFIX + email, authCode, 3, TimeUnit.MINUTES);
 
             //저장
-            System.out.println("성공적으로 저장되었습니다 : " + email + "인증번호 : " + authCode);
         }catch (Exception e) {
            e.printStackTrace();
-           System.out.println("실패 : " + e.getMessage());
        }
     }
 
     @Override
     public String getAuthCode(String email) {
         String result = (String)redisTemplate.opsForValue().get(PREFIX + email);
-        System.out.println("##########인증번호 가져오기 : " + result);
         return result;
     }
 
@@ -39,7 +36,6 @@ public class EmailAuthServiceImpl implements EmailAuthService {
     @Override
     public void deletedAuthCode(String email) {
         Boolean result = redisTemplate.delete(PREFIX + email);
-        System.out.println("###########인증번호가 삭제되었나요 ? :" +result);
     }
 
 

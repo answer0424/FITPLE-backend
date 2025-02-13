@@ -79,7 +79,6 @@ public class JWTFilter extends OncePerRequestFilter {
             HBTI hbti = jwtUtil.getHbti(token);
             String profileImage = jwtUtil.getProfileImage(token);
 
-            System.out.println("✅ JWT 파싱 완료: userId=" + id + ", username=" + username + ", authority=" + authority);
 
             // User 객체 생성
             User user = User.builder()
@@ -110,10 +109,8 @@ public class JWTFilter extends OncePerRequestFilter {
 
 
         } catch (Exception e) {
-            System.err.println("❌ JWT 파싱 오류: " + e.getMessage());
+            System.err.println(e.getMessage());
         }
-        System.out.println("🤎여기서 컨트롤러로 가야 함");
-        // 다음 필터로 전달
         filterChain.doFilter(request, response);
     }
 

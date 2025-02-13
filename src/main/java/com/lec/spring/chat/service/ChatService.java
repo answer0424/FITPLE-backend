@@ -36,34 +36,24 @@ public class ChatService {
     // 1:1 채팅방 생성 또는 기존 채팅방 반환
     @Transactional
     public Chat createOrGetChat(Long userId, Long trainerId) {
-        System.out.println("createOrGetChat() 호출");
         // 🔍 기존 채팅방이 있는지 확인
         Optional<Long> existingChatId = userChatRepository.findCommonChatId(userId, trainerId);
         if (existingChatId.isPresent()) {
-            System.out.println("이미 존재하는 채팅방 ID: " + existingChatId.get());
             return chatRepository.findById(existingChatId.get())
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 채팅방 ID"));
         }
 
 
         // 🔍 유저와 트레이너 정보 조회
-        System.out.println("유저와 트레이너 정보 조회");
         User user = chatUserRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 사용자 ID"));
         User trainer = chatUserRepository.findById(trainerId).orElseThrow(() -> new IllegalArgumentException("유효하지 않은 트레이너 ID"));
 
-        // 🔥 새로운 채팅방 생성 (ID 먼저 생성해야 함)
-        System.out.println("채팅방 생성");
-
         Chat chat = chatRepository.saveAndFlush(new Chat());
-        System.out.println("생성된 채팅방 " + chat);
-        System.out.println(chatRepository.findById(chat.getId()));
 
 
         // 🔥 UserChatId를 명확히 설정
         UserChatId userChatId1 = new UserChatId(userId, chat.getId());
         UserChatId userChatId2 = new UserChatId(trainerId, chat.getId());
-        System.out.println("저장된 유저 정보" + userChatId1);
-        System.out.println("저장된 트레이너 정보" + userChatId2);
 
 
 
@@ -111,7 +101,6 @@ public class ChatService {
         Chat chat = chatRepository.findById(chatId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 채팅방 ID"));
 
-        System.out.println("메시지 저장 중");
         // 메시지 저장
         Message message = Message.builder()
                 .user(sender)
@@ -122,11 +111,9 @@ public class ChatService {
                 .build();
 
         Message savedMessage = messageRepository.save(message);
-        System.out.println("메시지 저장 완료");
 
         messageDTO.setMessageId(savedMessage.getMessageId());
 
-        System.out.println("메시지가 저장되었습니다: " + message);
 
         // MessageDTO 변환 후 반환
         return MessageDTO.fromEntity(savedMessage);

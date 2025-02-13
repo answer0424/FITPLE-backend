@@ -49,7 +49,6 @@ public class UserService {
     String dir;
 
     public User registerUser(UserRegistrationDTO registrationDTO, String role) {
-        System.out.println("회원가입을 시도하는 유저 정보 등록하는 중");
         String email = registrationDTO.getEmail();
         String username = registrationDTO.getUsername();
         String password = passwordEncoder.encode(registrationDTO.getPassword());
@@ -93,9 +92,6 @@ public class UserService {
 
             user.setGym(gym);   // gymId 저장
             user = userRepository.save(user);
-            System.out.println("트레이너로 회원가입 되었습니다." + gym);
-        } else{
-            System.out.println("학생으로 회원가입 되었습니다." + user);
         }
 
        return user;
@@ -129,12 +125,10 @@ public class UserService {
     //유저 프로필 이미지 변경
     @Transactional(rollbackOn = Exception.class)
     public boolean changeUserProfileImage(MultipartFile image, Long userId) {
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n 프사 바뀌어요요");
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("유저 검색에 실패했습니다."));
         try {
             String ddir = imgService.saveImage(image, dir);
-            System.out.println(ddir);
             user.setProfileImage(ddir);
             userRepository.saveAndFlush(user);
             return true;

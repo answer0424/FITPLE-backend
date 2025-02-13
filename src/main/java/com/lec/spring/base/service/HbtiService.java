@@ -67,7 +67,6 @@ public class HbtiService implements HbtiMatcher{
      * @return 각 성향의 퍼센트 맵 (M/B, E/I, C/N, P/G)
      */
     public Map<String, Double> calculateHbtiPercentages(List<Integer> answers) {
-        System.out.println("calculateHbtiPercentages 진입");
         if (answers.size() != 12) {
             throw new IllegalArgumentException("12개의 답변이 필요합니다.");
         }
@@ -105,7 +104,6 @@ public class HbtiService implements HbtiMatcher{
         percentages.put("P", pPercent);
         percentages.put("G", gPercent);
 
-        System.out.println("calculateHbtiPercentages 끝");
         return percentages;
     }
 
@@ -120,7 +118,6 @@ public class HbtiService implements HbtiMatcher{
         hbti.append(percentages.get("E") >= percentages.get("I") ? "E" : "I");
         hbti.append(percentages.get("C") >= percentages.get("N") ? "C" : "N");
         hbti.append(percentages.get("P") >= percentages.get("G") ? "P" : "G");
-        System.out.println("determineHbti 끝");
         return hbti.toString();
     }
 
@@ -131,21 +128,17 @@ public class HbtiService implements HbtiMatcher{
      */
     @Transactional
     public void processHbti(Long userId, List<Integer> answers) {
-        System.out.println("서비스 진입");
 
         // 퍼센트 계산
         Map<String, Double> percentages = calculateHbtiPercentages(answers);
 
         // HBTI 결과 결정
         String hbti = determineHbti(percentages);
-        System.out.println("hbti = " + hbti);
 
         // 유저 정보 조회
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        System.out.println(userId + "유저 아이디");
-        System.out.println(user.toString());
 
         // 소수점 1자리로 반올림
         double roundedMb = roundToOneDecimalPlace(percentages.get("M"));
@@ -163,7 +156,6 @@ public class HbtiService implements HbtiMatcher{
         hbtiEntity.setPgScore(roundedPg);
         hbtiEntity.setHbti(hbti);
 
-        System.out.println("processHbti () 받아온 값 : " + hbtiEntity.toString());
         // 저장
         hbtiRepository.save(hbtiEntity);
     }
