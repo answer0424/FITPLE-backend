@@ -62,6 +62,6 @@ public class User extends BaseEntity {
     @Column(length = 20)
     private String authority;
 
-    @Column(length = 50)
+    @Column(columnDefinition = "LONGTEXT")
     private String profileImage;
 }
