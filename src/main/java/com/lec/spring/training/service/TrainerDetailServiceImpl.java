@@ -70,9 +70,11 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                                         PrincipalDetails user,
                                         List<String> skills,
                                         List<MultipartFile> images) throws IOException {
+        Long trianerId = user.getId();
         try {
             // 현재 로그인한 유저 가져오기
             User trainer = user.getUser();
+
             System.out.println("현재 로그인한 유저 : " + trainer.getUsername());
 
             if (!trainer.getAuthority().equals("ROLE_TRAINER")) {
@@ -110,6 +112,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
             // 신규 트레이너 프로필 생성
             TrainerProfile trainerProfile = TrainerProfile.builder()
                     .trainer(trainer)
+                    .id(trianerId)
                     .career(trainerProfileDTO.getCareer())
                     .content(trainerProfileDTO.getContent())
                     .perPrice(trainerProfileDTO.getPerPrice())
