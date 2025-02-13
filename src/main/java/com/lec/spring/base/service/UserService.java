@@ -54,9 +54,7 @@ public class UserService {
         String username = registrationDTO.getUsername();
         String password = passwordEncoder.encode(registrationDTO.getPassword());
         String nickname = registrationDTO.getNickname();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
         Date birth = registrationDTO.getBirth();
-        String formatBirth = formatter.format(birth);
         String address = registrationDTO.getAddress();
         String gymName = registrationDTO.getGymName();
         Double latitude = registrationDTO.getLatitude();
