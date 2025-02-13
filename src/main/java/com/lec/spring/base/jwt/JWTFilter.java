@@ -71,6 +71,7 @@ public class JWTFilter extends OncePerRequestFilter {
             String email = jwtUtil.getEmail(token);
             String nickname = jwtUtil.getNickname(token);
             String brith = jwtUtil.getBirth(token);
+            Date birthDate = (brith != null) ? new Date(brith) : null;
             String provider = jwtUtil.getProvider(token);
             String address = jwtUtil.getAddress(token);
             String authority = jwtUtil.getAuthority(token);
@@ -90,7 +91,7 @@ public class JWTFilter extends OncePerRequestFilter {
                     .provider(provider)
                     .address(address)
                     .authority(authority)
-                    .birth(new Date(brith))
+                    .birth(birthDate)
                     .gym(gym)
                     .hbti(hbti)
                     .profileImage(profileImage)
