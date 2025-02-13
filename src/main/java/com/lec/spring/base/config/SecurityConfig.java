@@ -82,7 +82,7 @@ public class SecurityConfig {
                         .requestMatchers("/member/send-reset-email").permitAll()
                         .requestMatchers("/member/reset-password").permitAll()
                         .requestMatchers("/member/detail").permitAll()  //지윤
-                        .requestMatchers("member/detail/write").permitAll()
+                        .requestMatchers("/member/detail/write").permitAll()
                         .requestMatchers("/api/hbti/calculate").permitAll()
                         .requestMatchers("/api/hbti/type/*").permitAll()
                         .requestMatchers("/img/**").permitAll()
