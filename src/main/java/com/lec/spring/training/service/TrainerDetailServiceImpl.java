@@ -184,7 +184,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
     // 특정 트레이너 ID로 트레이너 프로필 조회 (DTO 변환)
     public TrainerProfileReadDTO getTrainerProfileById(Long trainerId) {
         TrainerProfile trainerProfile = trainerProfileRepository.findByTrainerId(trainerId)
-                .orElseThrow(() -> new RuntimeException("신규등록한 회원임다.")) ;
+                .orElse(null);
 
         return convertToDTO(trainerProfile);
     }
