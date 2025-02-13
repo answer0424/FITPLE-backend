@@ -2,7 +2,7 @@ insert into hbti ( user_id, HBTI, mb_score
                  , ei_score
                  , cn_score
                  , pg_score)
-VALUES (126, 'MENP', 68, 88, 32, 88);
+VALUES (1, 'MENP', 68, 88, 32, 88);
 
 delete from hbti where user_id = 126;
 
@@ -88,7 +88,7 @@ TRUNCATE TABLE user_chat;
 
 TRUNCATE TABLE training;
 
-SELECT * FROM user_chat WHERE user_id = 51;
+SELECT * FROM user;
 
 
 

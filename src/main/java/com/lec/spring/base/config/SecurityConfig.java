@@ -91,12 +91,12 @@ public class SecurityConfig {
                         .requestMatchers("/api/chat/**").permitAll()
                         .requestMatchers("/api/quiz/**").permitAll()
                         .requestMatchers("/api/quiz/search").permitAll()
-                        .requestMatchers("/ws-chat/**").permitAll()
-                        .requestMatchers("/member/**").permitAll()
-                        .requestMatchers("/member/register/add-schedule/{userId}").permitAll()
+                        .requestMatchers("/ws-chat/**").authenticated()
+                        .requestMatchers("/member/**").authenticated()
+                        .requestMatchers("/member/register/add-schedule/{userId}").hasRole("Trainer")
                         .requestMatchers("/member/{userId}/register/search").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/member/{userid}/calendar/student/{studentId}").permitAll()
+                        .requestMatchers("/member/{userid}/calendar/student/{studentId}").authenticated()
 
                         .anyRequest().authenticated());
 
