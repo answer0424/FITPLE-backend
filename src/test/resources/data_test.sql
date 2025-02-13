@@ -19,7 +19,16 @@ INSERT INTO HBTI ( user_id, HBTI, mb_score
                  , pg_score)
 VALUES
 -- MICP (3)
-(130, 'BENG', 70, 20, 58, 90);
+(177, 'MICG', 70, 20, 58, 90);
+
+
+update hbti
+set hbti = 'MICG'
+where user_id= 177;
+
+update user
+set gym_id =1
+where id = 177;
 
 # 매칭페이지 데이터 불리기 위해...
 UPDATE HBTI
@@ -132,3 +141,8 @@ where id = 1;
 update user
 set username = 'TRAINER11'
 where id = 51;
+
+
+update trainer_profile
+set is_access='승인'
+where id=124;
