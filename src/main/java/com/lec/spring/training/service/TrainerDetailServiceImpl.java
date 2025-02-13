@@ -111,7 +111,6 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
             // 신규 트레이너 프로필 생성
             TrainerProfile trainerProfile = TrainerProfile.builder()
                     .trainer(trainer)
-                    .id(trianerId)
                     .career(trainerProfileDTO.getCareer())
                     .content(trainerProfileDTO.getContent())
                     .perPrice(trainerProfileDTO.getPerPrice())

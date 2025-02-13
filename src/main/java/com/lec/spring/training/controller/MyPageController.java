@@ -293,8 +293,8 @@ public class MyPageController{
     }
 
     // 트레이너 페이지에서 일정 삭제 처리 로직
-    @DeleteMapping("/calendar/delete-schedule")
-    public ResponseEntity<?> deleteSchedule(@RequestBody Long reservationId) {
+    @DeleteMapping("/calendar/delete-schedule/{reservationId}")
+    public ResponseEntity<?> deleteSchedule(@PathVariable Long reservationId) {
         try {
             myPageService.deleteSchedule(reservationId);
             return new ResponseEntity<>("삭제 되었습니다", HttpStatus.OK);
