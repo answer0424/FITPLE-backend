@@ -206,7 +206,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
         return TrainerProfileReadDTO.builder()
                 .id(trainerProfile.getId())
                 .trainerId(trainerProfile.getTrainer().getId())
-                .trainerName(trainerProfile.getTrainer().getUsername())
+                .trainerName(trainerProfile.getTrainer().getNickname())
                 .trainerEmail(trainerProfile.getTrainer().getEmail())
                 .trainerProfileImage(profileImage) //
                 .perPrice(trainerProfile.getPerPrice())
