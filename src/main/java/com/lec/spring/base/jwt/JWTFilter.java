@@ -91,6 +91,7 @@ public class JWTFilter extends OncePerRequestFilter {
                     .provider(provider)
                     .address(address)
                     .authority(authority)
+//                    .birth(new Date(brith))
                     .birth(birthDate)
                     .gym(gym)
                     .hbti(hbti)

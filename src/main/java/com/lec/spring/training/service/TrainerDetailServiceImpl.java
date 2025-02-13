@@ -90,8 +90,6 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 skillsDTO.setImg(images.get(i));
                 certificationSkills.add(skillsDTO);
             }
-//            trainerProfileDTO.setCertificationSkills(certificationSkills);
-
 
             // 트레이너 프로필이 이미 존재하는지 확인
             Optional<TrainerProfile> existingProfile = trainerProfileRepository.findByTrainer(trainer);
@@ -170,9 +168,6 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
             System.out.println("수정완료 : " + profile.getId());
 
-            // 트레이너 프로필 저장
-//            trainerProfileRepository.save(profile);
-
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -208,10 +203,10 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 .trainerId(trainerProfile.getTrainer().getId())
                 .trainerName(trainerProfile.getTrainer().getUsername())
                 .trainerEmail(trainerProfile.getTrainer().getEmail())
-                .trainerProfileImage(profileImage) //
+                .trainerProfileImage(profileImage)
                 .perPrice(trainerProfile.getPerPrice())
                 .content(trainerProfile.getContent())
-                .career(trainerProfile.getCareer()) //
+                .career(trainerProfile.getCareer())
                 .isAccess(trainerProfile.getIsAccess().name())
                 .certifications(trainerProfile.getCertificationList().stream()
                         .map(cert -> CertificationDTO.builder()

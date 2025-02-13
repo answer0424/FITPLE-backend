@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 public class EmailAuthServiceImpl implements EmailAuthService {
 
 
-    // auth-code:cooconut0226@gmail.com <- 이런식으로 authCode가 작성이 된다.(key)
     private static final String PREFIX = "auth-code:";
     private final RedisTemplate redisTemplate;
 
