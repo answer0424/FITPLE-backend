@@ -67,6 +67,7 @@ public class MyPageServiceImpl implements MyPageService {
 
         try {
             reservation.setStatus(ReservationStatus.valueOf(status));
+            System.out.println("받은 값 : " + reservation.getStatus());
 
             if (status.equals("운동중")) {
                 reservation.setStartTime(LocalTime.now());

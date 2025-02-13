@@ -19,7 +19,7 @@ INSERT INTO HBTI ( user_id, HBTI, mb_score
                  , pg_score)
 VALUES
 -- MICP (3)
-(126, 'BENG', 70, 20, 58, 90);
+(130, 'BENG', 70, 20, 58, 90);
 
 # 매칭페이지 데이터 불리기 위해...
 UPDATE HBTI
@@ -122,5 +122,13 @@ VALUES (62, '2025-02-01 09:00:00', '운동완료', '09:00:00', 45),
        (62, '2025-02-12 06:45:00', '운동취소', '06:45:00', 45),
        (63, '2025-02-13 17:30:00', '운동완료', '17:30:00', 30);
 update training
-set user_id = 1 , trainer_id = 52
+set total_stamps = 9
 where id = 2;
+
+update user
+set username = 'USER1'
+where id = 1;
+
+update user
+set username = 'TRAINER11'
+where id = 51;

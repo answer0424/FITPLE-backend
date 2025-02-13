@@ -27,6 +27,7 @@ public class TrainerMatchController {
 
     @GetMapping("/{userId}/result/match")
     public ResponseEntity<?> getMatchingTrainers(@PathVariable Long userId) {
+        System.out.println("userId = " + userId);
         try {
             // 1. 먼저 HBTI 매칭 결과를 가져옴
             Map<String, Object> matchResult = hbtiMatcher.findTopMatches(userId);
@@ -44,7 +45,7 @@ public class TrainerMatchController {
             if (matchingTrainers.isEmpty()) {
                 return ResponseEntity.noContent().build();
             }
-
+            System.out.println("matchingTrainers : " + matchingTrainers);
             log.info("매칭된 트레이너 수: {}", matchingTrainers.size());
             return ResponseEntity.ok(matchingTrainers);
         } catch (EntityNotFoundException e) {
@@ -61,7 +62,7 @@ public class TrainerMatchController {
     @GetMapping("/search")
     public ResponseEntity<?> getTrainers() {
         List<User> trainer = userRepository.findByAuthorities( "ROLE_TRAINER");
-        System.out.println("trainer: " + trainer);
+//        System.out.println("trainer: " + trainer);
         return ResponseEntity.ok(trainer);
     }
 

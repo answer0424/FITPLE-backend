@@ -1534,6 +1534,7 @@ WHERE u.authority = 'ROLE_TRAINER';
 select *
 from user;
 
+
 select *
 from hbti;
 
