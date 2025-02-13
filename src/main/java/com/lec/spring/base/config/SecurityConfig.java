@@ -83,6 +83,7 @@ public class SecurityConfig {
                         .requestMatchers("/member/reset-password").permitAll()
                         .requestMatchers("/member/detail").permitAll()
                         .requestMatchers("member/detail/write").permitAll()
+                        .requestMatchers("/member/calendar/delete-schedule/**").permitAll()
                         .requestMatchers("/api/hbti/calculate").permitAll()
                         .requestMatchers("/api/hbti/type/*").permitAll()
                         .requestMatchers("/img/**").permitAll()

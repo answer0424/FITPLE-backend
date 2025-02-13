@@ -288,13 +288,14 @@ public class MyPageController{
             userService.deleteUser(userId);
             return new ResponseEntity<>("탈퇴처리 되었습니다", HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
     // 트레이너 페이지에서 일정 삭제 처리 로직
-    @DeleteMapping("/calendar/delete-schedule")
-    public ResponseEntity<?> deleteSchedule(@RequestBody Long reservationId) {
+    @DeleteMapping("/calendar/delete-schedule/{reservationId}")
+    public ResponseEntity<?> deleteSchedule(@PathVariable Long reservationId) {
         try {
             myPageService.deleteSchedule(reservationId);
             return new ResponseEntity<>("삭제 되었습니다", HttpStatus.OK);
