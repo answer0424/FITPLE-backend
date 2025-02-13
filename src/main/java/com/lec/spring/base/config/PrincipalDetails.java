@@ -22,7 +22,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     private String profileImage;
 
     public User getUser(){
-        System.out.println("여기 유저 정보다!! = >>>"  + user);
         return user;
     }
 
@@ -32,19 +31,10 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         this.nickname = user.getNickname();
         this.email = user.getEmail();
         this.profileImage = user.getProfileImage();
-        System.out.println("일반 로그인 용 유저 정보다!! = >>>> " + user + nickname + email + profileImage);
     }
 
     // Oauth2 인증용 생성자
     public PrincipalDetails(User user, Map<String, Object> attributes) {
-        System.out.println("""
-        UserDetails(user, oauth attributes) 생성:
-            user: %s
-            attributes: %s
-            username: %s
-            email: %s
-            profileImage: %s
-        """.formatted(user, attributes, user.getUsername(), user.getEmail(), user.getProfileImage()));
 
         this.user = user;
         this.attributes = attributes;
@@ -108,7 +98,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return true;
     }
 
-    // OAuth2User 인터페이스 구현
     @Override
     public Map<String, Object> getAttributes() {
         return attributes;

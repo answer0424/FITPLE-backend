@@ -20,7 +20,7 @@ public class KakaoUserInfo implements OAuth2UserInfo {
 
     @Override
     public String getProviderId() {
-        return attributes.get("id").toString();  // kakao 는 id가 숫자값인데 이 경우 Long 타입이 리턴되니까 toString() 으로 리턴해준다.
+        return attributes.get("id").toString();
     }
 
     @Override
@@ -28,14 +28,9 @@ public class KakaoUserInfo implements OAuth2UserInfo {
         return null;
     }
 
-//    @Override
-//    public String getEmail() {
-//        return (String) kakaoAccountAttributes.get("email");  // 이메일을 kakao_account에서 가져오기
-//    }
 
     @Override
     public String getName() {
-        // kakao_account.profile.nickname 값
         return (String) profileAttributes.get("nickname");
     }
 }

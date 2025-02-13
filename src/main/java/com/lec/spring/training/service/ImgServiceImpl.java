@@ -84,8 +84,6 @@ public class ImgServiceImpl implements ImgService {
 
         Path relativePath = uploadPath.relativize(targetPath);
 
-        System.out.println("상대 경로가 나온다면?" + dir + "/" + relativePath);
-
         return dir + "/" + relativePath;
     }
 

@@ -32,25 +32,12 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        System.out.println("❤️클라이언트에서 사용자가 요청을 하면 여기에 가장 먼저 들어와야 겠지??");
         // 사용자 프로필 정보 가져오기
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        System.out.println("""
-                [loadUser() 호출]
-                  ClientRegistration: %s
-                  RegistratoinId: %s
-                  AccessToken: %s
-                  OAuth2User Attributes: %s
-                """.formatted(userRequest.getClientRegistration()  // ClientRegistration
-                , userRequest.getClientRegistration().getRegistrationId()  // String. 어떤 OAuth로 로그인 했는지 알수 있다.
-                , userRequest.getAccessToken().getTokenValue() // String
-                , oAuth2User.getAttributes()  // Map<String, Object> ← 사용자 프로필 정보가 있다.
-        ));
 
         // 강제 회원가입 진행
         String provider = userRequest.getClientRegistration().getRegistrationId();
-        System.out.println("🩷" +provider+ " 로 강제 회원가입 하는 중");
 
         OAuth2UserInfo oAuth2UserInfo = switch (provider.toLowerCase()) {
             case "google" -> new GoogleUserInfo(oAuth2User.getAttributes());
@@ -72,18 +59,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         }
         String nickname = username;
 
-        System.out.println();
 
-
-        System.out.println("""
-                🧡[OAuth2인증 회원 정보]
-                  username: %s
-                  nickname: %s
-                  email: %s
-                  password: %s
-                  provider: %s
-                  providerId: %s
-                """.formatted(username, nickname, email, password, provider, providerId));
 
         // 회원가입 전 이미 가입된 회원인지 확인
         User user = userRepository.findByUsername(username);
@@ -103,13 +79,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             newUser = userRepository.save(newUser);
 
             if (newUser != null) {
-                System.out.println("\n💛oauth2 인증 회원 가입 성공\n");
                 user = userRepository.findByUsername(username);
-            } else {
-                System.out.println("\noauth2 인증 회원 가입 실패 !\n");
             }
-        } else {
-            System.out.println("\n이미 가입된 회원입니다.\n");
         }
 
         return new PrincipalDetails(user, oAuth2User.getAttributes());

@@ -55,7 +55,6 @@ public class MyPageController{
     public ResponseEntity<?> getMyPageUserInfo(@PathVariable Long userid) {
         try {
             MyPageUserInfoDTO userInfo = userService.getMyPageUserInfo(userid);
-            System.out.println(userInfo);
             return new ResponseEntity<>(userInfo, HttpStatus.OK);
         } catch (Exception e){
             e.printStackTrace();
@@ -68,10 +67,8 @@ public class MyPageController{
     public ResponseEntity<?> getStudentCalendar(@PathVariable Long userid,
                                                 @RequestParam int year,
                                                 @RequestParam int month) {
-//        System.out.println("진입\n\n\n\n\n\n\n\n");
         try {
             List<MonthReservationDTO> monthDTO = myPageService.filterSchedulesByMonth(userid, year, month+1);
-//            System.out.println(monthDTO);
             return new ResponseEntity<>(monthDTO, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -92,7 +89,6 @@ public class MyPageController{
     // 학생 마이페이지 스탬프 조회 로직
     @GetMapping("/{userid}/stamp")
     public ResponseEntity<?> getStudentStamp(@PathVariable Long userid) {
-//        System.out.println("\n\n\n컨트롤\n\n" + userid);
         try {
             CouponPageDTO couponPageDTO = myPageService.getMyTrainerPage(userid);
 
@@ -117,10 +113,7 @@ public class MyPageController{
     // 트레이너 페이지 일정 등록 학생 목록 조회 로직 ok
     @GetMapping("/{userid}/register")
     public ResponseEntity<?> registerSchedule(@PathVariable Long userid) {
-        System.out.println("목록조회 시작합니담");
         List<StudentListDTO> studentListDTO = myPageService.getMyStudentList(userid);
-        System.out.println("트레이너의 회원리스트 입니다 : " + studentListDTO);
-        System.out.println();
         if(!studentListDTO.isEmpty()) {
 
             return new ResponseEntity<>(studentListDTO, HttpStatus.OK);
@@ -129,35 +122,15 @@ public class MyPageController{
         }
     }
 
-    // 트레이너 페이지에서 학생별 일정 등록 조회 로직
-//    @GetMapping("/{userid}/register/student/{studentId}")
-//    public ResponseEntity<?> registerScheduleForStudent(@PathVariable Long userid,
-//                                                        @PathVariable Long studentId,
-//                                                        @RequestParam int year,
-//                                                        @RequestParam int month) {
-//        List<MonthReservationDTO> monthReservationDTO =
-//                myPageService.getSchedulesByMember(studentId, userid, year, month);
-//
-//        if(!monthReservationDTO.isEmpty()) {
-//
-//            return new ResponseEntity<>(monthReservationDTO, HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>("해당 학생과 일정이 없습니다", HttpStatus.NO_CONTENT);
-//        }
-//    }
-
 
     // 트레이너 페이지에서 학생 검색
-// hjy : 채팅과 관련된 페이지임. ok
     @GetMapping("/{userId}/register/search")
     public ResponseEntity<?> searchStudentsForSchedule(
             @PathVariable Long userId,
             @RequestParam(required = false) String searchQuery) { // 검색어 추가
 
-        System.out.println("##########  SearchStudent 시작 - 검색어: " + searchQuery);
 
         List<StudentDTO> studentList = myPageService.findStudentByChats(userId, searchQuery);
-        System.out.println("학생 리스트 : " + studentList);
 
         if (studentList == null || studentList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -175,11 +148,9 @@ public class MyPageController{
                                                           @PathVariable Long studentId,
                                                           @RequestParam int year,
                                                           @RequestParam int month) {
-        System.out.println("학생 별 일정 시갖ㄱ");
         List<MonthReservationDTO> monthReservationDTO =
                 myPageService.getSchedulesByMember(studentId, userid, year, month);
 
-        System.out.println("monthReservationDTO : " + monthReservationDTO);
 
         if(!monthReservationDTO.isEmpty()) {
 
@@ -189,10 +160,10 @@ public class MyPageController{
         }
     }
 
-//     마이페이지에서 AI 프로필 사진 생성 요청 처리 로직
+    // 마이페이지에서 AI 프로필 사진 생성 요청 처리 로직
     @PostMapping("/{userid}/ai-creation")
     public ResponseEntity<?> createAIProfilePicture(@PathVariable String userid) {
-        //TODO : AI 빨랑 해야하는대...
+        // TODO : AI 빨랑 해야하는대...
         return new ResponseEntity<>("", HttpStatus.OK);
     }
 
@@ -200,9 +171,6 @@ public class MyPageController{
     @PostMapping("/register/add-schedule/{userId}")
     public ResponseEntity<?> addSchedule(@PathVariable Long userId,
                                          @RequestBody CreateReservationDTO reservationDTO) {
-        System.out.println("일정 등록 추가 시작");
-        System.out.println("전송된 데이터: " + reservationDTO);  // 전송된 데이터 확인
-        System.out.println("User ID from JWT: " + userId);
         try {
             MonthReservationDTO reservation = myPageService.addSchedule(reservationDTO, userId);
             return new ResponseEntity<>(reservation, HttpStatus.OK);
@@ -227,7 +195,6 @@ public class MyPageController{
     // 마이페이지에서 회원 정보 수정 처리 로직
     @PatchMapping("/mypage")
     public ResponseEntity<?> updateMemberInfo(@RequestBody MyPageUserInfoDTO newUserInfo) {
-        System.out.println(newUserInfo + "\n\n\n\n들어옴");
         try {
             userService.changeUserProfile(newUserInfo);
             return new ResponseEntity<>("", HttpStatus.OK);
@@ -239,8 +206,6 @@ public class MyPageController{
     // 마이페이지에서 일정 상태 변경 처리 로직
     @PatchMapping("/schedule")
     public ResponseEntity<?> updateSchedule(@RequestBody UpdateScheduleDTO DTO) {
-        System.out.println("\n\n\n\n\n\n\n");
-        System.out.println(DTO);
         try {
             if(myPageService.updateStampStatus(DTO.getStatus(), DTO.getReservationId()))
                 return new ResponseEntity<>("완료되었습니다", HttpStatus.OK);
@@ -257,15 +222,6 @@ public class MyPageController{
             @RequestParam("userId") Long userId,
             @RequestPart(required = false) MultipartFile profileImage
     ) {
-//        String contentType = request.getContentType();
-//        System.out.println("Received Content-Type: " + contentType);
-//        int userId = 1;
-//        String profileImage = "아";
-//        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-//                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-//                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
-//                "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nReceived userId: " + userId);
-//        System.out.println("Received profileImage: " + profileImage);
         try {
             userService.changeUserProfileImage(profileImage, userId);
             return new ResponseEntity<>("", HttpStatus.OK);
@@ -288,7 +244,6 @@ public class MyPageController{
     // 학생 마이페이지에서 쿠폰 사용 처리 로직
     @PatchMapping("/use-coupons")
     public ResponseEntity<?> useCoupons(@RequestBody TrainerIdStudentIdDTO DTO) {
-        System.out.println("들어옴\n\n\n\n\n\n\n\n\n\n" + DTO);
         try {
             if(myPageService.useCoupon(DTO.getStudentId(), DTO.getTrainerId())){
                 return new ResponseEntity<>("쿠폰 사용에 성공했습니다", HttpStatus.OK);
@@ -314,9 +269,7 @@ public class MyPageController{
     //[트레이너 상세페이지 회원정보 불러오기]
     @GetMapping("/detail")
     public ResponseEntity<Object> getMemberDetail(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        System.out.println("principal details : " + principalDetails);
         User user = userService.findByUsername(principalDetails.getUsername());
-        System.out.println("💿현재 로그인한 회원 : " + user);
         return ResponseEntity.ok(user);
     }
 
@@ -324,7 +277,6 @@ public class MyPageController{
     @GetMapping("/update-detail")
     public ResponseEntity<Object> updateMemberDetail(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         TrainerProfileReadDTO userProfile = trainerDetailService.getTrainerProfileById(principalDetails.getUser().getId());
-        System.out.println("현재유저 : " + principalDetails.getUser().getUsername() + " 현재 유저 프로필 : " + userProfile);
         return ResponseEntity.ok(userProfile);
 
     }
@@ -361,11 +313,6 @@ public class MyPageController{
             @RequestPart(required = false) List<MultipartFile> image
     ) {
         try {
-            System.out.println(".....");
-            System.out.println(" ##############삭제될 데이터 : " + trainerProfileDTO.getDeletedSkillsId());
-            System.out.println();
-            System.out.println("현재 로그인한 회원 : " + user.getUsername());
-
             // 비어있는 필드를 체크 (예시: trainerId가 없으면 400 오류)
             if (trainerProfileDTO.getTrainerId() == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("트레이너 ID가 필요합니다.");
@@ -373,7 +320,6 @@ public class MyPageController{
 
             // 트레이너 프로필 생성 서비스 호출
             boolean result = trainerDetailService.createTrainerProfile(trainerProfileDTO, user, skills, image);
-            System.out.println("skills:" + skills + "image:" + image);
 
 
             // 결과 반환
@@ -387,29 +333,6 @@ public class MyPageController{
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다. 다시 시도해주세요.");
         }
     }
-
-
-
-
-//    // [트레이너 상세페이지 수정]
-//    @PatchMapping(value = "/member/detail", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<Boolean> updateTrainerProfile(
-//            @ModelAttribute TrainerProfileDTO trainerProfileDTO,
-//            @AuthenticationPrincipal PrincipalDetails user,
-//            @RequestParam("skills") List<String> skills,
-//            @RequestPart(required = false) List<MultipartFile> image
-//
-//    ) throws IOException {
-//        System.out.println("🚀 skills: " + skills);
-//        System.out.println("🚀 images count: " + image.size());
-//        System.out.println(" deletedcertifications : " + trainerProfileDTO.getDeletedSkillsId());
-//
-//        boolean result = trainerDetailService.updateTrainerProfile(trainerProfileDTO,image);
-//        if(result){
-//            return new ResponseEntity<>(true, HttpStatus.OK);
-//        }else{
-//            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
-//        } }
 
 
 

@@ -56,9 +56,4 @@ public interface MyPageService {
     //- 트레이닝 id 찾기
     long findTrainingId(Long studentId, Long trainerId);
 
-
-
-    // 트레이너 작성 페이지 (이전) 불러오기
-
-
 } //end MyPageService

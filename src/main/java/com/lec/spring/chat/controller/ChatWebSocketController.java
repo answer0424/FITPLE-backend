@@ -25,7 +25,6 @@ public class ChatWebSocketController {
 
     @MessageMapping("/chat/{chatId}/send")
     public void sendMessage(@DestinationVariable Long chatId, MessageDTO messageDTO) {
-        System.out.println(chatId + "인 방에 " + messageDTO.getContent() + "를 보냈습니다.");
         MessageDTO message = chatService.saveMessage(chatId, messageDTO);
 
         // 클라이언트에게 메시지 전송
@@ -46,7 +45,6 @@ public class ChatWebSocketController {
     public void enterChatRoom(ChatRoomStatusDTO status) {
         activeUsers.computeIfAbsent(status.getRoomId(), k -> new HashSet<>()).add(status.getUserId());
 
-        System.out.println("User " + status.getUserId() + " entered room " + status.getRoomId());
     }
 
     // 유저가 채팅방에 나갔을 때
@@ -59,13 +57,11 @@ public class ChatWebSocketController {
             activeUsers.remove(status.getRoomId());
         }
 
-        System.out.println("User " + status.getUserId() + " exiting room " + status.getRoomId());
     }
 
     // 메시지 읽음 처리
     @MessageMapping("/chat/read")
     public void readChatRoom(ChatRoomStatusDTO status) {
-        System.out.println("User " + status.getUserId() + " read messages in room " + status.getRoomId());
 
         // 메시지를 읽음 처리
         // DB에서 해당 메시지를 읽음 처리하는 로직 호출

@@ -73,7 +73,7 @@ public class SecurityConfig {
         // 경로별 인가 설정
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/register/**").permitAll() // 회원가입 엔드포인트는 인증 필요 없음
+                        .requestMatchers("/register/**").permitAll()
                         .requestMatchers("/send-reset-email").permitAll()
                         .requestMatchers("/reset-password").permitAll()
                         .requestMatchers("/login").permitAll()
@@ -81,8 +81,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/hbti/save").permitAll()
                         .requestMatchers("/member/send-reset-email").permitAll()
                         .requestMatchers("/member/reset-password").permitAll()
-                        .requestMatchers("/member/detail").permitAll()  
-                        .requestMatchers("/member/detail/write").permitAll()
+                        .requestMatchers("/member/detail").permitAll()
+                        .requestMatchers("member/detail/write").permitAll()
                         .requestMatchers("/api/hbti/calculate").permitAll()
                         .requestMatchers("/api/hbti/type/*").permitAll()
                         .requestMatchers("/img/**").permitAll()
@@ -133,11 +133,8 @@ public class SecurityConfig {
         // oauth2 설정
         http
                 .oauth2Login(httpSecurityOAuth2LoginConfigurer -> httpSecurityOAuth2LoginConfigurer
-                        // // code 를 받아오는 것이 아니라, 'AccessToken' 과 사용자 '프로필정보'를 한번에 받아온다
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
-                                // 인증 서버의 UserInfo Endpoint 진행
                                 .userService(principalOauth2UserService))
-                        // 인증 성공 후 수행할 작업 (여기서 JWT 발급해야 함)
                         .successHandler(customOauth2SuccessHandler)
                 );
 

@@ -22,7 +22,6 @@ public class ResetPasswordController {
 
             // 이메일 존재 여부 체크
            boolean user = resetPasswordService.isExistEmail(emailMessage.getTo());
-            System.out.println("이메일이 존재하는 User인가요 ? : " + user);
             if (user) {
                 // 이메일 발송
                 String result = resetPasswordService.sendEmail(emailMessage);
@@ -45,7 +44,6 @@ public class ResetPasswordController {
 
             // 비밀번호 변경
             boolean isUpdated = resetPasswordService.updatePassword(id, newPassword);
-            System.out.println("isUpdated : " + isUpdated);
             if (isUpdated) {
                 return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
             } else {

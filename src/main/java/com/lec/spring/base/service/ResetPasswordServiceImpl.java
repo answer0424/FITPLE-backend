@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.FrameworkServlet;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.naming.Context;
 import java.util.HashMap;
@@ -30,8 +31,9 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private static int number;
-    private static final String FRONTEND_URL = "http://localhost:5173";
 
+    @Value("${spring.frontend.url}")
+    private String FRONTEND_URL;
 
     public ResetPasswordServiceImpl(RedisTemplate redisTemplate,
                                     EmailAuthService emailAuthService,
@@ -49,7 +51,6 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
     // # 랜덤 번호 생성
     @Override
     public void createNumber() {
-
         number = (int) (Math.random() * 90000) + 100000;
     }
 
@@ -65,10 +66,7 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
         // 이메일로 회원 정보 조회
         User user = userRepository.findByEmail(emailMessage.getTo());
         if (user == null) {
-            System.out.println("이메일이 등록되지 않았습니다.");
             return "이메일이 등록되지 않았습니다.";
-        } else {
-            System.out.println(user + "에게 이메일이 전송되었습니다.");
         }
 
         // UUID 생성 및 Redis에 저장 (3분 TTL)
@@ -82,7 +80,6 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
                 uuid
         );
 
-        System.out.println(resetLink);
 
         // 이메일 내용 작성 (HTML 형식, React에서 처리하기 용이한 링크 포함)
         String emailContent = "<html>" +
@@ -121,12 +118,10 @@ public class ResetPasswordServiceImpl implements ResetPasswordService {
     @Override
     public boolean updatePassword(Long id, String newPassword) {
         String encodedPassword = passwordEncoder.encode(newPassword);
-        System.out.println("#########encodedPassword: " + encodedPassword);
         Map<String, String> updatelist = new HashMap<String, String>();
         updatelist.put(String.valueOf(id), "id");
         updatelist.put("newPassword", encodedPassword);
         int result = resetPasswordRepository.updatePassword(id, encodedPassword);
-        System.out.println("update : " +result);
         if (result == 1) {
             return true;
         }

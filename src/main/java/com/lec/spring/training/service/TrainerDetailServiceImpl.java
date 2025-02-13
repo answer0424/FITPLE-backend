@@ -104,7 +104,6 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
             Optional<TrainerProfile> existingProfile = trainerProfileRepository.findByTrainer(trainer);
 
             if (existingProfile.isPresent()) {
-                System.out.println("기존 트레이너 프로필이 존재하므로 업데이트를 수행합니다: " + existingProfile.get().getId());
                 trainerProfileDTO.setTrainerId(existingProfile.get().getId());
                 return updateTrainerProfile(certificationSkills, trainerProfileDTO);
             }
@@ -119,12 +118,9 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                     .isAccess(대기) // 문자열 "대기"로 변경
                     .build();
 
-            System.out.println("db저장 시작");
             trainerProfileRepository.save(trainerProfile);
-            System.out.println("TrainerProfile 저장 완료: " + trainerProfile.getId());
 
             saveCertification(certificationSkills, trainerProfile);
-            System.out.println("저장 완료 : " + trainer.getUsername());
 
             return true;
         } catch (Exception e) {
@@ -155,21 +151,17 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
             if (trainerProfileDTO.getDeletedSkillsId() != null && trainerProfileDTO.getDeletedSkillsId().length > 0) {
                 List<Long> certificationIdsToDelete = Arrays.stream(trainerProfileDTO.getDeletedSkillsId())
                         .collect(Collectors.toList());
-                System.out.println("#######삭제될 자격증 리스트 :  " + certificationIdsToDelete);
                 // 각 자격증 ID에 대해 삭제 수행
 
                     certificationRepository.deleteCertifications(profile.getId(), certificationIdsToDelete);
 
 
                 certificationRepository.flush();
-                System.out.println("#########삭제 반영된 자격증 리스트 : " + certificationRepository.findCredentialsByTrainerProfileId(profile.getId()));
             }
 
             // 기존 자격증 이미지 리스트 가져오기
             List<String> existingImageUrls = certificationRepository.findCredentialsByTrainerProfileId(profile.getId());
 
-            System.out.println();
-            System.out.println("existingImageUrls: " + existingImageUrls);
             // 📌 새로운 자격증(사진)이 존재하는 경우에만 저장 수행
             if (certificationSkills != null && !certificationSkills.isEmpty()) {
                 // 새 이미지가 있을 경우 저장
@@ -179,10 +171,6 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
             }
 
 
-            System.out.println("수정완료 : " + profile.getId());
-
-            // 트레이너 프로필 저장
-//            trainerProfileRepository.save(profile);
 
             return true;
         } catch (Exception e) {
@@ -219,10 +207,10 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 .trainerId(trainerProfile.getTrainer().getId())
                 .trainerName(trainerProfile.getTrainer().getNickname())
                 .trainerEmail(trainerProfile.getTrainer().getEmail())
-                .trainerProfileImage(profileImage) //
+                .trainerProfileImage(profileImage)
                 .perPrice(trainerProfile.getPerPrice())
                 .content(trainerProfile.getContent())
-                .career(trainerProfile.getCareer()) //
+                .career(trainerProfile.getCareer())
                 .isAccess(trainerProfile.getIsAccess().name())
                 .certifications(trainerProfile.getCertificationList().stream()
                         .map(cert -> CertificationDTO.builder()
@@ -252,7 +240,6 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 String savePath = null;
                 if (skillsDTO.getImg() != null && !skillsDTO.getImg().isEmpty()) {
                     savePath = imgService.saveImage(skillsDTO.getImg(), trainerDir);
-                    System.out.println("자격증 이미지 저장 경로: " + savePath);
                 }
 
                 // CertificationId 설정 (복합 키)
@@ -260,7 +247,6 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                         ID_GENERATOR.getAndIncrement(),
                         trainerProfile.getId()
                 );
-                System.out.println("#################certificationId: " + certificationId);
 
                 // Certification 객체 생성
                 Certification certification = Certification.builder()
@@ -272,14 +258,12 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 certifications.add(certification);
 
             } catch (IOException e) {
-                System.out.println("자격증 이미지 저장 중 오류 발생: " + e.getMessage());
                 throw new ServiceException("자격증 이미지 저장 실패", e);
             }
         }
 
         if (!certifications.isEmpty()) {
             certificationRepository.saveAll(certifications);
-            System.out.println("트레이너 프로필 및 자격증 저장 완료: " + trainerProfile.getId());
         }
     }
 
