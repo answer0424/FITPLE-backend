@@ -39,6 +39,8 @@ spring:
       hibernate.format_sql: ${FORMAT_SQL}
     hibernate:
       ddl-auto: ${DDL_AUTO}
+    database-platform: org.hibernate.dialect.MySQLDialect
+
 
   security:
     oauth2:

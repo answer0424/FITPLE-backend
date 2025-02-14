@@ -2,7 +2,7 @@ insert into hbti ( user_id, HBTI, mb_score
                  , ei_score
                  , cn_score
                  , pg_score)
-VALUES (197, 'MENP', 68, 88, 32, 88);
+VALUES (126, 'MENP', 68, 88, 32, 88);
 
 delete from hbti where user_id = 126;
 
@@ -135,8 +135,8 @@ set total_stamps = 9
 where id = 2;
 
 update user
-set username = 'USER52'
-where id = 52;
+set username = 'USER1'
+where id = 1;
 
 update user
 set username = 'TRAINER11'
@@ -145,4 +145,4 @@ where id = 51;
 
 update trainer_profile
 set is_access='승인'
-where id=2;
+where id=124;
