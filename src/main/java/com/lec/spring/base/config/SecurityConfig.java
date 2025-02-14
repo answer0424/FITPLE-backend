@@ -92,7 +92,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/chat/**").permitAll()
                         .requestMatchers("/api/quiz/**").permitAll()
                         .requestMatchers("/api/quiz/search").permitAll()
-                        .requestMatchers("/ws-chat/**").authenticated()
+                        .requestMatchers("/ws-chat/**").permitAll()
                         .requestMatchers("/member/**").authenticated()
                         .requestMatchers("/member/register/add-schedule/{userId}").hasRole("Trainer")
                         .requestMatchers("/member/{userId}/register/search").permitAll()
