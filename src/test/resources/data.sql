@@ -1,4 +1,4 @@
-INSERT INTO User (username, password, email, nickname, address, birth, profile_image, authority, created_at)
+INSERT INTO user (username, password, email, nickname, address, birth, profile_image, authority, created_at)
 VALUES ('user1', 'password1', 'user1@example.com', 'Runner1', '서울특별시 강남구 대치동 888', '1990-01-01', '/img/profile1.png',
         'ROLE_STUDENT', NOW()),
        ('user2', 'password2', 'user2@example.com', 'Runner2', '서울특별시 강남구 삼성동 123', '1991-02-02', '/img/profile2.png',
@@ -33,7 +33,7 @@ VALUES ('user1', 'password1', 'user1@example.com', 'Runner1', '서울특별시 �
         '/img/profile16.png', 'ROLE_STUDENT', NOW()),
        ('user17', 'password17', 'user17@example.com', 'Dancer17', '서울특별시 동대문구 청량리동 234', '1996-05-17',
         '/img/profile17.png', 'ROLE_STUDENT', NOW()),
-       ('user18', 'password18', 'user18@example.com', 'Gymnast18', '서울특별시 동대문구 이문동 567', '1997-06-18',
+       ('user18', 'password18', 'user18@example.com', 'gymnast18', '서울특별시 동대문구 이문동 567', '1997-06-18',
         '/img/profile18.png', 'ROLE_STUDENT', NOW()),
        ('user19', 'password19', 'user19@example.com', 'Wrestler19', '서울특별시 중랑구 면목동 890', '1998-07-19',
         '/img/profile19.png', 'ROLE_STUDENT', NOW()),
@@ -100,7 +100,7 @@ VALUES ('user1', 'password1', 'user1@example.com', 'Runner1', '서울특별시 �
        ('user50', 'password50', 'user50@example.com', 'Ninja50', '서울특별시 종로구 삼청동 123', '1999-02-19',
         '/img/profile50.png', 'ROLE_STUDENT', NOW());
 
-INSERT INTO User (username, password, email, nickname, address, birth, profile_image, authority, created_at)
+INSERT INTO user (username, password, email, nickname, address, birth, profile_image, authority, created_at)
 VALUES ('Trainer11', 'password11', 'trainer11@example.com', 'TrainerNick11', 'Trainer Address 11', '1985-05-01',
         '/upload/profile/profile11.png', 'ROLE_TRAINER', NOW()),
        ('Trainer12', 'password12', 'trainer12@example.com', 'TrainerNick12', 'Trainer Address 12', '1986-06-02',
@@ -252,7 +252,7 @@ VALUES ('Trainer11', 'password11', 'trainer11@example.com', 'TrainerNick11', 'Tr
        ('Trainer85', 'password85', 'trainer85@example.com', 'TrainerNick85', '서울특별시 금천구 Trainer Address 85',
         '2004-10-10', '/img/profile85.png', 'ROLE_TRAINER', NOW());
 
-INSERT INTO User (username, password, email, nickname, address, birth, profile_image, authority, created_at)
+INSERT INTO user (username, password, email, nickname, address, birth, profile_image, authority, created_at)
 VALUES
     ('Trainer89', 'password89', 'trainer89@example.com', 'TrainerNick89', '서울특별시 종로구 수표로26길 12', '1985-05-01', '/upload/profile/profile89.png', 'ROLE_TRAINER', NOW()),
     ('Trainer90', 'password90', 'trainer90@example.com', 'TrainerNick90', '서울시 종로구 창신동 328-18', '1985-05-01', '/upload/profile/profile90.png', 'ROLE_TRAINER', NOW()),
@@ -461,7 +461,7 @@ VALUES
     (120, 170, 80000, 'High-intensity training specialist.', '2019-01-15', '거절'),
     (121, 171, 65000, 'Fitness and wellness coach.', '2019-02-16', '승인');
 
-INSERT INTO HBTI ( user_id, HBTI, mb_score
+INSERT INTO hbti ( user_id, hbti, mb_score
                  , ei_score
                  , cn_score
                  , pg_score)
@@ -627,7 +627,7 @@ VALUES
 (125, 'MENP', 75, 86, 33, 86)
 ;
 
-INSERT INTO HBTI (user_id, HBTI, mb_score, ei_score, cn_score, pg_score)
+INSERT INTO hbti (user_id, hbti, mb_score, ei_score, cn_score, pg_score)
 VALUES
 -- MICP (3명)
 (126, 'MICP', 73, 25, 60, 87),
@@ -707,7 +707,7 @@ VALUES
 (170, 'BENG', 34, 85, 32, 30),
 (171, 'BENG', 32, 83, 34, 31);
 
-INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons) VALUES
+INSERT INTO training (user_id, trainer_id, times, total_stamps, coupons) VALUES
                                                                              (1, 51, 10, 5, 0),
                                                                              (38, 51, 10, 5, 0),
                                                                              (2, 52, 15, 7, 1),
@@ -863,223 +863,223 @@ VALUES (1, 1, '2025-01-01 09:00:00', '운동완료', '09:00:00', 45),
        (99, 9, '2025-04-09 14:30:00', '운동전', '14:30:00', 35),
        (100, 10, '2025-04-10 18:15:00', '운동취소', '18:15:00', 25);
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 종로구 수표로26길 12'
 WHERE username IN ('Trainer11', 'Trainer69');
 
-UPDATE User
+UPDATE user
 SET address = '서울시 종로구 창신동 328-18'
 WHERE username = 'Trainer59';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 종로구 종로3가 119번지 지하동 1층 동영타워'
 WHERE username = 'Trainer37';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 중구 명동 청계천로 24 케이스퀘어 B1'
 WHERE username IN ('Trainer60', 'Trainer70');
 
-UPDATE User
+UPDATE user
 SET address = '서울시 중구 장충단로 253 헬로우APM 8층'
 WHERE username = 'Trainer36';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 중구 다산로 240'
 WHERE username = 'Trainer12';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 용산구 한강대로 273 B1'
 WHERE username = 'Trainer34';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 용산구 후암로 107'
 WHERE username = 'Trainer54';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 용산구 216-96 3층'
 WHERE username = 'Trainer13';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 성동구 독서당로 40길 39 B1층'
 WHERE username = 'Trainer35';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 성동구 성수1가제2동 13-436'
 WHERE username = 'Trainer55';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 광진구 구의동 구의강변로 106'
 WHERE username = 'Trainer65';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 광진구 자양제4동 74-14'
 WHERE username = 'Trainer14';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 동대문구 청량리동 710번지'
 WHERE username IN ('Trainer23', 'Trainer43', 'Trainer73', 'Trainer78');
 
-UPDATE User
+UPDATE user
 SET address = '서울시 동대문구 이문동 305-151'
 WHERE username = 'Trainer15';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 중랑구 망구로 60길 37 효성 써너스빌 친환경 3층'
 WHERE username IN ('Trainer28', 'Trainer48', 'Trainer83');
 
-UPDATE User
+UPDATE user
 SET address = '서울시 중랑구 망구로 30길 2층'
 WHERE username = 'Trainer16';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 성북구 안안동5가 101-27'
 WHERE username IN ('Trainer24', 'Trainer44', 'Trainer74', 'Trainer79');
 
-UPDATE User
+UPDATE user
 SET address = '서울 성북구 고려대로 22길 5 닥터스트렝스'
 WHERE username = 'Trainer17';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 강북구 번동 418-1 12층'
 WHERE username IN ('Trainer25', 'Trainer45', 'Trainer75', 'Trainer80');
 
-UPDATE User
+UPDATE user
 SET address = '서울시 강북구 수유1동 70-4'
 WHERE username = 'Trainer18';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 도봉구 방학로 3길 6 지하 1층'
 WHERE username IN ('Trainer26', 'Trainer46', 'Trainer81');
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 도봉구 워라밸 피트니스 B1'
 WHERE username = 'Trainer19';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 노원구 상계6. 7동 372-16'
 WHERE username IN ('Trainer27', 'Trainer47', 'Trainer82');
 
-UPDATE User
+UPDATE user
 SET address = '서울시 노원구 노원로 34길 72 와이와이헬스'
 WHERE username = 'Trainer20';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 은평구 은평로 179'
 WHERE username IN ('Trainer21', 'Trainer41', 'Trainer71', 'Trainer72', 'Trainer76');
 
-UPDATE User
+UPDATE user
 SET address = '서울시 은평구 진관3로 32'
 WHERE username = 'Trainer22';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 서대문구 홍은제 2동'
 WHERE username IN ('Trainer42', 'Trainer77');
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 서대문구 연희로 82'
 WHERE username = 'Trainer29';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 마포구 마포대로 109 롯데캐슬 프리미엄지던스튜디오엠롯데캐슬점'
 WHERE username IN ('Trainer57', 'Trainer67');
 
-UPDATE User
+UPDATE user
 SET address = '서울시 마포구 공덕동 167-2'
 WHERE username = 'Trainer30';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 양천구 목동중앙북로 74'
 WHERE username IN ('Trainer31', 'Trainer51');
 
-UPDATE User
+UPDATE user
 SET address = '서울시 양천구 신정43동 946-1'
 WHERE username = 'Trainer32';
 
-UPDATE User
+UPDATE user
 SET address = '서울시 강서구 수남빌딩 4층'
 WHERE username IN ('Trainer33', 'Trainer53');
 
-UPDATE User
+UPDATE user
 SET address = '서울시 강서구 화곡동 우현로 37'
 WHERE username = 'Trainer38';
 
-UPDATE User
+UPDATE user
 SET address = '서울 구로구 경인로 319 지하 비스트짐휘트니스 1층'
 WHERE username IN ('Trainer32', 'Trainer52');
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 구로구 구로동 612 10 6 7층'
 WHERE username = 'Trainer39';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 금천구 시흥동 8-17'
 WHERE username IN ('Trainer30', 'Trainer50', 'Trainer85');
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 금천구 독산동 291-5'
 WHERE username = 'Trainer40';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 금천구 서부샛길 606'
 WHERE username = 'Trainer84';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 영등포구 여의동 53 우정 빌딩 3 층'
 WHERE username IN ('Trainer58', 'Trainer68');
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 영등포구 여의대방로69길 7 충무빌딩 3층'
 WHERE username = 'Trainer42';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 영등포구 영등포동 624-20'
 WHERE username = 'Trainer43';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 동작구 여의대방로16길 53'
 WHERE username IN ('Trainer56', 'Trainer66');
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 동작구 동작대로29길 36'
 WHERE username = 'Trainer45';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 관악구 봉천동 1601-23'
 WHERE username IN ('Trainer29', 'Trainer49', 'Trainer84');
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 관악구 남부순환로 1817 Q타워'
 WHERE username = 'Trainer47';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 서초구 871-6 3층'
 WHERE username IN ('Trainer38', 'Trainer62');
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 서초구 서초동 1337-20'
 WHERE username = 'Trainer48';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 강남구 미진프라자 지하 3층'
 WHERE username IN ('Trainer39', 'Trainer61');
 
-UPDATE User
+UPDATE user
 SET address = '서울 강남구 강남대로 382 B2 KR 서울특별시'
 WHERE username = 'Trainer51';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 송파구 송파동 103-2'
 WHERE username IN ('Trainer40', 'Trainer63');
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 송파구 Samhacksaro 지하 30 1층'
 WHERE username = 'Trainer53';
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 강동구 성내동 293-12 B1'
 WHERE username IN ('Trainer64');
 
-UPDATE User
+UPDATE user
 SET address = '서울특별시 강동구 천호대로 1006'
 WHERE username = 'Trainer65';
 
@@ -1316,8 +1316,8 @@ VALUES (1, 1, '/upload/trainer/1.jpg', '경력'),
 
 
 
-# Gym 더미데이터
-INSERT INTO Gym (id, name, address, latitude, longitude)
+# gym 더미데이터
+INSERT INTO gym (id, name, address, latitude, longitude)
 VALUES (1, '파고다 헬스클럽', '서울특별시 종로구 수표로26길 12', 37.574857, 126.990532),
        (2, '스파렉스 피트니스 SPAREX FITNESS', '서울시 종로구 창신동 328-18', 37.574738, 127.015842),
        (3, '원알엠피트니스', '서울시 종로구 종로3가 119번지 지하동 1층 동영타워', 37.570195, 126.991015),
@@ -1421,7 +1421,7 @@ VALUES (1, '파고다 헬스클럽', '서울특별시 종로구 수표로26길 1
        (54, '제스트짐', '서울특별시 강동구 성내동 293-12 B1', 37.535090, 127.125230),
        (55, '에이블짐 천호역점', '서울특별시 강동구 천호대로 1006', 37.540126, 127.123170);
 
-INSERT INTO Review (training_id, rating, content, created_at) VALUES
+INSERT INTO review (training_id, rating, content, created_at) VALUES
                                                                   (1, 5, '트레이너가 정말 훌륭합니다! 제 목표를 이루게 도와주셨습니다.', NOW()),
                                                                   (2, 5, '세션이 너무 만족스러웠어요! 강력 추천합니다.', NOW()),
                                                                   (3, 5, '트레이너가 정말 프로페셔널하고 격려해 주셨어요.', NOW()),
@@ -1496,7 +1496,7 @@ UPDATE review
 set rating = 2
 WHERE id = 2;
 
-INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons)
+INSERT INTO training (user_id, trainer_id, times, total_stamps, coupons)
 VALUES
     (5, 51, 10, 5, 2),
     (16, 51, 20, 10, 3),
@@ -1506,7 +1506,7 @@ VALUES
     (37, 51, 25, 15, 5);
 
 
-INSERT INTO Review (training_id, rating, content, created_at)
+INSERT INTO review (training_id, rating, content, created_at)
 VALUES
     (52, 5, '트레이너님이 매우 친절하시고 체계적인 훈련을 제공합니다.', '2024-02-01 10:00:00'),
     (53, 4, '운동 루틴이 잘 짜여 있어서 효과를 보고 있습니다.', '2024-02-02 12:30:00'),
@@ -1518,15 +1518,15 @@ VALUES
 
 
 -- Update gym_id for trainers based on exact address matches
-UPDATE User u
-    JOIN Gym g ON u.address = g.address
+UPDATE user u
+    JOIN gym g ON u.address = g.address
 SET u.gym_id = g.id
 WHERE u.authority = 'ROLE_TRAINER';
 #
-# INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons)
+# INSERT INTO training (user_id, trainer_id, times, total_stamps, coupons)
 # VALUES (126, 51, 10, 5, 2);
 
-# DELETE FROM Training
+# DELETE FROM training
 # WHERE user_id = 126 AND trainer_id = 51 AND times = 10 AND total_stamps = 5 AND coupons = 2;
 
 
@@ -1547,7 +1547,7 @@ from review;
 select *
 from training;
 
-# insert into hbti ( user_id, HBTI, mb_score
+# insert into hbti ( user_id, hbti, mb_score
 #                  , ei_score
 #                  , cn_score
 #                  , pg_score)
@@ -1557,21 +1557,21 @@ from training;
 # delete from hbti where user_id = 126;
 # delete from training where id = 59;
 
-# update User
+# update user
 # set address = '서울시 여러분 식초'
 # where id = 126;
-# update User
+# update user
 # set birth = '1998-06-16'
 # where id = 126;
 
-# INSERT INTO HBTI ( user_id, HBTI, mb_score
+# INSERT INTO hbti ( user_id, hbti, mb_score
 #                  , ei_score
 #                  , cn_score
 #                  , pg_score)
 # VALUES
 # -- MICP (3)
 # (134, 'MICP', 70, 20, 58, 90);
-# INSERT INTO Training (user_id, trainer_id, times, total_stamps, coupons) VALUES
+# INSERT INTO training (user_id, trainer_id, times, total_stamps, coupons) VALUES
 # #  (126, 51, 40, 5, 0)
 #  (126, 52, 40, 5, 0),
 #  (126, 53, 40, 5, 0)
@@ -1622,7 +1622,7 @@ FROM
 WHERE
     REFERENCED_TABLE_NAME = 'user';
 
--- Message 테이블
+-- message 테이블
 ALTER TABLE message
     DROP FOREIGN KEY FKb3y6etti1cfougkdr0qiiemgv;
 
@@ -1640,7 +1640,7 @@ ALTER TABLE trainer_profile
         FOREIGN KEY (trainer_id) REFERENCES user(id)
             ON DELETE CASCADE;
 
--- Training 테이블 (trainer_id)
+-- training 테이블 (trainer_id)
 ALTER TABLE training
     DROP FOREIGN KEY FKa34ur7f6qsejqio84v9at8ylj;
 
@@ -1649,7 +1649,7 @@ ALTER TABLE training
         FOREIGN KEY (trainer_id) REFERENCES user(id)
             ON DELETE CASCADE;
 
--- Training 테이블 (user_id)
+-- training 테이블 (user_id)
 ALTER TABLE training
     DROP FOREIGN KEY FKfoy157kvf3lmam5gv5u2ty487;
 
@@ -1658,7 +1658,7 @@ ALTER TABLE training
         FOREIGN KEY (user_id) REFERENCES user(id)
             ON DELETE CASCADE;
 
--- User Chat 테이블
+-- user chat 테이블
 ALTER TABLE user_chat
     DROP FOREIGN KEY FKojd9hqbl3e7kq3vvr9ym218i4;
 
@@ -1678,7 +1678,7 @@ FROM
 WHERE
     REFERENCED_TABLE_NAME = 'trainer_profile';
 
--- Certification 테이블의 trainer_profile 외래키에 CASCADE 설정 추가
+-- certification 테이블의 trainer_profile 외래키에 CASCADE 설정 추가
 ALTER TABLE certification
     DROP FOREIGN KEY FKie9b3w133xxeonxqdw4c4jqr4;
 
