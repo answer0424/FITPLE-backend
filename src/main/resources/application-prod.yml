@@ -4,7 +4,7 @@ server:
 spring:
   application:
     name: FITPLE
-    frontend:
+  frontend:
       url: ${FRONTEND_URL}
 
   servlet:
