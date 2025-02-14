@@ -36,7 +36,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.nio.file.AccessDeniedException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -320,12 +322,17 @@ public class MyPageController{
             }
 
             // 트레이너 프로필 생성 서비스 호출
-            boolean result = trainerDetailService.createTrainerProfile(trainerProfileDTO, user, skills, image);
+            Long result = trainerDetailService.createTrainerProfile(trainerProfileDTO, user, skills, image);
 
 
             // 결과 반환
-            if (result) {
-                return ResponseEntity.ok("트레이너 프로필이 성공적으로 등록되었습니다.");
+            if (result != null && result > 0) {   // 성공 시 트레이너 프로필 ID와 메시지 반환
+                Map<String, Object> response = new HashMap<>();
+                response.put("message", "트레이너 프로필이 성공적으로 등록되었습니다.");
+                response.put("trainerProfileId", result);
+                System.out.println("생성된 트레이너 프로필 아이디 값 : " + result + response);
+
+                return ResponseEntity.ok(response.toString());
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("트레이너 프로필 등록에 실패했습니다.");
             }
