@@ -21,9 +21,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByNickname(String nickname);
 
     User findByEmail(String email);
-
+    // hjy
     @Query("SELECT u FROM User u WHERE :role = u.authority")
     List<User> findByAuthorities(@Param("role") String role);
+
+    //hjy
+    @Query("SELECT u FROM User u WHERE :role = u.authority AND u.nickname LIKE %:nickname%")
+    List<User> findByRoleAndNickname(@Param("role") String role, @Param("nickname") String nickname);
 
     Page<User> findByAuthority(String authority, Pageable pageable);
 

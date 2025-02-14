@@ -6,6 +6,9 @@ import com.lec.spring.base.service.HbtiMatcher;
 import com.lec.spring.base.service.HbtiService;
 import com.lec.spring.base.service.UserService;
 import com.lec.spring.training.DTO.TrainerMatchResponseDTO;
+import com.lec.spring.training.domain.GrantStatus;
+import com.lec.spring.training.domain.TrainerProfile;
+import com.lec.spring.training.repository.TrainerProfileRepository;
 import com.lec.spring.training.service.TrainerMatchService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/quiz")
@@ -24,6 +28,7 @@ public class TrainerMatchController {
     private final UserRepository userRepository;
     private final TrainerMatchService trainerMatchService;
     private final HbtiMatcher hbtiMatcher;
+    private final TrainerProfileRepository trainerProfileRepository;
 
     @GetMapping("/{userId}/result/match")
     public ResponseEntity<?> getMatchingTrainers(@PathVariable Long userId) {
@@ -56,11 +61,32 @@ public class TrainerMatchController {
         }
     }
 
-    //
+    //hjy - 수정
     @GetMapping("/search")
-    public ResponseEntity<?> getTrainers() {
-        List<User> trainer = userRepository.findByAuthorities( "ROLE_TRAINER");
-        return ResponseEntity.ok(trainer);
+    public ResponseEntity<?> getTrainers(@RequestParam(required = false) String nickname) {
+        List<User> trainers;
+        GrantStatus approvedStatus = GrantStatus.승인; // 승인 상태 필터링
+
+        if (nickname != null && !nickname.isEmpty()) {
+            trainers = userRepository.findByRoleAndNickname("ROLE_TRAINER", nickname)
+                    .stream()
+                    .filter(user -> user.getId() != null &&
+                            trainerProfileRepository.findByTrainerId(user.getId())
+                                    .map(TrainerProfile::getIsAccess)
+                                    .orElse(null) == approvedStatus)
+                    .collect(Collectors.toList());
+        } else {
+            trainers = userRepository.findByAuthorities("ROLE_TRAINER")
+                    .stream()
+                    .filter(user -> trainerProfileRepository.findByTrainerId(user.getId())
+                            .map(TrainerProfile::getIsAccess)
+                            .orElse(null) == approvedStatus)
+                    .collect(Collectors.toList());
+        }
+
+        return ResponseEntity.ok(trainers);
     }
+
+
 
 }
