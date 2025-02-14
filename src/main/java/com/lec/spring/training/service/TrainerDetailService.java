@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface TrainerDetailService {
     // 트레이너 프로필 생성
-    boolean createTrainerProfile(TrainerProfileDTO trainerProfile, PrincipalDetails user, List<String> skills, List<MultipartFile> files) throws IOException;
+    Long createTrainerProfile(TrainerProfileDTO trainerProfile, PrincipalDetails user, List<String> skills, List<MultipartFile> files) throws IOException;
 
 
     // 트레이너 프로필 수정

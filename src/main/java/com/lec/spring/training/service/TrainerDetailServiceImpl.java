@@ -66,7 +66,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
     @Transactional
     @Override
-    public boolean createTrainerProfile(TrainerProfileDTO trainerProfileDTO,
+    public Long createTrainerProfile(TrainerProfileDTO trainerProfileDTO,
                                         PrincipalDetails user,
                                         List<String> skills,
                                         List<MultipartFile> images) throws IOException {
@@ -75,7 +75,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
             // 현재 로그인한 유저 가져오기
             User trainer = user.getUser();
 
-            System.out.println("현재 로그인한 유저 : " + trainer.getUsername());
+
 
             if (!trainer.getAuthority().equals("ROLE_TRAINER")) {
                 throw new AccessDeniedException("트레이너 권한이 필요합니다");
@@ -105,7 +105,8 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
 
             if (existingProfile.isPresent()) {
                 trainerProfileDTO.setTrainerId(existingProfile.get().getId());
-                return updateTrainerProfile(certificationSkills, trainerProfileDTO);
+                boolean updated = updateTrainerProfile(certificationSkills, trainerProfileDTO);
+                return updated ? existingProfile.get().getId() : null;
             }
 
             // 신규 트레이너 프로필 생성
@@ -117,15 +118,15 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                     .isAccess(대기) // 문자열 "대기"로 변경
                     .build();
 
-            trainerProfileRepository.save(trainerProfile);
+           TrainerProfile savedTrainerProfile =  trainerProfileRepository.save(trainerProfile);
 
             saveCertification(certificationSkills, trainerProfile);
 
-            return true;
+            return savedTrainerProfile.getId();
         } catch (Exception e) {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return false;
+            return null;
         }
     }
 
@@ -250,7 +251,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 // Certification 객체 생성
                 Certification certification = Certification.builder()
                         .id(certificationId)
-                        .credentials(savePath)  // 이미지가 없으면 null이 저장됨
+                        .credentials(savePath)
                         .skills(skillsDTO.getSkills())
                         .trainerProfile(trainerProfile)
                         .build();
