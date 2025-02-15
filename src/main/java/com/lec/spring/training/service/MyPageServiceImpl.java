@@ -184,6 +184,7 @@ public class MyPageServiceImpl implements MyPageService {
                                 .nickname(e.getUser().getNickname())
                                 .userId(e.getUser().getId())
                                 .email(e.getUser().getEmail())
+                                .profileImage(e.getUser().getProfileImage())
                                 .build()
                 )
         );
