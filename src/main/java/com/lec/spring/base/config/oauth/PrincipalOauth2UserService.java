@@ -35,6 +35,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         // 사용자 프로필 정보 가져오기
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
+        System.out.println("1. 여기 들어오나?");
+
 
         // 강제 회원가입 진행
         String provider = userRequest.getClientRegistration().getRegistrationId();
