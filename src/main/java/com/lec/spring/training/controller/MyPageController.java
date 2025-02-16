@@ -224,7 +224,9 @@ public class MyPageController{
             @RequestParam("userId") Long userId,
             @RequestPart(required = false) MultipartFile profileImage
     ) {
-        System.out.println("프로필 이미지 경로가 뭐가 들어오냐?" + profileImage);
+        System.out.println("------------------------------파일 이름 : " + profileImage.getOriginalFilename());
+        System.out.println("------------------------------파일 크기 : " + profileImage.getSize());
+        System.out.println("------------------------------파일 타입 : " + profileImage.getContentType());
         try {
             userService.changeUserProfileImage(profileImage, userId);
             return new ResponseEntity<>("", HttpStatus.OK);
