@@ -50,7 +50,7 @@ public class User extends BaseEntity {
     @Column
     private Date birth;
 
-    @Column( length = 45, unique = true)
+    @Column( length = 500, unique = true)
     private String nickname;
 
     @Column(length = 10)
@@ -62,5 +62,6 @@ public class User extends BaseEntity {
     @Column(length = 20)
     private String authority;
 
+    @Column(length = 10000)
     private String profileImage;
 }
