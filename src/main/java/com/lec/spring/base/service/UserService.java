@@ -125,6 +125,8 @@ public class UserService {
     //유저 프로필 이미지 변경
     @Transactional(rollbackOn = Exception.class)
     public boolean changeUserProfileImage(MultipartFile image, Long userId) {
+
+        System.out.println("저장되는 경로"+dir);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("유저 검색에 실패했습니다."));
         try {
