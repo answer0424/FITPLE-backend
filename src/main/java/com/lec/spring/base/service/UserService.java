@@ -125,11 +125,20 @@ public class UserService {
     //유저 프로필 이미지 변경
     @Transactional(rollbackOn = Exception.class)
     public boolean changeUserProfileImage(MultipartFile image, Long userId) {
+
+        System.out.println("저장되는 경로"+dir);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("유저 검색에 실패했습니다."));
         try {
             String ddir = imgService.saveImage(image, dir);
-            user.setProfileImage(ddir);
+            String dbPath = ddir.replaceFirst("./FITPLE-backend/", "");
+
+            System.out.println("UserService에서 저장되는 경로래 : " + ddir);
+            System.out.println("db에 저장되는 경로 : " + dbPath);
+
+            user.setProfileImage(dbPath);
+
+            System.out.println("UserService에서 저장된느 파일명이래 : " + user.getProfileImage());
             userRepository.saveAndFlush(user);
             return true;
         } catch (IOException e) {

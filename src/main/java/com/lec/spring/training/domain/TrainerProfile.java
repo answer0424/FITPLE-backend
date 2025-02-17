@@ -31,7 +31,7 @@ public class TrainerProfile {
     @Column(nullable = false)
     private Integer perPrice;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
 
     @Column(nullable = false)

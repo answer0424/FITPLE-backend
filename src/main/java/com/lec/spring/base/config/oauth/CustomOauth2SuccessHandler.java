@@ -31,7 +31,7 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-
+        System.out.println("인증 성공하면 여기로 와야 함");
         // OAuth2USer 상속받는 객체
         PrincipalDetails oauth2User = (PrincipalDetails) authentication.getPrincipal();
 

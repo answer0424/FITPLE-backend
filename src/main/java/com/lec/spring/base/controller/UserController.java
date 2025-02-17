@@ -27,8 +27,9 @@ public class UserController {
 
     @PostMapping("/student")
     public ResponseEntity<?> registerStudent(@RequestBody UserRegistrationDTO registration) {
-
+        System.out.println("회원가입 한 student 유저에 받아온 값 : " + registration);
         User user = userService.registerUser(registration, "ROLE_STUDENT");
+        System.out.println("register user : " + user);
         if(user == null){
             return new ResponseEntity<>("Student registered failed", HttpStatus.CONFLICT);
         }else {
@@ -38,7 +39,9 @@ public class UserController {
 
     @PostMapping("/trainer")
     public ResponseEntity<?> registerTrainer(@RequestBody UserRegistrationDTO registration) {
+        System.out.println("회원가입 한 trainer 유저에 받아온 값 : " + registration);
         User user = userService.registerUser(registration, "ROLE_TRAINER");
+        System.out.println("register user : " + user);
         if(user == null){
             return new ResponseEntity<>("Trainer registered failed", HttpStatus.CONFLICT);
         }else {

@@ -22,7 +22,7 @@ public class Certification {
     @JsonIgnore
     private TrainerProfile trainerProfile;
 
-    @Column(name = "credentials")
+    @Column(name = "credentials", length = 10000)
     private String credentials; // 경로
 
     @Column(nullable = false)

@@ -19,7 +19,7 @@ INSERT INTO HBTI ( user_id, HBTI, mb_score
                  , pg_score)
 VALUES
 -- MICP (3)
-(177, 'MICG', 70, 20, 58, 90);
+(204, 'MICG', 70, 20, 58, 90);
 
 
 update hbti
@@ -146,3 +146,6 @@ where id = 51;
 update trainer_profile
 set is_access='승인'
 where id=124;
+
+update certification
+set skills ='[{"name" : "경력"}]'

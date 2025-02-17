@@ -16,7 +16,7 @@ public class StudentListDTO {
     private Long userId;
     private String nickname;
     private String email;
-
+    private String profileImage;
     private int times;
     private int trainingId; //hjy
     private List<StudentDTO> students;
