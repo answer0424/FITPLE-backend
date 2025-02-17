@@ -131,9 +131,13 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("유저 검색에 실패했습니다."));
         try {
             String ddir = imgService.saveImage(image, dir);
-            ddir.replaceFirst("^\\./FITPLE-backend", "");
+            String dbPath = ddir.replaceFirst("./FITPLE-backend", "");
+
             System.out.println("UserService에서 저장되는 경로래 : " + ddir);
-            user.setProfileImage(ddir);
+            System.out.println("db에 저장되는 경로 : " + dbPath);
+
+            user.setProfileImage(dbPath);
+
             System.out.println("UserService에서 저장된느 파일명이래 : " + user.getProfileImage());
             userRepository.saveAndFlush(user);
             return true;
