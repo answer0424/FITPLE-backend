@@ -241,6 +241,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 if (skillsDTO.getImg() != null && !skillsDTO.getImg().isEmpty()) {
                     savePath = imgService.saveImage(skillsDTO.getImg(), trainerDir);
                 }
+                String dbSavePath = savePath.replaceFirst("./FITPLE-backend/", "");
 
                 // CertificationId 설정 (복합 키)
                 CertificationId certificationId = new CertificationId(
@@ -251,7 +252,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                 // Certification 객체 생성
                 Certification certification = Certification.builder()
                         .id(certificationId)
-                        .credentials(savePath)
+                        .credentials(dbSavePath)
                         .skills(skillsDTO.getSkills())
                         .trainerProfile(trainerProfile)
                         .build();
