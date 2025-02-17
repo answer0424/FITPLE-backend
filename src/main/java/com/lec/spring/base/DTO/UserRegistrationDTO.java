@@ -42,4 +42,24 @@ public class UserRegistrationDTO {
     @JsonProperty("lng") // JSON의 lng 필드를 DTO의 longitude에 매핑
     private Double longitude;
 
+    @JsonProperty("gym")
+    private GymDTO gym;
+
+    public void setGym(GymDTO gym) {
+        this.address = gym.getAddress();
+        this.gymName = gym.getGymName();
+        this.latitude = gym.getLatitude();
+        this.longitude = gym.getLongitude();
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class GymDTO {
+        private String gymName;
+        private String address;
+        private Double latitude;
+        private Double longitude;
+    }
 }
