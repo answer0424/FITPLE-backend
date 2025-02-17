@@ -48,8 +48,8 @@ public class UserRegistrationDTO {
     public void setGym(GymDTO gym) {
         this.address = gym.getAddress();
         this.gymName = gym.getGymName();
-        this.latitude = gym.getLatitude();
-        this.longitude = gym.getLongitude();
+        this.latitude = gym.getLat();
+        this.longitude = gym.getLng();
     }
 
     @Data
@@ -59,7 +59,7 @@ public class UserRegistrationDTO {
     public static class GymDTO {
         private String gymName;
         private String address;
-        private Double latitude;
-        private Double longitude;
+        private Double lat;
+        private Double lng;
     }
 }
