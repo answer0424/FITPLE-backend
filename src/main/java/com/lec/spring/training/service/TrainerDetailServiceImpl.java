@@ -68,7 +68,7 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
     @Override
     public Long createTrainerProfile(TrainerProfileDTO trainerProfileDTO,
                                         PrincipalDetails user,
-                                        List<String> skills,
+                                        String[] skills,
                                         List<MultipartFile> images) throws IOException {
         Long trianerId = user.getId();
         try {
@@ -83,9 +83,9 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
             }
 
             List<SkillsDTO> certificationSkills = new ArrayList<>();
-            for (int i = 0; i < skills.size(); i++) {
+            for (int i = 0; i < skills.length; i++) {
                 SkillsDTO skillsDTO = new SkillsDTO();
-                skillsDTO.setSkills(skills.get(i).trim());
+                skillsDTO.setSkills(skills[i].trim());
 
                 // images 리스트 길이보다 index가 작을 때만 추가
                 if (i < images.size()) {

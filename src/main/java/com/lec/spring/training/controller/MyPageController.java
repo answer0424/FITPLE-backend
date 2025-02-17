@@ -316,7 +316,7 @@ public class MyPageController{
     public ResponseEntity<String> createTrainerProfile(
             @ModelAttribute TrainerProfileDTO trainerProfileDTO,
             @AuthenticationPrincipal PrincipalDetails user,
-            @RequestParam("skills") List<String> skills,
+            @RequestParam("skills") String[] skills,
             @RequestPart(required = false) List<MultipartFile> image
     ) {
         try {
