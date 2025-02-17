@@ -72,16 +72,12 @@ public class TrainerDetailServiceImpl implements TrainerDetailService {
                                         List<MultipartFile> images) throws IOException {
         Long trianerId = user.getId();
         try {
-            // 현재 로그인한 유저 가져오기
             User trainer = user.getUser();
-
-
 
             if (!trainer.getAuthority().equals("ROLE_TRAINER")) {
                 throw new AccessDeniedException("트레이너 권한이 필요합니다");
             }
 
-            // images가 null이면 빈 리스트로 초기화
             if (images == null) {
                 images = new ArrayList<>();
             }

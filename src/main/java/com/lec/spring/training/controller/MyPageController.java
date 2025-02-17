@@ -197,6 +197,7 @@ public class MyPageController{
     // 마이페이지에서 회원 정보 수정 처리 로직
     @PatchMapping("/mypage")
     public ResponseEntity<?> updateMemberInfo(@RequestBody MyPageUserInfoDTO newUserInfo) {
+        System.out.println("\n\n\n\nnewUserInfo" + newUserInfo);
         try {
             userService.changeUserProfile(newUserInfo);
             return new ResponseEntity<>("", HttpStatus.OK);
