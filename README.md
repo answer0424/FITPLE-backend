@@ -17,6 +17,11 @@
    - DB 설계 및 JPA 구현
    - React 웹을 Nginx 웹 서버로 구동, EC2 서버로 배포
  - 이동희
+   - Admin page CRUD
+   - Review 로직 구현
+   - HBTI(헬스 MBTI) api
+   - Matching page CRUD
+   - EC2, RDS 활용 백앤드  서버 배포
  - 현지윤
    - 자격증 CRUD 기능 (생성, 업데이트)
    - 일정 crud
