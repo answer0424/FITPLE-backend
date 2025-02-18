@@ -37,7 +37,7 @@ out/
 .vscode/
 
 ### application ###
-application*.yml
+application-dev.yml
 
 ### Mac OS ###
 .DS_Store

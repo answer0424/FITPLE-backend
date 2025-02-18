@@ -1,0 +1,54 @@
+package com.lec.spring.training.domain;
+
+import com.lec.spring.base.domain.User;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Entity(name = "TrainerProfile")
+public class TrainerProfile {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "trainerId", nullable = false)
+    @OnDelete(action= OnDeleteAction.CASCADE)
+    private User trainer;
+
+    @Column(nullable = false)
+    private Integer perPrice;
+
+    @Column(columnDefinition = "LONGTEXT")
+    private String content;
+
+    @Column(nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate career;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private GrantStatus isAccess = GrantStatus.valueOf("대기");
+
+    @OneToMany(mappedBy = "trainerProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @Builder.Default
+    private List<Certification> certificationList = new ArrayList<>();
+
+    public void addCertificationList(Certification... certificationList) {
+        Collections.addAll(this.certificationList, certificationList);
+    }
+}// end TrainerProfile
+

@@ -1,0 +1,52 @@
+package com.lec.spring.training.domain;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import java.time.LocalTime;
+import java.util.Date;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Entity(name = "Reservation")
+public class Reservation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "trainingId", nullable = false)
+    @ToString.Exclude
+    @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Training training;
+
+    @Column(nullable = false)
+    private LocalDateTime date;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private ReservationStatus status;
+
+    @Column(name = "startTime")
+    private LocalTime startTime;
+
+    @Column
+    private Integer exerciseTime;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.status == null) {
+            this.status = ReservationStatus.운동전;
+        }
+    }
+}
