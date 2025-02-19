@@ -64,4 +64,4 @@
 > JQuery, Mybatis, EC2, RDS, POSTMAN, JAVA-17, Lombok, NAVER OPEN API, OAuth2, MySQL, Redis, Stomp
 
 ## 유튜브 링크
-
+https://www.youtube.com/watch?v=CnNcrq3vPEg&list=PLedGoSru794_aMnL_7ufmlhuhJSxzFoxh&index=1&t=1s
